@@ -1,6 +1,8 @@
 {
   "name": "dr-booze-client-ionic",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular",
   "id": "72673ce7"
 }
