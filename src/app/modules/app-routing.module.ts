@@ -15,7 +15,7 @@ const routes: Routes = [
     {path: 'register', component: RegisterComponent, canActivate: [RegisteredGuard]},
     {path: 'home', component: DashboardComponent, canActivate: [NeedRegisterGuard]},
     {path: 'stats', component: StatisticsMainComponent, canActivate: [NeedRegisterGuard]},
-    {path: 'profile', component: InformationComponent, canActivate: [NeedRegisterGuard]},
+    {path: 'profile', component: InformationComponent},
     {path: 'activity', component: CalenderComponent, canActivate: [NeedRegisterGuard]},
     {path: '**', redirectTo: 'home'}
 ];

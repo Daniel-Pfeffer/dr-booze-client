@@ -12,7 +12,7 @@
 </ion-header>
 <ion-content>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <ion-item color="primary">
+        <ion-item>
             <ion-input name="username" formControlName="username" placeholder="Username" required></ion-input>
             <!--
             the ngIf will be activated if the form.controls."formControlName".errors?."Validator.type"
@@ -46,4 +46,5 @@
             <ion-button color="primary" type="submit" [disabled]="!form.valid" class="submit">Submit</ion-button>
     </form>
     <a [routerLink]="['/login']" id="alreadyAcc">I already have an Account!</a>
+    <a [routerLink]="['/profile']">Fucc testing</a>
 </ion-content>

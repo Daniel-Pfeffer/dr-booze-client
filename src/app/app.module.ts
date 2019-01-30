@@ -25,6 +25,7 @@ import {StatisticsDetailComponent} from './statistics-main/statistics/statistics
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
+import {DatePicker} from '@ionic-native/date-picker/ngx';
 
 @NgModule({
     declarations: [
@@ -53,6 +54,7 @@ import {Dialogs} from '@ionic-native/dialogs/ngx';
         AppRoutingModule
     ],
     providers: [
+        DatePicker,
         Dialogs,
         StatusBar,
         SplashScreen,

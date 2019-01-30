@@ -1,3 +1,47 @@
-<p>
-  information works!
-</p>
+<!--
+
+-->
+<ion-header>
+    <ion-toolbar>
+        <ion-back-button></ion-back-button>
+        <ion-title>
+            Information
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <ion-item>
+            <ion-input name="foreName" formControlName="foreName" placeholder="Forename">
+            </ion-input>
+            <ion-badge *ngIf="form.controls.foreName.errors?.pattern"></ion-badge>
+        </ion-item>
+        <br/>
+        <ion-item>
+            <ion-input name="surName" formControlName="surName" placeholder="Surname">
+            </ion-input>
+        </ion-item>
+        <br/>
+        <ion-item>
+            <ion-datetime [max]="date.getFullYear()-16" formControlName="age" placeholder="Birthdate"></ion-datetime>
+        </ion-item>
+        <br/>
+        <ion-item>
+            <ion-input name="weight" formControlName="weight" placeholder="Weight" required type="number">
+            </ion-input>
+        </ion-item>
+        <br/>
+        <ion-item>
+            <ion-input name="height" formControlName="height" placeholder="Height" required type="number"></ion-input>
+        </ion-item>
+        <br/>
+        <ion-item>
+            <ion-select placeholder="Gender" formControlName="gender">
+                <ion-select-option value="m">Male</ion-select-option>
+                <ion-select-option value="w">Female</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <br/>
+        <ion-button color="primary" type="submit" [disabled]="!form.valid" class="submit">Submit</ion-button>
+    </form>
+</ion-content>

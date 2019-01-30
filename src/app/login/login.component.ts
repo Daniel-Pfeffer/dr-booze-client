@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
 
     onSubmit() {
         const val = this.form.value;
-        const error = this.httpService.login(val.username, val.password).subscribe(item => {
+        this.httpService.login(val.username, val.password).subscribe(item => {
             if (!item.error) {
                 AuthService.setToken();
             } else {
