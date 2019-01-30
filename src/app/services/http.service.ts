@@ -20,10 +20,14 @@ export class HttpService {
     }
 
     login(username, password) {
-        return this.http.post<Login>(this.ipLocalGlobal + 'login', {username, password});
+        return this.http.post<Login>(this.ipLocal + 'login', {username, password});
     }
 
     register(email, password, username) {
-        return this.http.post<Register>(this.ipLocalGlobal + 'register', {email, password, username});
+        return this.http.post<Register>(this.ipLocal + 'register', {email, password, username});
+    }
+
+    insertData(birthday, weight, height, gender, firstname?, lastName?) {
+        return this.http.post(this.ipLocal + 'insertDetails', {birthday, weight, height, gender, firstname, lastName});
     }
 }
