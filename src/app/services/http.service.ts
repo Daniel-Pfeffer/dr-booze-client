@@ -28,6 +28,7 @@ export class HttpService {
     }
 
     insertData(birthday, weight, height, gender, firstname?, lastName?) {
-        return this.http.post(this.ipLocal + 'insertDetails', {birthday, weight, height, gender, firstname, lastName});
+        console.log(`bday: ${birthday}\nweight: ${weight}\nheight: ${height}\ngender: ${gender}\nfirstname: ${firstname}\nlastName: ${lastName}`);
+        // return this.http.post(this.ipLocal + 'insertDetails', {birthday, weight, height, gender, firstname, lastName});
     }
 }
