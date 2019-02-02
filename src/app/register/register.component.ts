@@ -17,8 +17,8 @@ export class RegisterComponent {
     /*
     FormBuilder is used to build form validator and get all form values without 2 the 2-way-binding of ngModel
     HttpService is used for all transaction happening through the http protocol
-    router is used for routing
-    the snackbar is the small little bar at the bottom
+    Router is used for routing
+    Dialog similar to the alert pop up
 
     do not mess with the constructor especially do not mess with the patterns
     */
@@ -41,10 +41,10 @@ export class RegisterComponent {
             console.log(item);
             // if there are any errors than proceed with error logging
             if (item.error) {
-                // if there are more than one error loop through them else just log the one
+                // if there are more than one error loop through them. Otherwise just log the one
                 if (Array.isArray(item.error)) {
                     item.error.forEach(error => {
-                        // switch through all errors if there are more than 2 and output it on a snackbar
+                        // switch through all errors if there are more than 2 and output it on a dialog
                         this.switchError(error);
                     });
                 } else {
@@ -57,7 +57,6 @@ export class RegisterComponent {
             } else {
                 // if no error was received redirect to the login page
                 this.openDialog();
-                this.router.navigate(['login']);
             }
         });
     }
@@ -88,6 +87,8 @@ export class RegisterComponent {
     }
 
     private openDialog() {
-        this.dialog.alert('Welcome to Dr. Booze', 'Welcome', 'Dismiss');
+        this.dialog.alert('Welcome to Dr. Booze', 'Welcome', 'Dismiss')
+            .then(() =>
+                this.router.navigate(['login']));
     }
 }

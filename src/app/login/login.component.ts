@@ -26,18 +26,15 @@ export class LoginComponent implements OnInit {
         this.httpService.login(val.username, val.password).subscribe(item => {
             if (!item.error) {
                 AuthService.setToken();
+                this.dialog.alert('Hello', 'Login')
+                    .then(
+                        () => this.router.navigate(['/profile']));
             } else {
                 this.openSnackbar('Username or password invalid');
             }
         });
     }
 
-    /*
-    get all query params from the url and if the token given then an message on a snackbar will be outputted
-    NOTE: There is sometimes an error when the snackbar is displayed. This is due to the reason that
-            the snackbar auto-updates when the ngOnInit is finished but it doesn't recognised that
-            it is already on display
-     */
     ngOnInit(): void {
         this.activatedRoute.queryParams.subscribe(params => {
             const activatedMail = params['token'];
