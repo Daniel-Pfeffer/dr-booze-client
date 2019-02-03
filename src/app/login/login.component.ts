@@ -25,10 +25,25 @@ export class LoginComponent implements OnInit {
         const val = this.form.value;
         this.httpService.login(val.username, val.password).subscribe(item => {
             if (!item.error) {
-                AuthService.setToken();
-                this.dialog.alert('Hello', 'Login')
-                    .then(
-                        () => this.router.navigate(['/profile']));
+                item.user.person = item.person;
+                console.log(item.user);
+                AuthService.setToken(item.user);
+                if (item.user.person == null) {
+                    this.dialog.alert(`Hello ${item.user.username}`, 'Login')
+                        .then(
+                            () => this.router.navigate(['/profile']));
+                } else {
+                    if (item.user.person.firstname !== undefined || item.user.person.firstname != null) {
+                        this.dialog.alert(`Hello ${item.user.person.firstname}`, 'Hello')
+                            .then(
+                                () => this.router.navigate(['/home']));
+                    } else {
+                        this.dialog.alert(`Hello ${item.user.username}`, 'Hello')
+                            .then(
+                                () => this.router.navigate(['/home']));
+                    }
+                }
+
             } else {
                 this.openSnackbar('Username or password invalid');
             }

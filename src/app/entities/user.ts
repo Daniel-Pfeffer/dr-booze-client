@@ -1,5 +1,7 @@
+import {Person} from './person';
+
 export class User {
-    name: string;
     username: string;
     email: string;
+    person?: Person;
 }

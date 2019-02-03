@@ -1,4 +1,6 @@
 import {CustomError} from './error';
+import {User} from '../entities/user';
+import {Person} from '../entities/person';
 
 /*
     all variables which ends in a ? are variables which can
@@ -10,8 +12,7 @@ import {CustomError} from './error';
     errors is an array of custom errors
  */
 export interface Login {
-    worked: boolean;
-    userToken?: string;
-    expiresAt?: number;
     error?: CustomError;
+    user?: User;
+    person?: Person;
 }

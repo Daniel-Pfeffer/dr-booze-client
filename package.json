@@ -6,7 +6,7 @@
   "scripts": {
     "init": "npm i -g ionic",
     "ng": "ng",
-    "start": "ionic serve -c",
+    "start": "ionic serve -c -p 4200",
     "desktop": "ionic cordova run browser",
     "build": "ng build",
     "test": "ng test",

@@ -25,6 +25,6 @@ export class InformationComponent {
 
     onSubmit() {
         const value = this.form.value;
-        this.http.insertData(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName);
+        this.http.insertData(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName).subscribe(res => console.log(res));
     }
 }
