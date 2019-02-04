@@ -6,6 +6,7 @@ import {HttpClient} from '@angular/common/http';
 import {Login} from '../interfaces/login';
 import {Register} from '../interfaces/register';
 import {User} from '../entities/user';
+import {InsertData} from '../interfaces/insert-data';
 
 @Injectable({
     providedIn: 'root'
@@ -34,6 +35,6 @@ export class HttpService {
         const user = JSON.parse(localStorage.getItem('user'));
         const email = user.email;
         console.log(`bday: ${birthday}\nweight: ${weight}\nheight: ${height}\ngender: ${gender}\nfirstname: ${firstName}\nlastName: ${lastName}\nemail: ${email}`);
-        return this.http.post(this.ipLocal + 'insertDetails', {birthday, weight, height, gender, firstName, lastName, email});
+        return this.http.post<InsertData>(this.ipLocal + 'insertDetails', {birthday, weight, height, gender, firstName, lastName, email});
     }
 }

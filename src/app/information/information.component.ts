@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HttpService} from '../services/http.service';
+import {InsertData} from '../interfaces/insert-data';
 
 @Component({
     selector: 'app-information',
@@ -8,6 +9,7 @@ import {HttpService} from '../services/http.service';
     styleUrls: ['./information.component.scss']
 })
 export class InformationComponent {
+
     form: FormGroup;
     date: Date;
 
@@ -23,8 +25,15 @@ export class InformationComponent {
         });
     }
 
+    private static saveDate(res: InsertData) {
+        localStorage.removeItem('user');
+        if (!res.error) {
+            localStorage.setItem('user', JSON.stringify(res));
+        }
+    }
+
     onSubmit() {
         const value = this.form.value;
-        this.http.insertData(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName).subscribe(res => console.log(res));
+        this.http.insertData(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName).subscribe(res => InformationComponent.saveDate(res));
     }
 }

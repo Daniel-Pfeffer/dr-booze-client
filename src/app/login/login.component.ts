@@ -25,16 +25,14 @@ export class LoginComponent implements OnInit {
         const val = this.form.value;
         this.httpService.login(val.username, val.password).subscribe(item => {
             if (!item.error) {
-                item.user.person = item.person;
-                console.log(item.user);
-                AuthService.setToken(item.user);
+                AuthService.setToken(item);
                 if (item.user.person == null) {
                     this.dialog.alert(`Hello ${item.user.username}`, 'Login')
                         .then(
                             () => this.router.navigate(['/profile']));
                 } else {
-                    if (item.user.person.firstname !== undefined || item.user.person.firstname != null) {
-                        this.dialog.alert(`Hello ${item.user.person.firstname}`, 'Hello')
+                    if (item.user.person.firstName !== undefined || item.user.person.firstName != null) {
+                        this.dialog.alert(`Hello ${item.user.person.firstName}`, 'Hello')
                             .then(
                                 () => this.router.navigate(['/home']));
                     } else {
@@ -43,9 +41,8 @@ export class LoginComponent implements OnInit {
                                 () => this.router.navigate(['/home']));
                     }
                 }
-
             } else {
-                this.openSnackbar('Username or password invalid');
+                this.openDialogCustomMsg('Username or password invalid');
             }
         });
     }
@@ -59,12 +56,12 @@ export class LoginComponent implements OnInit {
                 } else {
                     this.activatedMailResponse = 'Your account wasn\'t activated. Please login and try again. Note that you can\'t use the app properly without a verified account';
                 }
-                this.openSnackbar(this.activatedMailResponse);
+                this.openDialogCustomMsg(this.activatedMailResponse);
             }
         });
     }
 
-    private openSnackbar(msg) {
+    private openDialogCustomMsg(msg) {
         this.dialog.alert(msg, 'Mail Activation', 'OK');
     }
 }

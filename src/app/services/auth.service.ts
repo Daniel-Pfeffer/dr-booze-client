@@ -5,6 +5,7 @@ import {Injectable} from '@angular/core';
 // Custom time management class
 import * as moment from 'moment';
 import {User} from '../entities/user';
+import {Login} from '../interfaces/login';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,7 @@ export class AuthService {
     constructor() {
     }
 
-    public static setToken(user: User) {
+    public static setToken(user: Login) {
         localStorage.setItem('logged_in', String(true));
         localStorage.setItem('user', JSON.stringify(user));
     }

@@ -1,8 +1,8 @@
 import {User} from './user';
 
 export class Person {
-    firstname?: string;
-    lastname?: string;
+    firstName?: string;
+    lastName?: string;
     age: Date;
     weight: number;
     gender: string;
