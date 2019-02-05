@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HttpService} from '../services/http.service';
 import {InsertData} from '../interfaces/insert-data';
+import {Dialogs} from '@ionic-native/dialogs/ngx';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-information',
@@ -13,7 +15,7 @@ export class InformationComponent {
     form: FormGroup;
     date: Date;
 
-    constructor(private fb: FormBuilder, private http: HttpService) {
+    constructor(private fb: FormBuilder, private http: HttpService, private dialog: Dialogs, private router: Router) {
         this.date = new Date();
         this.form = this.fb.group({
             foreName: ['', [Validators.minLength(1), Validators.maxLength(100), Validators.pattern(/^[a-zA-z]*$/)]],
@@ -25,15 +27,18 @@ export class InformationComponent {
         });
     }
 
-    private static saveDate(res: InsertData) {
+    private saveDate(res: InsertData) {
         localStorage.removeItem('user');
         if (!res.error) {
             localStorage.setItem('user', JSON.stringify(res));
+            this.dialog.alert('Thanks for joining Dr. Booze!\nYour data will be handled carefully and discrete', 'Login finished')
+                .then(
+                    () => this.router.navigate(['/home']));
         }
     }
 
     onSubmit() {
         const value = this.form.value;
-        this.http.insertData(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName).subscribe(res => InformationComponent.saveDate(res));
+        this.http.insertData(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName).subscribe(res => this.saveDate(res));
     }
 }

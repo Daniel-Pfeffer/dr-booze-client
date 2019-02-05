@@ -32,7 +32,7 @@ export class HttpService {
     }
 
     insertData(birthday, weight, height, gender, firstName?, lastName?) {
-        const user = JSON.parse(localStorage.getItem('user'));
+        const user: User = JSON.parse(localStorage.getItem('user')).user;
         const email = user.email;
         console.log(`bday: ${birthday}\nweight: ${weight}\nheight: ${height}\ngender: ${gender}\nfirstname: ${firstName}\nlastName: ${lastName}\nemail: ${email}`);
         return this.http.post<InsertData>(this.ipLocal + 'insertDetails', {birthday, weight, height, gender, firstName, lastName, email});
