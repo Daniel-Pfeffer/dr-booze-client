@@ -1,0 +1,25 @@
+<!--TODO: add meaningful errors and hints
+     THX Greisi or Hanna
+-->
+<ion-header>
+    <ion-toolbar>
+        <ion-back-button></ion-back-button>
+        <ion-title>Login</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <ion-item>
+            <ion-input type="text" name="username" placeholder="Username" formControlName="username"></ion-input>
+            <ion-badge color="danger" *ngIf="form.controls.username.errors?.required">This boi required</ion-badge>
+        </ion-item>
+        <br>
+        <ion-item>
+            <ion-input type="password" name="password" placeholder="Password" formControlName="password"></ion-input>
+            <ion-badge color="danger" *ngIf="form.controls.password.errors?.required">This boi required</ion-badge>
+            <ion-badge color="danger" *ngIf="form.controls.password.errors?.pattern">This boi no pwd</ion-badge>
+        </ion-item>
+        <br>
+            <ion-button type="submit" [disabled]="!form.valid" color="primary">Login</ion-button>
+    </form>
+</ion-content>
