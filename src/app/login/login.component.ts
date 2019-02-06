@@ -63,7 +63,6 @@ export class LoginComponent implements OnInit {
             }
         });
     }
-
     private openSnackbar(msg) {
         this.dialog.alert(msg, 'Mail Activation', 'OK');
     }

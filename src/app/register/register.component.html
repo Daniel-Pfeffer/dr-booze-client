@@ -1,7 +1,7 @@
 <!--TODO: Meaningful error messages
      Meaningful hints
      Thx Greis oder Hanna
--->
+
 <ion-header>
     <ion-toolbar>
         <ion-back-button></ion-back-button>
@@ -9,10 +9,18 @@
             Register
         </ion-title>
     </ion-toolbar>
-</ion-header>
-<ion-content id="fuck" override>
+</ion-header>-->
+<ion-content>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <ion-item>
+        <div class="background">
+            <div class="logo">
+                <!--ion-img [src]="../../assets/logo_placeholder.png"></ion-img> -->
+                <img src="../../assets/logo_placeholder.png" alt="logo">
+
+            </div>
+        <div class="content">
+        <ion-item color="dark">
+            <ion-icon style="color:white" name="person"></ion-icon>
             <ion-input name="username" formControlName="username" placeholder="Username" required></ion-input>
             <!--
             the ngIf will be activated if the form.controls."formControlName".errors?."Validator.type"
@@ -23,30 +31,34 @@
             Validator.type is the validator type which is created in the FormBuilder.
                 the Validator must be created in the FormBuilder in order to use it
             -->
-            <ion-badge color="danger" *ngIf="form.controls.username.errors?.required">This Boi required</ion-badge>
+            <ion-badge color="danger" *ngIf="form.controls.username.errors?.required">This is required</ion-badge>
         </ion-item>
         <br>
-        <ion-item>
+        <ion-item color="dark">
+            <ion-icon style="color:white" name="mail"></ion-icon>
             <ion-input name="email" formControlName="email" placeholder="E-Mail" required></ion-input>
-            <ion-badge color="danger" *ngIf="form.controls.email.errors?.required">This Boi required</ion-badge>
-            <ion-badge color="danger" *ngIf="form.controls.email.errors?.pattern">This Bitch left</ion-badge>
+            <ion-badge color="danger" *ngIf="form.controls.email.errors?.required">This is required</ion-badge>
+            <ion-badge color="danger" *ngIf="form.controls.email.errors?.pattern">This is left</ion-badge>
             <!--No pun intended-->
-            <ion-badge color="danger" *ngIf="form.controls.email.errors?.maxLength">This Schlong long af</ion-badge>
+            <ion-badge color="danger" *ngIf="form.controls.email.errors?.maxLength">Too long</ion-badge>
         </ion-item>
         <br>
-        <ion-item>
+        <ion-item color="dark" id="last">
+            <ion-icon style="color:white" name="lock"></ion-icon>
             <ion-input name="password" formControlName="password" placeholder="Password" type="password"
                        required></ion-input>
-            <ion-badge color="danger" *ngIf="form.controls.password.errors?.required">This Boi required</ion-badge>
-            <ion-badge color="danger" *ngIf="form.controls.password.errors?.pattern">This Bitch left</ion-badge>
+            <ion-badge color="danger" *ngIf="form.controls.password.errors?.required">This is required</ion-badge>
+            <ion-badge color="danger" *ngIf="form.controls.password.errors?.pattern">This is left</ion-badge>
             <!--No pun intended-->
-            <ion-badge color="danger" *ngIf="form.controls.password.errors?.maxLength">This Schlong long af
+            <ion-badge color="danger" *ngIf="form.controls.password.errors?.maxLength">Too long
             </ion-badge>
         </ion-item>
         <ion-note>Password must be 8-25 chars long and has to contain a capital letter and a number</ion-note>
-        <br>
-        <ion-button color="primary" type="submit" [disabled]="!form.valid" class="submit">Submit</ion-button>
+            <br><br><br>
+            <ion-button [disabled]="!form.valid" color="danger" expand="block" fill="solid" type="submit"  class="submit">Submit</ion-button><br>
+            <a [routerLink]="['/login']" id="alreadyAcc">I already have an Account!</a>
+        </div>
+        </div>
     </form>
-    <a [routerLink]="['/login']" id="alreadyAcc">I already have an Account!</a>
-    <a [routerLink]="['/profile']">Fucc testing</a>
+   <!-- <a [routerLink]="['/login']" id="alreadyAcc">I already have an Account!</a> -->
 </ion-content>

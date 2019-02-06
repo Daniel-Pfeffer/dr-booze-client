@@ -1,25 +1,45 @@
-<!--TODO: add meaningful errors and hints
+<!-- TODO: add meaningful errors and hints
      THX Greisi or Hanna
--->
+
 <ion-header>
     <ion-toolbar>
         <ion-back-button></ion-back-button>
         <ion-title>Login</ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content>
+-->
+
+<ion-content class="red">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <ion-item>
+        <div class="background">
+            <div class="logo">
+                <!--ion-img [src]="../../assets/logo_placeholder.png"></ion-img> -->
+                <img src="../../assets/logo_placeholder.png" alt="logo">
+
+            </div>
+        <div class="content">
+        <ion-item color="dark">
+            <ion-icon style="color:white" name="person"></ion-icon>
             <ion-input type="text" name="username" placeholder="Username" formControlName="username"></ion-input>
-            <ion-badge color="danger" *ngIf="form.controls.username.errors?.required">This boi required</ion-badge>
+            <ion-badge color="danger" *ngIf="form.controls.username.errors?.required">This is required</ion-badge>
         </ion-item>
         <br>
-        <ion-item>
+        <ion-item color="dark">
+            <ion-icon style="color:white" name="lock"></ion-icon>
             <ion-input type="password" name="password" placeholder="Password" formControlName="password"></ion-input>
-            <ion-badge color="danger" *ngIf="form.controls.password.errors?.required">This boi required</ion-badge>
-            <ion-badge color="danger" *ngIf="form.controls.password.errors?.pattern">This boi no pwd</ion-badge>
+            <ion-badge color="danger" *ngIf="form.controls.password.errors?.required">This is required</ion-badge>
+            <ion-badge color="danger" *ngIf="form.controls.password.errors?.pattern">This is no password</ion-badge>
         </ion-item>
+
+            <p><a>Forgot your password?</a></p>
+            <ion-button [disabled]="!form.valid" expand="block" fill="solid" type="submit" color="danger">Login</ion-button>
+            <br>
+            <ion-button [disabled]="!form.valid" expand="block" fill="solid" type="submit" color="medium" onClick="goToRegister()">Register</ion-button>
+        </div>
         <br>
-            <ion-button type="submit" [disabled]="!form.valid" color="primary">Login</ion-button>
+
+        </div>
     </form>
 </ion-content>
+
+<!--[disabled]="!form.valid"-->
