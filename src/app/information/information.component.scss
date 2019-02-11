@@ -1,4 +1,4 @@
-.content{
+.content {
   width: 95%;
   color: white;
   text-align: center;
@@ -6,52 +6,48 @@
   height: 95vh;
 }
 
-ion-button{
-  background: red;
-}
-
-p{
+p {
   margin-top: 10%;
   color: black;
 }
 
-ion-icon{
+ion-icon {
   margin-right: 2%;
 }
 
-a{
+a {
   color: black;
   text-decoration: underline;
   font-weight: bold;
 }
 
-ion-item{
+ion-item {
   border-radius: 5%;
 }
 
-h1{
+h1 {
   color: black;
   font-weight: bold;
   background-color: white;
   width: 60%;
 }
 
-ion-input{
+ion-input {
   border-radius: 5%;
 }
 
-ion-badge{
+ion-badge {
   opacity: 100%;
 }
 
-img{
+img {
   height: 200px;
   width: 200px;
   margin-top: 6vh;
   margin-bottom: 3vh;
 }
 
-.background{
+.background {
   background-image: url("../../assets/background.jpg");
   background-repeat: repeat;
   display: flex;
@@ -62,13 +58,13 @@ img{
   justify-content: center;
 }
 
-.red{
+.red {
   //ion-background-color: red;
   --ion-background-image: url("../../assets/background.jpg") repeat;
 }
 
 
-ion-grid{
+ion-grid {
   margin-left: auto;
   margin-right: auto;
 }

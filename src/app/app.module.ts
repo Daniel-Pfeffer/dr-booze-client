@@ -26,6 +26,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
 import {DatePicker} from '@ionic-native/date-picker/ngx';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
     declarations: [
@@ -42,7 +43,8 @@ import {DatePicker} from '@ionic-native/date-picker/ngx';
         PickerDetailComponent,
         StatisticsMainComponent,
         StatisticsComponent,
-        StatisticsDetailComponent
+        StatisticsDetailComponent,
+        ProfileComponent
     ],
     entryComponents: [],
     imports: [

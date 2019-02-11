@@ -27,14 +27,14 @@ export class LoginComponent implements OnInit {
             if (!item.error) {
                 item.user.person = item.person;
                 console.log(item.user);
-                AuthService.setToken(item.user);
+                AuthService.setToken(item);
                 if (item.user.person == null) {
                     this.dialog.alert(`Hello ${item.user.username}`, 'Login')
                         .then(
                             () => this.router.navigate(['/profile']));
                 } else {
-                    if (item.user.person.firstname !== undefined || item.user.person.firstname != null) {
-                        this.dialog.alert(`Hello ${item.user.person.firstname}`, 'Hello')
+                    if (item.user.person.firstName !== undefined || item.user.person.firstName != null) {
+                        this.dialog.alert(`Hello ${item.user.person.firstName}`, 'Hello')
                             .then(
                                 () => this.router.navigate(['/home']));
                     } else {
@@ -63,6 +63,7 @@ export class LoginComponent implements OnInit {
             }
         });
     }
+
     private openSnackbar(msg) {
         this.dialog.alert(msg, 'Mail Activation', 'OK');
     }

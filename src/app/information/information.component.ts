@@ -25,6 +25,17 @@ export class InformationComponent {
             height: ['', [Validators.required, Validators.pattern(/^[0-9]+$/), Validators.max(230), Validators.min(150)]],
             gender: ['', [Validators.required]]
         });
+
+        const person = JSON.parse(localStorage.getItem('user')).person;
+        if (person) {
+            this.form.controls.foreName.setValue(person.firstName);
+            this.form.controls.surName.setValue(person.lastName);
+            this.form.controls.age.setValue(new Date(person.birthday).toISOString());
+            console.log(`Birthday: ${new Date(person.birthday)}\n Birthday ISO: ${new Date(person.birthday).toISOString()}`);
+            this.form.controls.weight.setValue(person.weight);
+            this.form.controls.height.setValue(person.height);
+            this.form.controls.gender.setValue(person.gender.toUpperCase());
+        }
     }
 
     private saveDate(res: InsertData) {
@@ -40,5 +51,9 @@ export class InformationComponent {
     onSubmit() {
         const value = this.form.value;
         this.http.insertData(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName).subscribe(res => this.saveDate(res));
+    }
+
+    onChange() {
+
     }
 }
