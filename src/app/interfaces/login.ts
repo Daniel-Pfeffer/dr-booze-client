@@ -13,6 +13,5 @@ import {Person} from '../entities/person';
  */
 export interface Login {
     error?: CustomError;
-    user?: User;
-    person?: Person;
+    token?: string;
 }

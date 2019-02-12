@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {LoginComponent} from '../login/login.component';
-import {RegisterComponent} from '../register/register.component';
-import {DashboardComponent} from '../dashboard/dashboard.component';
-import {StatisticsMainComponent} from '../statistics-main/statistics-main.component';
-import {InformationComponent} from '../information/information.component';
-import {CalenderComponent} from '../calender/calender.component';
+import {LoginComponent} from '../components/login/login.component';
+import {RegisterComponent} from '../components/register/register.component';
+import {DashboardComponent} from '../components/dashboard/dashboard.component';
+import {StatisticsMainComponent} from '../components/statistics-main/statistics-main.component';
+import {InformationComponent} from '../components/information/information.component';
+import {CalenderComponent} from '../components/calender/calender.component';
 import {RegisteredGuard} from '../guards/registered.guard';
 import {NeedRegisterGuard} from '../guards/need-register.guard';
 

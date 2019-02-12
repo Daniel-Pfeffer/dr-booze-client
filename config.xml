@@ -85,4 +85,5 @@
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <plugin name="cordova-plugin-datepicker" spec="0.9.3" />
+    <engine name="browser" spec="5.0.4" />
 </widget>
