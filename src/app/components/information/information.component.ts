@@ -28,24 +28,27 @@ export class InformationComponent {
             gender: ['', [Validators.required]]
         });
 
-        const tempPerson = JSON.parse(localStorage.getItem('user'));
+        const tempPerson = JSON.parse(localStorage.getItem('person'));
         if (tempPerson) {
             const person = tempPerson.person;
-            this.alreadyReg = true;
-            this.form.controls.foreName.setValue(person.firstName);
-            this.form.controls.surName.setValue(person.lastName);
-            this.form.controls.age.setValue(new Date(person.birthday).toISOString());
-            console.log(`Birthday: ${new Date(person.birthday)}\n Birthday ISO: ${new Date(person.birthday).toISOString()}`);
-            this.form.controls.weight.setValue(person.weight);
-            this.form.controls.height.setValue(person.height);
-            this.form.controls.gender.setValue(person.gender.toUpperCase());
+            if (person) {
+                this.alreadyReg = true;
+                this.form.controls.foreName.setValue(person.firstName);
+                this.form.controls.surName.setValue(person.lastName);
+                this.form.controls.age.setValue(new Date(person.birthday).toISOString());
+                console.log(`Birthday: ${new Date(person.birthday)}\n Birthday ISO: ${new Date(person.birthday).toISOString()}`);
+                this.form.controls.weight.setValue(person.weight);
+                this.form.controls.height.setValue(person.height);
+                this.form.controls.gender.setValue(person.gender.toUpperCase());
+            }
         }
     }
 
     private saveDate(res: InsertData) {
-        localStorage.removeItem('user');
+        localStorage.removeItem('person');
         if (!res.error) {
-            localStorage.setItem('user', JSON.stringify(res));
+            res.person.user = res.user;
+            localStorage.setItem('person', JSON.stringify(res));
             this.dialog.alert('Thanks for joining Dr. Booze!\nYour data will be handled carefully and discrete', 'Login finished')
                 .then(
                     () => this.router.navigate(['/home']));
@@ -56,11 +59,16 @@ export class InformationComponent {
         const value = this.form.value;
         this.http.insertData(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName)
             .subscribe(
-                res => this.saveDate(res));
+                res => {
+                    this.saveDate(res);
+                }
+            );
     }
 
     onChange() {
         const value = this.form.value;
-        this.http.updateDetails();
+        this.http.updateDetails(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName)
+            .subscribe(
+                res => this.saveDate(res));
     }
 }

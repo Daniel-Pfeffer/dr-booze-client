@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
                 this.httpService.getPerson().subscribe(person => {
                     if (!person.error) {
                         console.log(person);
-                        AuthService.setToken(item.token, person.person);
+                        AuthService.setToken(item.token, person);
                         if (person.person == null) {
                             this.dialog.alert(`Hello`, 'Login')
                                 .then(

@@ -4,6 +4,7 @@ Used for all of the authentication
 import {Injectable} from '@angular/core';
 // Custom time management class
 import {Person} from '../entities/person';
+import {GetPerson} from '../interfaces/get-person';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,7 @@ export class AuthService {
     }
 
 
-    public static setToken(token: string, person: Person) {
+    public static setToken(token: string, person: GetPerson) {
         localStorage.setItem('auth', token);
         localStorage.setItem('person', JSON.stringify(person));
     }

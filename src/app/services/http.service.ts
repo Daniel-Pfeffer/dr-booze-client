@@ -9,6 +9,7 @@ import {User} from '../entities/user';
 import {InsertData} from '../interfaces/insert-data';
 import {Person} from '../entities/person';
 import {GetPerson} from '../interfaces/get-person';
+import {Drink} from '../interfaces/drink';
 
 @Injectable({
     providedIn: 'root'
@@ -53,7 +54,22 @@ export class HttpService {
         }, {headers: this.header});
     }
 
-    updateDetails() {
-        this.header.set('Authorization', 'Bearer ' + localStorage.getItem('auth'));
+    updateDetails(birthday, weight, height, gender, firstName?, lastName?) {
+        return this.http.post<InsertData>(this.ipLocal + 'manage/updateDetails', {
+            birthday,
+            weight,
+            height,
+            gender,
+            firstName,
+            lastName
+        }, {headers: this.header});
+    }
+
+    getBeer() {
+        return this.http.get<Array<Drink>>(this.ipLocal + 'auth/getBeer', {headers: this.header});
+    }
+
+    getWine() {
+        return this.http.get<Array<Drink>>(this.ipLocal + 'auth/getWine', {headers: this.header});
     }
 }
