@@ -1,27 +1,17 @@
-<!--TODO: Meaningful error messages
-     Meaningful hints
-     Thx Greis oder Hanna
-     -->
-
 <ion-header>
-    <ion-toolbar>
-        <ion-back-button></ion-back-button>
+    <ion-toolbar color="dark">
         <ion-title>
             Register
         </ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content [scrollY]="false">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="background">
-            <div class="logo">
-                <!--ion-img [src]="../../assets/logo_placeholder.png"></ion-img> -->
-                <img src="../../assets/logo_placeholder.png" alt="logo">
-
-            </div>
+            <img src="../../../assets/icon/Logo.svg" alt="logo">
             <div class="content">
                 <ion-item color="dark">
-                    <ion-icon style="color:white" name="person"></ion-icon>
+                    <ion-icon style="color: white" name="person"></ion-icon>
                     <ion-input name="username" formControlName="username" placeholder="Username" required></ion-input>
                     <!--
                     the ngIf will be activated if the form.controls."formControlName".errors?."Validator.type"
@@ -63,7 +53,9 @@
                             class="submit">Register
                 </ion-button>
                 <br>
-                <a [routerLink]="['/login']">I already have an Account!</a>
+                <ion-button [routerLink]="['/login']" color="medium">
+                    I already have an account
+                </ion-button>
             </div>
         </div>
     </form>

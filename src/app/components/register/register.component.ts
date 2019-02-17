@@ -3,7 +3,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {HttpService} from '../../services/http.service';
 import {SwitchError} from '../../helper/switch-error';
-import {DialogDisplay} from '../../helper/dialog-display';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
 
 @Component({
@@ -23,17 +22,18 @@ export class RegisterComponent {
 
     do not mess with the constructor especially do not mess with the patterns
     */
-
-    constructor(private fb: FormBuilder, private httpService: HttpService, private router: Router, private dialog: Dialogs, private switcher: SwitchError) {
+    constructor(private fb: FormBuilder, private httpService: HttpService, private router: Router,
+                private dialog: Dialogs, private switcher: SwitchError) {
         this.form = this.fb.group({
-            email: ['', [Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            ), Validators.maxLength(100)]],
-            password: ['', [Validators.required, Validators.pattern(/^.*(?=.{8,})(?=.*\d)((?=.*[a-z]))((?=.*[A-Z])).*$/), Validators.maxLength(25)]],
-            username: ['', Validators.required]
+            email:
+                ['', [Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/), Validators.maxLength(100)]],
+            password:
+                ['', [Validators.required, Validators.pattern(/^.*(?=.{8,})(?=.*\d)((?=.*[a-z]))((?=.*[A-Z])).*$/), Validators.maxLength(25)]],
+            username:
+                ['', Validators.required]
         });
     }
 
-    // handles what happens after an submit
     onSubmit() {
         const val = this.form.value;
         console.log(val);
