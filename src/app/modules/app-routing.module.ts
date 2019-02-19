@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from '../components/login/login.component';
 import {RegisterComponent} from '../components/register/register.component';
 import {DashboardComponent} from '../components/dashboard/dashboard.component';
@@ -10,8 +10,8 @@ import {RegisteredGuard} from '../guards/registered.guard';
 import {NeedRegisterGuard} from '../guards/need-register.guard';
 
 const routes: Routes = [
-    {path: 'login', component: LoginComponent, canActivate: [RegisteredGuard]},
     {path: '', component: RegisterComponent, canActivate: [RegisteredGuard]},
+    {path: 'login', component: LoginComponent, canActivate: [RegisteredGuard]},
     {path: 'register', component: RegisterComponent, canActivate: [RegisteredGuard]},
     {path: 'home', component: DashboardComponent, canActivate: [NeedRegisterGuard]},
     {path: 'stats', component: StatisticsMainComponent, canActivate: [NeedRegisterGuard]},

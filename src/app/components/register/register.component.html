@@ -5,7 +5,7 @@
         </ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content [scrollY]="false">
+<ion-content>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="background">
             <img src="../../../assets/icon/Logo.svg" alt="logo">
@@ -48,7 +48,7 @@
                     </ion-badge>
                 </ion-item>
                 <ion-note>Password must be 8-25 chars long and has to contain a capital letter and a number</ion-note>
-                <br><br><br>
+                <br><br>
                 <ion-button [disabled]="!form.valid" color="danger" expand="block" fill="solid" type="submit"
                             class="submit">Register
                 </ion-button>
@@ -56,8 +56,10 @@
                 <ion-button [routerLink]="['/login']" color="medium">
                     I already have an account
                 </ion-button>
+                <ion-button color="primary" (click)="onAutoFill()">
+                    (dev) auto-fill
+                </ion-button>
             </div>
         </div>
     </form>
-    <!-- <a [routerLink]="['/login']" id="alreadyAcc">I already have an Account!</a> -->
 </ion-content>

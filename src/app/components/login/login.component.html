@@ -28,12 +28,16 @@
                     <ion-badge color="danger" *ngIf="form.controls.password.errors?.pattern">This is no password
                     </ion-badge>
                 </ion-item>
-
                 <p><a>Forgot your password?</a></p>
-                <ion-button [disabled]="!form.valid" expand="block" fill="solid" type="submit" color="danger">Login
+                <ion-button [disabled]="!form.valid" expand="block" fill="solid" type="submit" color="danger">
+                    Login
                 </ion-button>
                 <br>
-                <ion-button expand="block" fill="solid" color="medium" [routerLink]="['/register']">Register
+                <ion-button expand="block" fill="solid" color="medium" [routerLink]="['/register']">
+                    Register
+                </ion-button>
+                <ion-button color="primary" (click)="onAutoFill()">
+                    (dev) auto-fill
                 </ion-button>
             </div>
             <br>

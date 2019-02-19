@@ -14,10 +14,13 @@ export class LoginComponent implements OnInit {
     form: FormGroup;
     activatedMailResponse: string;
 
-    constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private dialog: Dialogs, private activatedRoute: ActivatedRoute, private httpService: HttpService) {
+    constructor(private fb: FormBuilder, private authService: AuthService, private router: Router,
+                private dialog: Dialogs, private activatedRoute: ActivatedRoute, private httpService: HttpService) {
         this.form = this.fb.group({
-            username: ['', [Validators.required]],
-            password: ['', [Validators.required, Validators.pattern(/^.*(?=.{8,})(?=.*\d)((?=.*[a-z]))((?=.*[A-Z])).*$/), Validators.maxLength(25)]]
+            username:
+                ['', [Validators.required]],
+            password:
+                ['', [Validators.required, Validators.pattern(/^.*(?=.{8,})(?=.*\d)((?=.*[a-z]))((?=.*[A-Z])).*$/), Validators.maxLength(25)]]
         });
     }
 
@@ -25,18 +28,22 @@ export class LoginComponent implements OnInit {
         const val = this.form.value;
         this.httpService.login(val.username, val.password).subscribe(item => {
             console.log('token from rep ' + item.token);
+
             if (!item.error) {
                 this.httpService.header = this.httpService.header.append('Authorization', 'Bearer ' + item.token);
                 console.log(this.httpService.header.keys());
                 console.log('token in auth ' + this.httpService.header.get('Authorization'));
+
                 this.httpService.getPerson().subscribe(person => {
+
                     if (!person.error) {
                         console.log(person);
                         AuthService.setToken(item.token, person);
+
                         if (person.person == null) {
                             this.dialog.alert(`Hello`, 'Login')
                                 .then(
-                                    () => this.router.navigate(['/profile']));
+                                    () => this.router.navigate(['profile']));
                         } else {
                             if (person.person.firstName !== undefined || person.person.firstName != null) {
                                 this.dialog.alert(`Hello ${person.person.firstName}`, 'Hello')
@@ -73,4 +80,9 @@ export class LoginComponent implements OnInit {
     private openSnackbar(msg) {
         this.dialog.alert(msg, 'Mail Activation', 'OK');
     }
+
+    onAutoFill() {
+        this.form.setValue({username: 'User1', password: 's3fePassword'});
+    }
+
 }

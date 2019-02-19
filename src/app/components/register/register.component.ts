@@ -67,4 +67,9 @@ export class RegisterComponent {
             .then(() =>
                 this.router.navigate(['login']));
     }
+
+    onAutoFill() {
+        this.form.setValue({username: 'User1', email: 'dr.boozeteam@gmail.com', password: 's3fePassword'});
+    }
+
 }

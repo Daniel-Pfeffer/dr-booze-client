@@ -13,7 +13,7 @@ import {LoginComponent} from './components/login/login.component';
 import {CalenderComponent} from './components/calender/calender.component';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {InformationComponent} from './components/information/information.component';
-import {ChallengesComponent} from './components/information/challenges/challenges.component';
+import {ChallengesComponent} from './components/challenges/challenges.component';
 import {PickMainComponent} from './components/pick-main/pick-main.component';
 import {PickerComponent} from './components/pick-main/picker/picker.component';
 import {PickerDetailComponent} from './components/pick-main/picker/picker-detail/picker-detail.component';

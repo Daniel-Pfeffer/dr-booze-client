@@ -6,20 +6,8 @@
   height: 95vh;
 }
 
-p {
-  margin-top: 10%;
-  color: black;
-}
-
 ion-icon {
   margin-right: 2%;
-}
-
-a {
-  color: black;
-  text-decoration: underline;
-  font-weight: bold;
-  background: white;
 }
 
 ion-note {
@@ -61,16 +49,10 @@ img {
 }
 
 .red {
-  //ion-background-color: red;
   --ion-background-image: url("../../../assets/background.jpg") repeat;
 }
-
 
 ion-grid {
   margin-left: auto;
   margin-right: auto;
-}
-
-#last {
-  margin-bottom: 1%;
 }
