@@ -12,19 +12,17 @@ export class HeaderComponent {
     drinks = new Array<Drink>();
     gkw: number;
 
-
     currentPerMille(): string {
-        console.log('hi');
         if (localStorage.getItem('person')) {
             this.gkw = this.calculateGKW();
         }
         this.drinks = <Array<Drink>>JSON.parse(localStorage.getItem('drinks'));
         if (this.drinks) {
             this.drinks.forEach(drink => {
-                drink.bak = this.calculateBAK(drink);
+                drink.bak = this.calculateBAC(drink);
             });
         }
-        return 'Henlo';
+        return 'insert current per mille here';
     }
 
     calculateGKW(): number {
@@ -43,7 +41,7 @@ export class HeaderComponent {
         }
     }
 
-    calculateBAK(drink: Drink): number {
+    calculateBAC(drink: Drink): number {
         const a = (drink.amount * (drink.percentage / 100)) * 0.8;
         return (0.8 * a) / (1.055 * this.gkw);
     }

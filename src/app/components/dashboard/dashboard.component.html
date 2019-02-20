@@ -1,3 +1,14 @@
-<p>
-  dashboard works!
-</p>
+<ion-header>
+    <ion-toolbar color="dark">
+        <ion-title slot="start">Dashboard</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="onLogout()">
+                <ion-icon name="log-out"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <app-header></app-header>
+    <div class="background"></div>
+</ion-content>

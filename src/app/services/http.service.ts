@@ -19,8 +19,6 @@ export class HttpService {
     private ipApp = 'http://192.168.0.155:8080/rest/';
     public header: HttpHeaders = new HttpHeaders();
 
-    // help me i don't have a fuccin clue
-
     constructor(private http: HttpClient) {
         if (!!localStorage.getItem('auth')) {
             this.header = this.header.set('Authorization', 'Bearer ' + localStorage.getItem('auth'));

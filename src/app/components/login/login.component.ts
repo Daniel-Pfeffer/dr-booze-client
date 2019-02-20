@@ -24,13 +24,29 @@ export class LoginComponent implements OnInit {
         });
     }
 
+    ngOnInit(): void {
+        this.activatedRoute.queryParams.subscribe(params => {
+            const activatedMail = params['token'];
+            if (activatedMail) {
+                if (activatedMail === 'true') {
+                    this.activatedMailResponse = 'Your account was successfully activated. You now can login';
+                } else {
+                    this.activatedMailResponse =
+                        'Your account wasn\'t activated. Please login and try again.' +
+                        ' Note that you can\'t use the app properly without a verified account';
+                }
+                this.openSnackbar(this.activatedMailResponse);
+            }
+        });
+    }
+
     onSubmit() {
         const val = this.form.value;
         this.httpService.login(val.username, val.password).subscribe(item => {
             console.log('token from rep ' + item.token);
 
             if (!item.error) {
-                this.httpService.header = this.httpService.header.append('Authorization', 'Bearer ' + item.token);
+                this.httpService.header = this.httpService.header.set('Authorization', 'Bearer ' + item.token);
                 console.log(this.httpService.header.keys());
                 console.log('token in auth ' + this.httpService.header.get('Authorization'));
 
@@ -59,20 +75,6 @@ export class LoginComponent implements OnInit {
                 });
             } else {
                 this.dialog.alert('Username or password invalid', 'Mail Activation', 'OK');
-            }
-        });
-    }
-
-    ngOnInit(): void {
-        this.activatedRoute.queryParams.subscribe(params => {
-            const activatedMail = params['token'];
-            if (activatedMail) {
-                if (activatedMail === 'true') {
-                    this.activatedMailResponse = 'Your account was successfully activated. You now can login';
-                } else {
-                    this.activatedMailResponse = 'Your account wasn\'t activated. Please login and try again. Note that you can\'t use the app properly without a verified account';
-                }
-                this.openSnackbar(this.activatedMailResponse);
             }
         });
     }
