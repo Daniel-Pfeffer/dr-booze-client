@@ -61,12 +61,10 @@ export class HttpService {
     }
 
     getBeer() {
-        return this.http.get<Array<Drink>>(this.ipApp + 'getter/getBeer', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getBeer', {headers: this.header});
     }
 
     getWine() {
-        return this.http.get<Array<Drink>>(this.ipApp + 'getter/getWine', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getWine', {headers: this.header});
     }
 }
-
-// TODO: Validator for username
