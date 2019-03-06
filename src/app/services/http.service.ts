@@ -16,7 +16,7 @@ export class HttpService {
 
     private ipLocal = 'http://localhost:8080/rest/';
     private ipLocalGlobal = 'http://192.168.1.6:8080/rest/';
-    private ipApp = 'http://192.168.0.155:8080/rest/';
+    private ipApp = 'http://192.168.2.1:8080/rest/';
     public header: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient) {
@@ -61,10 +61,12 @@ export class HttpService {
     }
 
     getBeer() {
-        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getBeer', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.ipApp + 'getter/getBeer', {headers: this.header});
     }
 
     getWine() {
-        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getWine', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.ipApp + 'getter/getWine', {headers: this.header});
     }
 }
+
+// TODO: Validator for username

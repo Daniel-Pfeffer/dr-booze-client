@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {HttpService} from '../../services/http.service';
 import {SwitchError} from '../../helper/switch-error';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
+import {Person} from '../../entities/person';
 
 @Component({
     selector: 'app-register',
@@ -30,7 +31,7 @@ export class RegisterComponent {
             password:
                 ['', [Validators.required, Validators.pattern(/^.*(?=.{8,})(?=.*\d)((?=.*[a-z]))((?=.*[A-Z])).*$/), Validators.maxLength(25)]],
             username:
-                ['', Validators.required]
+                ['', [Validators.required, Validators.minLength(4), Validators.maxLength(25)]]
         });
     }
 
@@ -72,4 +73,9 @@ export class RegisterComponent {
         this.form.setValue({username: 'User1', email: 'dr.boozeteam@gmail.com', password: 's3fePassword'});
     }
 
+    onAutoLog() {
+        const person: Person = new Person();
+        localStorage.setItem('auth', '');
+        localStorage.setItem('person', JSON.stringify(person));
+    }
 }

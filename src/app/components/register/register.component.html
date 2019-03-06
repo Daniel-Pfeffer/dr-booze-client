@@ -13,16 +13,11 @@
                 <ion-item color="dark">
                     <ion-icon style="color: white" name="person"></ion-icon>
                     <ion-input name="username" formControlName="username" placeholder="Username" required></ion-input>
-                    <!--
-                    the ngIf will be activated if the form.controls."formControlName".errors?."Validator.type"
-                    The form variable is found in the register.component.ts
-                    With controls the access to all formControlNames is given
-                    With the "formControlName" u can access the different formControl elements see formControlName="username"
-                    Errors? access the errors if there are any
-                    Validator.type is the validator type which is created in the FormBuilder.
-                        the Validator must be created in the FormBuilder in order to use it
-                    -->
                     <ion-badge color="danger" *ngIf="form.controls.username.errors?.required">Username is required
+                    </ion-badge>
+                    <ion-badge color="danger" *ngIf="form.controls.username.errors?.minLength">Username is too short
+                    </ion-badge>
+                    <ion-badge color="danger" *ngIf="form.controls.username.errors?.maxLength">Username is too long
                     </ion-badge>
                 </ion-item>
                 <br>
@@ -58,6 +53,9 @@
                 </ion-button>
                 <ion-button color="primary" (click)="onAutoFill()">
                     (dev) auto-fill
+                </ion-button>
+                <ion-button color="primary" (click)="onAutoLog()">
+                    (dev) auto-log
                 </ion-button>
             </div>
         </div>
