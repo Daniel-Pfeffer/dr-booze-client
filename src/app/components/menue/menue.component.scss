@@ -1,0 +1,13 @@
+ion-grid{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: white;
+}
+
+ion-col{
+  border-right: 1px solid black;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
