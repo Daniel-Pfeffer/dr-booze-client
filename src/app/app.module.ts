@@ -28,6 +28,8 @@ import {DatePicker} from '@ionic-native/date-picker/ngx';
 import {ProfileComponent} from './components/profile/profile.component';
 import {SwitchError} from './helper/switch-error';
 import {HeaderComponent} from './components/header/header.component';
+import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
+import { UpdatePasswordComponent } from './components/update-password/update-password.component';
 
 @NgModule({
     declarations: [
@@ -45,7 +47,9 @@ import {HeaderComponent} from './components/header/header.component';
         StatisticsComponent,
         StatisticsDetailComponent,
         ProfileComponent,
-        HeaderComponent
+        HeaderComponent,
+        RequestPasswordChangeComponent,
+        UpdatePasswordComponent,
     ],
     entryComponents: [],
     imports: [

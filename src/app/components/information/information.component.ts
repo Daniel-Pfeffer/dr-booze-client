@@ -3,7 +3,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HttpService} from '../../services/http.service';
 import {InsertData} from '../../interfaces/insert-data';
 import {Router} from '@angular/router';
-import {DialogDisplay} from '../../helper/dialog-display';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
 
 @Component({
@@ -70,5 +69,16 @@ export class InformationComponent {
         this.http.updateDetails(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName)
             .subscribe(
                 res => this.saveDate(res));
+    }
+
+    onAutoFill() {
+        this.form.controls.foreName.setValue('Guenther');
+        this.form.controls.surName.setValue('Friedrich');
+        const date = new Date();
+        date.setFullYear(2000);
+        this.form.controls.age.setValue(date.toISOString());
+        this.form.controls.weight.setValue(80);
+        this.form.controls.height.setValue(167);
+        this.form.controls.gender.setValue('M');
     }
 }

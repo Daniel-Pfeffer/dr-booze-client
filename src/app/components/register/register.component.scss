@@ -6,19 +6,10 @@
   height: 95vh;
 }
 
-ion-icon {
-  margin-right: 2%;
-}
-
 ion-note {
   background: white;
   color: black;
   font-weight: bold;
-}
-
-ion-item {
-  margin-bottom: 8%;
-  border-radius: 5%;
 }
 
 ion-input {
@@ -38,7 +29,7 @@ img {
 }
 
 .background {
-  background-image: url("../../../assets/background2.png");
+  background-image: url("../../../assets/background.jpg");
   background-repeat: no-repeat;
   background-position: center;
   display: flex;

@@ -43,7 +43,7 @@ img {
 }
 
 .background {
-  background-image: url("../../../assets/background2.png");
+  background-image: url("../../../assets/background.jpg");
   background-repeat: repeat;
   display: flex;
   flex-direction: column;
@@ -57,7 +57,6 @@ img {
   //ion-background-color: red;
   --ion-background-image: url("../../../assets/background.jpg") repeat;
 }
-
 
 ion-grid {
   margin-left: auto;
