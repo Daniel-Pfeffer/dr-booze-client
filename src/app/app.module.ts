@@ -29,7 +29,6 @@ import {ProfileComponent} from './components/profile/profile.component';
 import {SwitchError} from './helper/switch-error';
 import {HeaderComponent} from './components/header/header.component';
 import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
-import { UpdatePasswordComponent } from './components/update-password/update-password.component';
 
 @NgModule({
     declarations: [
@@ -49,7 +48,6 @@ import { UpdatePasswordComponent } from './components/update-password/update-pas
         ProfileComponent,
         HeaderComponent,
         RequestPasswordChangeComponent,
-        UpdatePasswordComponent,
     ],
     entryComponents: [],
     imports: [

@@ -16,7 +16,7 @@ export class HttpService {
 
     private ipLocal = 'http://localhost:8080/rest/';
     private ipLocalGlobal = 'http://192.168.1.6:8080/rest/';
-    private ipApp = 'http://172.17.27.35:8080/rest/';
+    private ipApp = 'http://172.18.107.96:8080/rest/';
     public header: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient) {
@@ -66,8 +66,10 @@ export class HttpService {
             {observe: 'response'});
     }
 
-    changePassword(email, password) {
-        return this.http.post(this.ipApp + 'auth/updatePassword', {email, password});
+    updatePassword(password, pin) {
+        return this.http.post(this.ipApp + 'auth/updatePassword',
+            {password, pin},
+            {observe: 'response'});
     }
 
     getBeer() {
@@ -77,4 +79,5 @@ export class HttpService {
     getWine() {
         return this.http.get<Array<Drink>>(this.ipApp + 'auth/getWine', {headers: this.header});
     }
+
 }
