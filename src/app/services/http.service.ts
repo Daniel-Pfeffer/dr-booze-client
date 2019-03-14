@@ -16,7 +16,8 @@ export class HttpService {
 
     private ipLocal = 'http://localhost:8080/rest/';
     private ipLocalGlobal = 'http://192.168.1.6:8080/rest/';
-    private ipApp = 'http://172.18.107.96:8080/rest/';
+    private ipApp = 'http://localhost:8080/rest/';
+  
     public header: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient) {
