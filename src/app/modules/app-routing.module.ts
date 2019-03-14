@@ -8,6 +8,7 @@ import {InformationComponent} from '../components/information/information.compon
 import {CalenderComponent} from '../components/calender/calender.component';
 import {RegisteredGuard} from '../guards/registered.guard';
 import {NeedRegisterGuard} from '../guards/need-register.guard';
+import {RequestPasswordChangeComponent} from '../components/request-password-change/request-password-change.component';
 
 const routes: Routes = [
     {path: '', component: RegisterComponent, canActivate: [RegisteredGuard]},
@@ -17,6 +18,7 @@ const routes: Routes = [
     {path: 'stats', component: StatisticsMainComponent, canActivate: [NeedRegisterGuard]},
     {path: 'profile', component: InformationComponent, canActivate: [NeedRegisterGuard]},
     {path: 'activity', component: CalenderComponent, canActivate: [NeedRegisterGuard]},
+    {path: 'request-password-change', component: RequestPasswordChangeComponent, canActivate: [RegisteredGuard]},
     {path: '**', redirectTo: 'home'}
 ];
 

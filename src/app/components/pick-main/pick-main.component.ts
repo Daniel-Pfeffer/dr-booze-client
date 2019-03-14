@@ -12,6 +12,7 @@ export class PickMainComponent {
     wine: Array<Drink>;
 
     constructor(private http: HttpService) {
+
         this.http.getBeer().subscribe(drinks => this.beer = drinks);
         this.http.getWine().subscribe(drinks => this.wine = drinks);
     }
