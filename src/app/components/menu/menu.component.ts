@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ProfileComponent} from '../profile/profile.component';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-menu',
@@ -8,9 +9,8 @@ import {ProfileComponent} from '../profile/profile.component';
 })
 export class MenuComponent {
 
-    constructor(private profile: ProfileComponent) {
+    constructor(private profile: ProfileComponent, private router: Router) {
     }
-
 
     openProfile() {
         console.log('Open profile in menu');

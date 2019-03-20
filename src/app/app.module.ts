@@ -23,7 +23,7 @@ import {StatisticsDetailComponent} from './components/statistics-main/statistics
 import {ProfileComponent} from './components/profile/profile.component';
 import {SwitchError} from './helper/switch-error';
 import {HeaderComponent} from './components/header/header.component';
-import {MenuComponent} from './components/menue/menu.component';
+import {MenuComponent} from './components/menu/menu.component';
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
