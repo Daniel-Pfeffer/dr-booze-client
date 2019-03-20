@@ -15,6 +15,10 @@
                     <ion-input name="username" formControlName="username" placeholder="Username" required></ion-input>
                     <ion-badge color="danger" *ngIf="form.controls.username.errors?.required">Username is required
                     </ion-badge>
+                    <ion-badge color="danger" *ngIf="form.controls.username.errors?.minLength">Username is too short
+                    </ion-badge>
+                    <ion-badge color="danger" *ngIf="form.controls.username.errors?.maxLength">Username is too long
+                    </ion-badge>
                 </ion-item>
                 <br>
                 <ion-item color="dark">
@@ -49,6 +53,9 @@
                 </ion-button>
                 <ion-button color="primary" (click)="onAutoFill()">
                     (dev) auto-fill
+                </ion-button>
+                <ion-button color="primary" (click)="onAutoLog()">
+                    (dev) auto-log
                 </ion-button>
             </div>
         </div>

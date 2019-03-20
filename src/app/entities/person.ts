@@ -8,4 +8,5 @@ export class Person {
     gender: string;
     height: number;
     user: User;
+    gkw: number;
 }

@@ -1,15 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import {Component} from '@angular/core';
+import {MenuController} from '@ionic/angular';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent {
 
-  constructor() { }
+    constructor(private menu: MenuController) {
+    }
 
-  ngOnInit() {
-  }
-
+    openFirst() {
+        this.menu.enable(true, 'profile2').then(() => {
+            this.menu.open().then(() => {
+                console.log('Profile should be open in controller');
+                this.menu.isOpen().then(() => {
+                    console.log('Profile is open in controller');
+                });
+            });
+        });
+    }
 }

@@ -32,7 +32,7 @@
     "@ionic/pro": "2.0.4",
     "cordova-android": "7.1.4",
     "cordova-browser": "5.0.4",
-    "cordova-ios": "4.5.5",
+    "cordova-ios": "^4.5.5",
     "cordova-plugin-datepicker": "^0.9.3",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-dialogs": "^2.0.1",
@@ -91,7 +91,8 @@
     },
     "platforms": [
       "browser",
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
