@@ -5,6 +5,7 @@ import {InsertData} from '../../interfaces/insert-data';
 import {Router} from '@angular/router';
 import {DialogDisplay} from '../../helper/dialog-display';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
+import {Toast} from '@ionic-native/toast/ngx';
 
 @Component({
     selector: 'app-information',
@@ -17,7 +18,7 @@ export class InformationComponent {
     date: Date;
     alreadyReg: boolean;
 
-    constructor(private fb: FormBuilder, private http: HttpService, private dialog: Dialogs, private router: Router) {
+    constructor(private fb: FormBuilder, private http: HttpService, private dialog: Dialogs, private router: Router, private toast: Toast) {
         this.date = new Date();
         this.form = this.fb.group({
             foreName: ['', [Validators.minLength(1), Validators.maxLength(100), Validators.pattern(/^[a-zA-z]*$/)]],
@@ -31,6 +32,7 @@ export class InformationComponent {
         const tempPerson = JSON.parse(localStorage.getItem('person'));
         if (tempPerson) {
             const person = tempPerson.person;
+            console.log(person);
             if (person) {
                 this.alreadyReg = true;
                 this.form.controls.foreName.setValue(person.firstName);
@@ -44,7 +46,7 @@ export class InformationComponent {
         }
     }
 
-    private saveDate(res: InsertData) {
+    private saveData(res: InsertData) {
         localStorage.removeItem('person');
         if (!res.error) {
             res.person.user = res.user;
@@ -55,12 +57,25 @@ export class InformationComponent {
         }
     }
 
+    private saveUpdatedData(res: InsertData) {
+        console.log('reached saveUpdateData');
+        localStorage.removeItem('person');
+        if (!res.error) {
+            res.person.user = res.user;
+            localStorage.setItem('person', JSON.stringify(res));
+            console.log('should open specific whitebread');
+            this.toast.show('henlo', 'long', 'bootom').subscribe(next => {
+                console.log(next);
+            });
+        }
+    }
+
     onSubmit() {
         const value = this.form.value;
         this.http.insertData(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName)
             .subscribe(
                 res => {
-                    this.saveDate(res);
+                    this.saveData(res);
                 }
             );
     }
@@ -69,6 +84,9 @@ export class InformationComponent {
         const value = this.form.value;
         this.http.updateDetails(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName)
             .subscribe(
-                res => this.saveDate(res));
+                res => {
+                    console.log('onChange:' + res);
+                    this.saveUpdatedData(res);
+                });
     }
 }

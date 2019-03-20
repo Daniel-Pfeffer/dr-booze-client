@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {Drink} from '../../interfaces/drink';
 import {Person} from '../../entities/person';
+import * as moment from 'moment';
+import {DurationInputArg2, Moment} from 'moment';
 
 @Component({
     selector: 'app-header',
@@ -11,18 +13,55 @@ export class HeaderComponent {
 
     drinks = new Array<Drink>();
     gkw: number;
+    alcoholInBlood: number;
+    deconstructPerMinute: number;
+    timeSinceLastCalled: Moment;
 
-    currentPerMille(): string {
+    constructor() {
+        this.timeSinceLastCalled = moment().subtract(5, 'd');
+        this.deconstructPerMinute = 0.1 / 60;
+        this.alcoholInBlood = 0;
         if (localStorage.getItem('person')) {
-            this.gkw = this.calculateGKW();
+            if ((<Person>JSON.parse(localStorage.getItem('person'))).birthday != null) {
+                if (!(<Person>JSON.parse(localStorage.getItem('person'))).gkw) {
+                    this.gkw = this.calculateGKW();
+                } else {
+                    this.gkw = (<Person>JSON.parse(localStorage.getItem('person'))).gkw;
+                }
+            }
         }
-        this.drinks = <Array<Drink>>JSON.parse(localStorage.getItem('drinks'));
-        if (this.drinks) {
-            this.drinks.forEach(drink => {
-                drink.bak = this.calculateBAC(drink);
-            });
+    }
+
+    currentPerMille(): number {
+        const now = moment();
+        if ((this.timeSinceLastCalled.add(5, 'm')).isAfter(now)) {
+            console.log('calculation exec');
+            this.drinks = <Array<Drink>>JSON.parse(localStorage.getItem('drinks'));
+            if (this.drinks) {
+                if (!this.gkw) {
+                    this.calculateGKW();
+                }
+                this.drinks.forEach(drink => {
+                    drink.bak = this.calculateBAC(drink);
+                });
+                console.table(this.drinks);
+                this.drinks.forEach(drink => {
+                    // in minutes
+                    const timeSinceDrank = now.subtract(drink.timeWhenDrank, 'ms').get('m');
+                    if ((drink.bak / this.deconstructPerMinute) > timeSinceDrank) {
+                        this.alcoholInBlood += drink.bak - timeSinceDrank * this.deconstructPerMinute;
+                    }
+                    console.log(this.alcoholInBlood);
+                });
+            }
+            this.timeSinceLastCalled = moment();
+            if (this.alcoholInBlood > 0) {
+                return this.alcoholInBlood;
+            }
         }
-        return 'insert current per mille here';
+
+
+        return 0;
     }
 
     calculateGKW(): number {

@@ -15,21 +15,22 @@ import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {InformationComponent} from './components/information/information.component';
 import {ChallengesComponent} from './components/challenges/challenges.component';
 import {PickMainComponent} from './components/pick-main/pick-main.component';
-import {PickerComponent} from './components/pick-main/picker/picker.component';
-import {PickerDetailComponent} from './components/pick-main/picker/picker-detail/picker-detail.component';
+import {PickerComponent} from './components/picker/picker.component';
+import {PickerDetailComponent} from './components/picker/picker-detail/picker-detail.component';
 import {StatisticsMainComponent} from './components/statistics-main/statistics-main.component';
 import {StatisticsComponent} from './components/statistics-main/statistics/statistics.component';
 import {StatisticsDetailComponent} from './components/statistics-main/statistics/statistics-detail/statistics-detail.component';
-
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-import {Dialogs} from '@ionic-native/dialogs/ngx';
-import {DatePicker} from '@ionic-native/date-picker/ngx';
 import {ProfileComponent} from './components/profile/profile.component';
 import {SwitchError} from './helper/switch-error';
 import {HeaderComponent} from './components/header/header.component';
-import { MenueComponent } from './components/menue/menue.component';
-import { PwdResetComponent } from './components/pwd-reset/pwd-reset.component';
+import {MenuComponent} from './components/menue/menu.component';
+
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
+
+import {Dialogs} from '@ionic-native/dialogs/ngx';
+import {DatePicker} from '@ionic-native/date-picker/ngx';
+import {Toast} from '@ionic-native/toast/ngx';
 
 @NgModule({
     declarations: [
@@ -48,8 +49,7 @@ import { PwdResetComponent } from './components/pwd-reset/pwd-reset.component';
         StatisticsDetailComponent,
         ProfileComponent,
         HeaderComponent,
-        MenueComponent,
-        PwdResetComponent
+        MenuComponent
     ],
     entryComponents: [],
     imports: [
@@ -66,6 +66,8 @@ import { PwdResetComponent } from './components/pwd-reset/pwd-reset.component';
         Dialogs,
         StatusBar,
         SplashScreen,
+        Toast,
+        ProfileComponent,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
     ],
     bootstrap: [AppComponent]

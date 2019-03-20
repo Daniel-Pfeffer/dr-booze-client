@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Drink} from '../../../interfaces/drink';
+import {Drink} from '../../interfaces/drink';
 
 @Component({
     selector: 'app-picker',
