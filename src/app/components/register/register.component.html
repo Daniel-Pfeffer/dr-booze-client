@@ -42,7 +42,7 @@
                     <ion-badge color="danger" *ngIf="form.controls.password.errors?.maxLength">Password too long
                     </ion-badge>
                 </ion-item>
-                <ion-note>Password must be 8-25 chars long and has to contain a capital letter and a number</ion-note>
+                <ion-note style="">Password must be 8-25 chars long and has to contain a capital letter and a number</ion-note>
                 <br><br>
                 <ion-button [disabled]="!form.valid" color="danger" expand="block" fill="solid" type="submit"
                             class="submit">Register

@@ -16,7 +16,7 @@ export class HttpService {
 
     private ipLocal = 'http://localhost:8080/rest/';
     private ipLocalGlobal = 'http://192.168.1.6:8080/rest/';
-    private ipApp = 'http://192.168.2.1:8080/rest/';
+    private ipApp = 'http://localhost:8080/rest/';
     public header: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient) {
@@ -26,20 +26,20 @@ export class HttpService {
     }
 
     login(username, password) {
-        return this.http.post<Login>(this.ipLocal + 'auth/login', {username, password});
+        return this.http.post<Login>(this.ipApp + 'auth/login', {username, password});
     }
 
     register(email, password, username) {
-        return this.http.post<Register>(this.ipLocal + 'auth/register', {email, password, username});
+        return this.http.post<Register>(this.ipApp + 'auth/register', {email, password, username});
     }
 
     getPerson() {
-        return this.http.get<GetPerson>(this.ipLocal + 'manage/getPerson', {headers: this.header});
+        return this.http.get<GetPerson>(this.ipApp + 'manage/getPerson', {headers: this.header});
     }
 
     insertData(birthday, weight, height, gender, firstName?, lastName?) {
         console.log(`bday: ${birthday}\nweight: ${weight}\nheight: ${height}\ngender: ${gender}\nfirstname: ${firstName}\nlastName: ${lastName}`);
-        return this.http.post<InsertData>(this.ipLocal + 'manage/insertDetails', {
+        return this.http.post<InsertData>(this.ipApp + 'manage/insertDetails', {
             birthday,
             weight,
             height,
@@ -50,7 +50,7 @@ export class HttpService {
     }
 
     updateDetails(birthday, weight, height, gender, firstName?, lastName?) {
-        return this.http.post<InsertData>(this.ipLocal + 'manage/updateDetails', {
+        return this.http.post<InsertData>(this.ipApp + 'manage/updateDetails', {
             birthday,
             weight,
             height,
@@ -61,10 +61,10 @@ export class HttpService {
     }
 
     getBeer() {
-        return this.http.get<Array<Drink>>(this.ipLocal + 'auth/getBeer', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getBeer', {headers: this.header});
     }
 
     getWine() {
-        return this.http.get<Array<Drink>>(this.ipLocal + 'auth/getWine', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getWine', {headers: this.header});
     }
 }

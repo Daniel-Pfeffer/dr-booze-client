@@ -31,6 +31,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
 import {DatePicker} from '@ionic-native/date-picker/ngx';
 import {Toast} from '@ionic-native/toast/ngx';
+import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
 
 @NgModule({
     declarations: [
@@ -49,6 +50,7 @@ import {Toast} from '@ionic-native/toast/ngx';
         StatisticsDetailComponent,
         ProfileComponent,
         HeaderComponent,
+        RequestPasswordChangeComponent,
         MenuComponent
     ],
     entryComponents: [],
