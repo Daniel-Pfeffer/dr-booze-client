@@ -14,6 +14,6 @@ export class MenuComponent {
 
     openProfile() {
         console.log('Open profile in menu');
-        this.profile.openFirst();
+        this.profile.open();
     }
 }

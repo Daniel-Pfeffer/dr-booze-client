@@ -1,8 +1,13 @@
-<ion-split-pane contentId="menu-content">
-    <ion-menu side="end" menuId="profile2" [swipeGesture]="false" contentId="menu-content">
+<!-- id="menu-content" is need for the menu -->
+<ion-menu side="end" type="overlay" menuId="profile" contentId="menu-content" id="menu-content">
     <ion-header>
         <ion-toolbar color="primary">
-            <ion-title>Profile</ion-title>
+            <ion-button (click)="close()">
+                <ion-icon name="close" size="large"></ion-icon>
+            </ion-button>
+            <ion-title>
+                Profile
+            </ion-title>
         </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -15,4 +20,3 @@
         </ion-list>
     </ion-content>
 </ion-menu>
-</ion-split-pane>
