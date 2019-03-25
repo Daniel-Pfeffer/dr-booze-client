@@ -11,7 +11,7 @@ export class ProfileComponent {
     constructor(private menu: MenuController) {
     }
 
-    openFirst() {
+    /*openFirst() {
         this.menu.enable(true, 'profile2').then(() => {
             this.menu.open().then(() => {
                 console.log('Profile should be open in controller');
@@ -20,5 +20,5 @@ export class ProfileComponent {
                 });
             });
         });
-    }
+    }*/
 }

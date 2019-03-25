@@ -11,6 +11,9 @@
 <ion-content>
     <app-header></app-header>
     <div class="background"></div>
-    <app-profile></app-profile>
+    <ion-menu side="menu" menuId="menu" type="push">
+        <app-profile></app-profile>
+    </ion-menu>
+    <ion-button (click)="openMenu()">Open Menu</ion-button>
     <app-menu></app-menu>
 </ion-content>

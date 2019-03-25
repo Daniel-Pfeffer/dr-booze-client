@@ -5,6 +5,7 @@ import {InsertData} from '../../interfaces/insert-data';
 import {Router} from '@angular/router';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
 import {Toast} from '@ionic-native/toast/ngx';
+import {Person} from '../../entities/person';
 
 @Component({
     selector: 'app-information',
@@ -37,7 +38,7 @@ export class InformationComponent {
                 this.form.controls.foreName.setValue(person.firstName);
                 this.form.controls.surName.setValue(person.lastName);
                 this.form.controls.age.setValue(new Date(person.birthday).toISOString());
-                console.log(`Birthday: ${new Date(person.birthday)}\n Birthday ISO: ${new Date(person.birthday).toISOString()}`);
+                // console.log(`Birthday: ${new Date(person.birthday)}\n Birthday ISO: ${new Date(person.birthday).toISOString()}`);
                 this.form.controls.weight.setValue(person.weight);
                 this.form.controls.height.setValue(person.height);
                 this.form.controls.gender.setValue(person.gender.toUpperCase());
@@ -49,6 +50,7 @@ export class InformationComponent {
         localStorage.removeItem('person');
         if (!res.error) {
             res.person.user = res.user;
+            this.calculateGKW(res.person);
             localStorage.setItem('person', JSON.stringify(res));
             this.dialog.alert('Thanks for joining Dr. Booze!\nYour data will be handled carefully and discrete', 'Login finished')
                 .then(
@@ -56,14 +58,28 @@ export class InformationComponent {
         }
     }
 
+    private calculateGKW(person: Person): number {
+        const age = new Date().getFullYear() - new Date(person.birthday).getFullYear();
+        switch (person.gender) {
+            case 'M':
+                const c = 2.447 - (0.09516 * age) + (0.1074 * person.height) + (0.3362 * person.weight);
+                console.log(c);
+                return c;
+            case 'W':
+                const cd = -2.097 + (0.1069 * person.height) + (0.2466 * person.weight);
+                console.log(cd);
+                return cd;
+        }
+    }
+
     private saveUpdatedData(res: InsertData) {
-        console.log('reached saveUpdateData');
         localStorage.removeItem('person');
         if (!res.error) {
             res.person.user = res.user;
+            this.calculateGKW(res.person);
             localStorage.setItem('person', JSON.stringify(res));
             console.log('should open specific whitebread');
-            this.toast.show('henlo', 'long', 'bootom').subscribe(next => {
+            this.toast.show('Hello', 'long', 'bottom').subscribe(next => {
                 console.log(next);
             });
         }

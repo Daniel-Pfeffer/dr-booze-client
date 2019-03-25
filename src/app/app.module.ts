@@ -1,10 +1,16 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {RouteReuseStrategy} from '@angular/router';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
 import {IonicModule, IonicRouteStrategy} from '@ionic/angular';
+
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
+import {Dialogs} from '@ionic-native/dialogs/ngx';
+import {DatePicker} from '@ionic-native/date-picker/ngx';
+import {Toast} from '@ionic-native/toast/ngx';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './modules/app-routing.module';
@@ -23,14 +29,7 @@ import {StatisticsDetailComponent} from './components/statistics-main/statistics
 import {ProfileComponent} from './components/profile/profile.component';
 import {SwitchError} from './helper/switch-error';
 import {HeaderComponent} from './components/header/header.component';
-import {MenuComponent} from './components/menue/menu.component';
-
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-
-import {Dialogs} from '@ionic-native/dialogs/ngx';
-import {DatePicker} from '@ionic-native/date-picker/ngx';
-import {Toast} from '@ionic-native/toast/ngx';
+import {MenuComponent} from './components/menu/menu.component';
 import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
 
 @NgModule({
@@ -70,6 +69,7 @@ import {RequestPasswordChangeComponent} from './components/request-password-chan
         SplashScreen,
         Toast,
         ProfileComponent,
+        DashboardComponent,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
     ],
     bootstrap: [AppComponent]
