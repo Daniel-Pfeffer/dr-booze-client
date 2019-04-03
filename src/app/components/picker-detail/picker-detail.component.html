@@ -1,0 +1,13 @@
+<!--
+<ion-content>
+  <app-picker [drinks]="beer" [group]="'Beer'"></app-picker>
+  <app-picker [drinks]="wine" [group]="'Wine'"></app-picker>
+</ion-content>
+-->
+
+<ion-list >
+  <ion-item *ngFor="let drink of drinksToShow">
+    <ion-label><ion-button (click)="onChoose(drink)">{{drink.name}}  |  {{drink.percentage}}%  |  {{drink.amount}}ml</ion-button></ion-label>
+  </ion-item>
+</ion-list>
+

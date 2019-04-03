@@ -8,6 +8,8 @@ import {InformationComponent} from '../components/information/information.compon
 import {CalenderComponent} from '../components/calender/calender.component';
 import {RegisteredGuard} from '../guards/registered.guard';
 import {NeedRegisterGuard} from '../guards/need-register.guard';
+import {PickerDetailComponent} from '../components/picker-detail/picker-detail.component';
+import {PickerComponent} from '../components/picker/picker.component';
 
 const routes: Routes = [
     {path: '', component: RegisterComponent, canActivate: [RegisteredGuard]},
@@ -17,6 +19,8 @@ const routes: Routes = [
     {path: 'stats', component: StatisticsMainComponent, canActivate: [NeedRegisterGuard]},
     {path: 'profile', component: InformationComponent, canActivate: [NeedRegisterGuard]},
     {path: 'activity', component: CalenderComponent, canActivate: [NeedRegisterGuard]},
+    {path: 'pickerDetail', component: PickerDetailComponent, canActivate: [NeedRegisterGuard]},
+    {path: 'picker', component: PickerComponent, canActivate: [NeedRegisterGuard]},
     {path: '**', redirectTo: 'home'}
 ];
 
