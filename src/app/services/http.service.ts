@@ -60,22 +60,37 @@ export class HttpService {
     }
 
     requestPasswordChange(email) {
-        return this.http.post(this.ip + 'auth/requestPasswordChange',
+
+        return this.http.post(this.ipApp + 'auth/requestPasswordChange',
             {email},
             {observe: 'response'});
     }
 
     updatePassword(password, pin) {
-        return this.http.post(this.ip + 'auth/updatePassword',
+
+        return this.http.post(this.ipApp + 'auth/updatePassword',
+
             {password, pin},
             {observe: 'response'});
     }
 
     getBeer() {
-        return this.http.get<Array<Drink>>(this.ip + 'auth/getBeer', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.ipApp + 'getter/getBeer', {headers: this.header});
     }
 
     getWine() {
-        return this.http.get<Array<Drink>>(this.ip + 'auth/getWine', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.ipApp + 'getter/getWine', {headers: this.header});
     }
+/*
+    getCocktails() {
+        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getCocktails', {headers: this.header});
+    }
+
+    getSpirituosen() {
+        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getSpirituosen', {headers: this.header});
+    }
+
+    getPersonalDrinks() {
+        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getPersonalDrinks', {headers: this.header});
+    }*/
 }

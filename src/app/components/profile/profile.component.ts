@@ -13,18 +13,4 @@ export class ProfileComponent {
 
     open() {
         this.menu.enable(true, 'profile').then(() => {
-            this.menu.open().then(() => {
-                console.log('Profile should be open in controller');
-                this.menu.isOpen().then(() => {
-                    console.log('Profile is open in controller');
-                });
-            });
-        });
-    }
-
-    close() {
-        this.menu.close('profile').then(() => {
-            console.log('Profile is closed');
-        });
-    }
 }

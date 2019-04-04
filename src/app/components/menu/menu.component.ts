@@ -8,12 +8,12 @@ import {Router} from '@angular/router';
     styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent {
-
     constructor(private profile: ProfileComponent, private router: Router) {
     }
 
     openProfile() {
         console.log('Open profile in menu');
         this.profile.open();
+
     }
 }

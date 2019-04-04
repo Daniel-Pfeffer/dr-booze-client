@@ -1,5 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {Drink} from '../../interfaces/drink';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DrinkPicker} from '../../entities/drinkPicker';
+import {Dialogs} from '@ionic-native/dialogs/ngx';
 
 @Component({
     selector: 'app-picker',
@@ -7,11 +10,7 @@ import {Drink} from '../../interfaces/drink';
     styleUrls: ['./picker.component.scss']
 })
 export class PickerComponent {
-    @Input() drinks: Array<Drink>;
-    @Input() group: string;
 
-    constructor() {
-    }
 
 
 }
