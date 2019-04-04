@@ -20,9 +20,8 @@ import {CalenderComponent} from './components/calender/calender.component';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {InformationComponent} from './components/information/information.component';
 import {ChallengesComponent} from './components/challenges/challenges.component';
-import {PickMainComponent} from './components/pick-main/pick-main.component';
 import {PickerComponent} from './components/picker/picker.component';
-import {PickerDetailComponent} from './components/picker/picker-detail/picker-detail.component';
+import {PickerDetailComponent} from './components/picker-detail/picker-detail.component';
 import {StatisticsMainComponent} from './components/statistics-main/statistics-main.component';
 import {StatisticsComponent} from './components/statistics-main/statistics/statistics.component';
 import {StatisticsDetailComponent} from './components/statistics-main/statistics/statistics-detail/statistics-detail.component';
@@ -41,7 +40,6 @@ import {RequestPasswordChangeComponent} from './components/request-password-chan
         DashboardComponent,
         InformationComponent,
         ChallengesComponent,
-        PickMainComponent,
         PickerComponent,
         PickerDetailComponent,
         StatisticsMainComponent,
