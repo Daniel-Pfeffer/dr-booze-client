@@ -8,8 +8,8 @@
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
-
-<ion-content>
+<ion-content [scrollY]="false">
+    <app-header></app-header>
     <!--<app-header></app-header>-->
     <ion-grid  *ngFor="let card of drinkCards; let i = index">
         <div *ngIf="i%2==1">
@@ -37,7 +37,6 @@
             </ion-row>
         </div>
     </ion-grid>
-
     <div class="background"></div>
     <ion-menu side="menu" menuId="menu" type="push">
         <app-profile></app-profile>

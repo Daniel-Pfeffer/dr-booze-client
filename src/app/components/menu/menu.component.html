@@ -1,16 +1,22 @@
-<ion-grid>
-    <ion-row>
-        <ion-col [routerLink]="['/home']">
+
+<ion-tabs>
+    <ion-tab-bar color="dark" slot="bottom">
+        <ion-tab-button [routerLink]="['/home']">
             <ion-icon name="home"></ion-icon>
-        </ion-col>
-        <ion-col [routerLink]="['/stats']">
+            <ion-label>Dashboard</ion-label>
+        </ion-tab-button>
+        <ion-tab-button [routerLink]="['/stats']">
             <ion-icon name="stats"></ion-icon>
-        </ion-col>
-        <ion-col [routerLink]="['/activity']">
+            <ion-label>Statistics</ion-label>
+        </ion-tab-button>
+        <ion-tab-button [routerLink]="['/calendar']">
             <ion-icon name="calendar"></ion-icon>
-        </ion-col>
-        <ion-col (click)="openProfile()">
+            <ion-label>Calendar</ion-label>
+        </ion-tab-button>
+        <ion-tab-button (click)="openProfile()">
             <ion-icon name="person"></ion-icon>
-        </ion-col>
-    </ion-row>
-</ion-grid>
+            <ion-label>Me</ion-label>
+        </ion-tab-button>
+    </ion-tab-bar>
+</ion-tabs>
+

@@ -12,17 +12,10 @@ import {Person} from '../../entities/person';
     styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
+
     form: FormGroup;
     error = '';
 
-    /*
-    FormBuilder is used to build form validator and get all form values without 2 the 2-way-binding of ngModel
-    HttpService is used for all transaction happening through the http protocol
-    Router is used for routing
-    Dialog similar to the alert pop up
-
-    do not mess with the constructor especially do not mess with the patterns
-    */
     constructor(private fb: FormBuilder, private httpService: HttpService, private router: Router,
                 private dialog: Dialogs, private switcher: SwitchError) {
         this.form = this.fb.group({

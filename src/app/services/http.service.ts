@@ -14,9 +14,8 @@ import {Drink} from '../interfaces/drink';
 })
 export class HttpService {
 
-    private ipLocal = 'http://localhost:8080/rest/';
-    private ipLocalGlobal = 'http://192.168.1.6:8080/rest/';
-    private ipApp = 'http://localhost:8080/rest/';
+    private ip = 'http://172.18.107.96:8080/rest/';
+
     public header: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient) {
@@ -26,20 +25,20 @@ export class HttpService {
     }
 
     login(username, password) {
-        return this.http.post<Login>(this.ipApp + 'auth/login', {username, password});
+        return this.http.post<Login>(this.ip + 'auth/login', {username, password});
     }
 
     register(email, password, username) {
-        return this.http.post<Register>(this.ipApp + 'auth/register', {email, password, username});
+        return this.http.post<Register>(this.ip + 'auth/register', {email, password, username});
     }
 
     getPerson() {
-        return this.http.get<GetPerson>(this.ipApp + 'manage/getPerson', {headers: this.header});
+        return this.http.get<GetPerson>(this.ip + 'manage/getPerson', {headers: this.header});
     }
 
     insertData(birthday, weight, height, gender, firstName?, lastName?) {
         console.log(`bday: ${birthday}\nweight: ${weight}\nheight: ${height}\ngender: ${gender}\nfirstname: ${firstName}\nlastName: ${lastName}`);
-        return this.http.post<InsertData>(this.ipApp + 'manage/insertDetails', {
+        return this.http.post<InsertData>(this.ip + 'manage/insertDetails', {
             birthday,
             weight,
             height,
@@ -50,7 +49,7 @@ export class HttpService {
     }
 
     updateDetails(birthday, weight, height, gender, firstName?, lastName?) {
-        return this.http.post<InsertData>(this.ipApp + 'manage/updateDetails', {
+        return this.http.post<InsertData>(this.ip + 'manage/updateDetails', {
             birthday,
             weight,
             height,
@@ -61,13 +60,16 @@ export class HttpService {
     }
 
     requestPasswordChange(email) {
+
         return this.http.post(this.ipApp + 'auth/requestPasswordChange',
             {email},
             {observe: 'response'});
     }
 
     updatePassword(password, pin) {
+
         return this.http.post(this.ipApp + 'auth/updatePassword',
+
             {password, pin},
             {observe: 'response'});
     }
