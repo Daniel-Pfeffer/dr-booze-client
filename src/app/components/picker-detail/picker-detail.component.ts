@@ -15,9 +15,11 @@ export class PickerDetailComponent implements OnInit {
 
 
   drinksToShow: Array<Drink>;
+  moreDrinksToShow: Array<Drink>;
   chooseDrinks: Array<Drink>;
   cardid;
-  length: number;
+  name: string;
+  moreName: string;
 
   constructor(private http: HttpService, private route: ActivatedRoute, private router: Router) {
     this.chooseDrinks = JSON.parse(localStorage.getItem('drinks')) ? JSON.parse(localStorage.getItem('drinks')) : new Array<Drink>();
@@ -25,19 +27,23 @@ export class PickerDetailComponent implements OnInit {
       this.cardid = params['id'];
     });
     console.log(typeof this.cardid);
+    console.log(this.cardid);
     this.drinksToShow = new Array<Drink>();
+    this.moreDrinksToShow = new Array<Drink>();
+
     if (this.cardid == 1) {
+      this.name = 'Beer';
+      this.moreName = 'Wine';
     this.http.getBeer().subscribe((drinks) => {
       this.drinksToShow = drinks;
       console.log(drinks);
-      length = this.drinksToShow.length;
-      this.http.getWine().subscribe(drinks2 => drinks2.forEach(item => this.drinksToShow.push(item)));
     });
-
-    }/*
-    if (this.cardid === 2) {
-      this.http.getCocktails().subscribe(drinks => this.drinksToShow = drinks);
+      this.http.getWine().subscribe((drinks) => this.moreDrinksToShow = drinks);
     }
+
+    if (this.cardid == 2) {
+      this.http.getBeer().subscribe(drinks => this.drinksToShow = drinks);
+    }/*
    if (this.cardid === 3) {
       this.http.getSpirituosen().subscribe(drinks => this.drinksToShow = drinks);
     }
@@ -51,6 +57,10 @@ export class PickerDetailComponent implements OnInit {
     this.chooseDrinks.push(chosenDrink);
     console.log(this.chooseDrinks);
     localStorage.setItem('drinks', JSON.stringify(this.chooseDrinks));
+    this.drinksToShow = this.drinksToShow.filter(item => item === null);
+    this.moreDrinksToShow = this.moreDrinksToShow.filter(item => item === null);
+    console.log(this.drinksToShow);
+    console.log(this.moreDrinksToShow);
     this.router.navigate(['dashboard']);
   }
 

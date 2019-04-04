@@ -5,9 +5,24 @@
 </ion-content>
 -->
 
-<ion-list >
-  <ion-item *ngFor="let drink of drinksToShow">
-    <ion-label><ion-button (click)="onChoose(drink)">{{drink.name}}  |  {{drink.percentage}}%  |  {{drink.amount}}ml</ion-button></ion-label>
-  </ion-item>
+<ion-list>
+    <ion-list-header *ngIf="cardid==1">{{name}}</ion-list-header>
+    <ion-item *ngFor="let drink of drinksToShow">
+        <ion-label>
+            <ion-button (click)="onChoose(drink)">{{drink.name}}  |  {{drink.percentage}}% |  {{drink.amount}}ml
+            </ion-button>
+        </ion-label>
+    </ion-item>
+</ion-list>
+<ion-list>
+<div *ngIf="moreDrinksToShow.length!=0">
+    <ion-list-header *ngIf="cardid==1">{{moreName}}</ion-list-header>
+    <ion-item  *ngFor="let drink of moreDrinksToShow">
+        <ion-label>
+            <ion-button (click)="onChoose(drink)">{{drink.name}}  |  {{drink.percentage}}% |  {{drink.amount}}ml
+            </ion-button>
+        </ion-label>
+    </ion-item>
+</div>
 </ion-list>
 
