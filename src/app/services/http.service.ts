@@ -14,7 +14,7 @@ import {Drink} from '../interfaces/drink';
 })
 export class HttpService {
 
-    private ip = 'http://172.18.107.96:8080/rest/';
+    private ip = 'http://localhost:8080/rest/';
 
     public header: HttpHeaders = new HttpHeaders();
 
@@ -61,25 +61,25 @@ export class HttpService {
 
     requestPasswordChange(email) {
 
-        return this.http.post(this.ipApp + 'auth/requestPasswordChange',
+        return this.http.post(this.ip + 'auth/requestPasswordChange',
             {email},
             {observe: 'response'});
     }
 
     updatePassword(password, pin) {
 
-        return this.http.post(this.ipApp + 'auth/updatePassword',
+        return this.http.post(this.ip + 'auth/updatePassword',
 
             {password, pin},
             {observe: 'response'});
     }
 
     getBeer() {
-        return this.http.get<Array<Drink>>(this.ipApp + 'getter/getBeer', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.ip + 'getter/getBeer', {headers: this.header});
     }
 
     getWine() {
-        return this.http.get<Array<Drink>>(this.ipApp + 'getter/getWine', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.ip + 'getter/getWine', {headers: this.header});
     }
 /*
     getCocktails() {

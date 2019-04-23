@@ -66,4 +66,5 @@
     <plugin name="cordova-plugin-datepicker" spec="0.9.3"/>
     <engine name="browser" spec="5.0.4" />
     <engine name="android" spec="7.1.4" />
+    <engine name="ios" spec="^4.5.5"/>
 </widget>
