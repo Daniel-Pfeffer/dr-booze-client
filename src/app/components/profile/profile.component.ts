@@ -13,4 +13,6 @@ export class ProfileComponent {
 
     open() {
         this.menu.enable(true, 'profile').then(() => {
+        });
+    }
 }
