@@ -8,18 +8,18 @@
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content [scrollY]="false">
+<ion-content [scrollY]="true">
     <app-header></app-header>
-    <ion-grid  *ngFor="let card of drinkCards; let i = index">
+    <ion-grid *ngFor="let card of drinkCards; let i = index">
         <div *ngIf="i%2==1">
             <ion-row>
                 <ion-col [size]="6">
                     <ion-card (click)="onClick(drinkCards[i-1].id)">
                         <ion-card-header>
-                            <ion-card-title>{{drinkCards[i-1].cardHeader}}</ion-card-title>
+                            <ion-card-title>{{drinkCards[i - 1].cardHeader}}</ion-card-title>
                         </ion-card-header>
                         <ion-card-content>
-                            <p>{{drinkCards[i-1].picture}}</p>
+                            <p>{{drinkCards[i - 1].picture}}</p>
                         </ion-card-content>
                     </ion-card>
                 </ion-col>
@@ -38,5 +38,10 @@
     </ion-grid>
     <div class="background"></div>
     <app-profile></app-profile>
-    <app-menu></app-menu>
 </ion-content>
+<ion-footer [translucent]="false">
+    <ion-toolbar>
+        <app-menu></app-menu>
+    </ion-toolbar>
+</ion-footer>
+

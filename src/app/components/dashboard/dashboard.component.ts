@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
@@ -11,9 +11,9 @@ import {DrinkPicker} from '../../entities/drinkPicker';
     styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
+
     drinkCards: Array<DrinkPicker>;
     private route: ActivatedRoute;
-
 
     constructor(private router: Router, private dialog: Dialogs) {
         this.drinkCards = new Array<DrinkPicker>();
@@ -24,6 +24,7 @@ export class DashboardComponent {
     }
 
     onClick(cardid: number) {
+        console.log('onClick called');
         this.router.navigate(['pickerDetail'], {queryParams: {id: cardid}});
     }
 
