@@ -1,22 +1,31 @@
-<!-- id="menu-content" is need for the menu -->
-<ion-menu side="end" type="overlay" menuId="profile" contentId="menu-content" id="menu-content">
-    <ion-header>
-        <ion-toolbar color="primary">
-            <ion-button (click)="close()">
-                <ion-icon name="close" size="large"></ion-icon>
-            </ion-button>
-            <ion-title>
-                Profile
-            </ion-title>
-        </ion-toolbar>
-    </ion-header>
-    <ion-content>
-        <ion-list>
-            <ion-item>Menu Item</ion-item>
-            <ion-item>Menu Item</ion-item>
-            <ion-item>Menu Item</ion-item>
-            <ion-item>Menu Item</ion-item>
-            <ion-item>Menu Item</ion-item>
-        </ion-list>
-    </ion-content>
-</ion-menu>
+<div class="background">
+<ion-list>
+  <ion-item>
+    <ion-label>{{person.user.username}}</ion-label>
+  </ion-item>
+  <ion-item >
+    <ion-label *ngIf="person.firstName||person.lastName">
+      <ng-container *ngIf=person.firstName>{{person.firstName}} </ng-container>
+      <ng-container *ngIf="person.lastName">{{person.lastName}}</ng-container>
+    </ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label>{{person.height}}</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-label>{{person.weight}}</ion-label>
+  </ion-item>
+    <ion-item>
+      <ion-label>Challenges coming soon ...</ion-label>
+    </ion-item>
+</ion-list>
+
+<ion-button (click)="information()" fill="solid" color="danger">Modify Data</ion-button>
+
+</div>
+
+<!--<ng-container *ngFor = "let challenge of Challenges">
+  <div *ngIf="challenge.active">
+    {{challenge.description}},{{challenge.progress}},{{challenge.reward}}
+  </div>
+</ng-container>-->
