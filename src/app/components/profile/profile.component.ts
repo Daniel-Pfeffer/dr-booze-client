@@ -15,9 +15,10 @@ export class ProfileComponent implements OnInit {
     optionalName: String;
 
     constructor(private router: Router, private menu: MenuController) {
-        const tempPerson = JSON.parse(localStorage.getItem('person'));
+        const tempPerson = <Person>JSON.parse(localStorage.getItem('person')).person;
+
         if (tempPerson) {
-            const person = tempPerson.person;
+            const person = tempPerson;
             if (person) {
                 this.person = person;
             }
