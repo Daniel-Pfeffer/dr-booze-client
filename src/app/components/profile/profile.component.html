@@ -9,18 +9,17 @@
             </ion-button>
         </ion-toolbar>
     </ion-header>
-    <ion-content>
-        <ion-list>
-            <!--<ion-item> TODO: MAYBE add stuff or some other things
-                <ion-label>{{person.user.username}}</ion-label>
-            </ion-item>-->
-            <ion-item>
-                <ion-label *ngIf="person.firstName||person.lastName">
-                    <ng-container *ngIf=person.firstName>{{person.firstName}} </ng-container>
-                    <ng-container *ngIf="person.lastName">{{person.lastName}}</ng-container>
-                </ion-label>
-            </ion-item>
-            <ion-item>
+    <ion-content >
+        <div class="background">
+         <ion-list>
+             <ion-item *ngIf="person.firstName||person.lastName">
+                 <ion-label >
+                     <ng-container *ngIf=person.firstName>{{person.firstName}} </ng-container>
+                     <ng-container *ngIf="person.lastName">{{person.lastName}}</ng-container>
+                 </ion-label>
+             </ion-item>
+
+             <ion-item>
                 <ion-label>{{person.height}}</ion-label>
             </ion-item>
             <ion-item>
@@ -29,8 +28,9 @@
             <ion-item>
                 <ion-label>Challenges coming soon ...</ion-label>
             </ion-item>
-        </ion-list>
-        <ion-button (click)="information()" fill="solid" color="danger">Modify Data</ion-button>
+            </ion-list>
+            <ion-button (click)="information()" style="margin-left:30%;width:40%;font-size: 2vh" fill="solid" color="danger">Modify Data</ion-button>
+        </div>
     </ion-content>
 </ion-menu>
 
