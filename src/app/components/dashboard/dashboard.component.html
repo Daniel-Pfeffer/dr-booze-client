@@ -9,38 +9,39 @@
     </ion-toolbar>
 </ion-header>
 <ion-content [scrollY]="false">
-    <app-header></app-header>
-    <ion-grid *ngFor="let card of drinkCards; let i = index">
-        <div *ngIf="i%2==1">
-            <ion-row>
-                <ion-col [size]="6">
-                    <ion-card (click)="onClick(drinkCards[i-1].id)">
-                        <ion-card-header>
-                            <ion-card-title>{{drinkCards[i - 1].cardHeader}}</ion-card-title>
-                        </ion-card-header>
-                        <ion-card-content>
-                            <p>{{drinkCards[i - 1].picture}}</p>
-                        </ion-card-content>
-                    </ion-card>
-                </ion-col>
-                <ion-col [size]="6">
-                    <ion-card (click)="onClick(drinkCards[i].id)">
-                        <ion-card-header>
-                            <ion-card-title>{{drinkCards[i].cardHeader}}</ion-card-title>
-                        </ion-card-header>
-                        <ion-card-content>
-                            <p>{{drinkCards[i].picture}}</p>
-                        </ion-card-content>
-                    </ion-card>
-                </ion-col>
-            </ion-row>
-        </div>
-    </ion-grid>
-    <app-profile></app-profile>
+    <div id="background">
+        <app-header></app-header>
+        <ion-grid *ngFor="let card of drinkCards; let i = index">
+            <div *ngIf="i%2==1">
+                <ion-row>
+                    <ion-col [size]="6">
+                        <ion-card (click)="onClick(drinkCards[i-1].id)" class="card">
+                            <ion-card-header>
+                                <ion-card-title>{{drinkCards[i - 1].cardHeader}}</ion-card-title>
+                            </ion-card-header>
+                            <ion-card-content>
+                                <p>{{drinkCards[i - 1].picture}}</p>
+                            </ion-card-content>
+                        </ion-card>
+                    </ion-col>
+                    <ion-col [size]="6">
+                        <ion-card (click)="onClick(drinkCards[i].id)" class="card">
+                            <ion-card-header>
+                                <ion-card-title>{{drinkCards[i].cardHeader}}</ion-card-title>
+                            </ion-card-header>
+                            <ion-card-content>
+                                <p>{{drinkCards[i].picture}}</p>
+                            </ion-card-content>
+                        </ion-card>
+                    </ion-col>
+                </ion-row>
+            </div>
+        </ion-grid>
+        <app-profile></app-profile>
+    </div>
 </ion-content>
 <ion-footer>
     <ion-toolbar>
         <app-menu></app-menu>
     </ion-toolbar>
 </ion-footer>
-
