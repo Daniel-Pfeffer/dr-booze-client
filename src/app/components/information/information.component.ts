@@ -50,7 +50,7 @@ export class InformationComponent {
         localStorage.removeItem('person');
         if (!res.error) {
             res.person.user = res.user;
-            this.calculateGKW(res.person);
+            res.person.gkw = this.calculateGKW(res.person);
             localStorage.setItem('person', JSON.stringify(res));
             this.dialog.alert('Thanks for joining Dr. Booze!\nYour data will be handled carefully and discrete', 'Login finished')
                 .then(
@@ -60,7 +60,7 @@ export class InformationComponent {
 
     private calculateGKW(person: Person): number {
         const age = new Date().getFullYear() - new Date(person.birthday).getFullYear();
-        switch (person.gender) {
+        switch (person.gender.toUpperCase()) {
             case 'M':
                 const c = 2.447 - (0.09516 * age) + (0.1074 * person.height) + (0.3362 * person.weight);
                 console.log(c);
@@ -76,7 +76,7 @@ export class InformationComponent {
         localStorage.removeItem('person');
         if (!res.error) {
             res.person.user = res.user;
-            this.calculateGKW(res.person);
+            res.person.gkw = this.calculateGKW(res.person);
             localStorage.setItem('person', JSON.stringify(res));
             console.log('should open specific whitebread');
             this.toast.show('Hello', 'long', 'bottom').subscribe(next => {
@@ -97,6 +97,7 @@ export class InformationComponent {
 
     onChange() {
         const value = this.form.value;
+        console.log('HI');
         this.http.updateDetails(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName)
             .subscribe(
                 res => {
