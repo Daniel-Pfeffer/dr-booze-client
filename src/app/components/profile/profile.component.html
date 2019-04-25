@@ -10,7 +10,6 @@
         </ion-toolbar>
     </ion-header>
     <ion-content >
-        <div class="background">
          <ion-list>
              <ion-item *ngIf="person.firstName||person.lastName">
                  <ion-label >
@@ -30,7 +29,7 @@
             </ion-item>
             </ion-list>
             <ion-button (click)="information()" style="margin-left:30%;width:40%;font-size: 2vh" fill="solid" color="danger">Modify Data</ion-button>
-        </div>
+
     </ion-content>
 </ion-menu>
 

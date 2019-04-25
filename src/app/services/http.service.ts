@@ -14,7 +14,7 @@ import {Drink} from '../interfaces/drink';
 })
 export class HttpService {
 
-    private ip = 'http://localhost:8080/rest/';
+    private ip = 'http://172.18.107.163:8080/rest/';
 
     public header: HttpHeaders = new HttpHeaders();
 
