@@ -25,30 +25,25 @@ export class HeaderComponent {
     }
 
     currentPerMille(): number {
-        const now = moment();
-        if ((this.timeSinceLastCalled.add(5, 'm')).isAfter(now)) {
-            this.drinks = <Array<Drink>>JSON.parse(localStorage.getItem('drinks'));
-            if (this.drinks) {
-                if (!this.gkw) {
-                    return 0;
+        this.alcoholInBlood = 0;
+        this.drinks = <Array<Drink>>JSON.parse(localStorage.getItem('drinks'));
+        if (this.drinks) {
+            if (!this.gkw) {
+                this.gkw = (<Person>JSON.parse(localStorage.getItem('person')).person).gkw;
+            }
+            this.drinks.forEach(drink => {
+                drink.bak = this.calculateBAC(drink);
+            });
+            this.drinks.forEach(drink => {
+                // in minutes
+                const timeSinceDrank = moment().diff(drink.timeWhenDrank, 'm');
+                if ((drink.bak / this.deconstructPerMinute) > timeSinceDrank) {
+                    this.alcoholInBlood += drink.bak - timeSinceDrank * this.deconstructPerMinute;
                 }
-                this.drinks.forEach(drink => {
-                    drink.bak = this.calculateBAC(drink);
-                });
-                console.table(this.drinks);
-                this.drinks.forEach(drink => {
-                    // in minutes
-                    const timeSinceDrank = now.subtract(drink.timeWhenDrank, 'ms').get('m');
-                    if ((drink.bak / this.deconstructPerMinute) > timeSinceDrank) {
-                        this.alcoholInBlood += drink.bak - timeSinceDrank * this.deconstructPerMinute;
-                    }
-                    console.log(this.alcoholInBlood);
-                });
-            }
-            this.timeSinceLastCalled = moment();
-            if (this.alcoholInBlood > 0) {
-                return this.alcoholInBlood;
-            }
+            });
+        }
+        if (this.alcoholInBlood > 0) {
+            return this.alcoholInBlood;
         }
         return 0;
     }
@@ -56,6 +51,7 @@ export class HeaderComponent {
 
     calculateBAC(drink: Drink): number {
         const a = (drink.amount * (drink.percentage / 100)) * 0.8;
+        console.log(`A: ${a}`);
         return (0.8 * a) / (1.055 * this.gkw);
     }
 }

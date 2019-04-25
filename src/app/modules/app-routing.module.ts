@@ -10,7 +10,6 @@ import {RegisteredGuard} from '../guards/registered.guard';
 import {NeedRegisterGuard} from '../guards/need-register.guard';
 import {RequestPasswordChangeComponent} from '../components/request-password-change/request-password-change.component';
 import {PickerDetailComponent} from '../components/picker-detail/picker-detail.component';
-import {PickerComponent} from '../components/picker/picker.component';
 
 
 const routes: Routes = [
@@ -25,7 +24,6 @@ const routes: Routes = [
     {path: 'request-password-change', component: RequestPasswordChangeComponent, canActivate: [RegisteredGuard]},
 
     {path: 'pickerDetail', component: PickerDetailComponent, canActivate: [NeedRegisterGuard]},
-    {path: 'picker', component: PickerComponent, canActivate: [NeedRegisterGuard]},
     {path: '**', redirectTo: 'home'}
 ];
 

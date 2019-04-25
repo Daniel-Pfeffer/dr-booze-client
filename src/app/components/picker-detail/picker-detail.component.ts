@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Drink} from '../../interfaces/drink';
 import {HttpService} from '../../services/http.service';
-import {DrinkPicker} from '../../entities/drinkPicker';
-import {ActivatedRoute, ActivatedRouteSnapshot, Router} from '@angular/router';
-import {callRule} from '@angular-devkit/schematics';
+import {ActivatedRoute, Router} from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-picker-detail',
@@ -25,8 +24,6 @@ export class PickerDetailComponent implements OnInit {
         this.route.queryParams.subscribe(params => {
             this.cardid = params['id'];
         });
-        console.log(typeof this.cardid);
-        console.log(this.cardid);
         this.drinksToShow = new Array<Drink>();
         this.moreDrinksToShow = new Array<Drink>();
 
@@ -42,7 +39,8 @@ export class PickerDetailComponent implements OnInit {
 
         if (this.cardid === '2') {
             this.http.getBeer().subscribe(drinks => this.drinksToShow = drinks);
-        }/*
+        }
+        /*
    if (this.cardid === 3) {
       this.http.getSpirituosen().subscribe(drinks => this.drinksToShow = drinks);
     }
@@ -51,15 +49,12 @@ export class PickerDetailComponent implements OnInit {
     }*/
     }
 
-    onChoose(chosenDrink) {
-        console.log(chosenDrink);
+    onChoose(chosenDrink: Drink) {
+        chosenDrink.timeWhenDrank = moment();
         this.chooseDrinks.push(chosenDrink);
-        console.log(this.chooseDrinks);
         localStorage.setItem('drinks', JSON.stringify(this.chooseDrinks));
         this.drinksToShow = this.drinksToShow.filter(item => item === null);
         this.moreDrinksToShow = this.moreDrinksToShow.filter(item => item === null);
-        console.log(this.drinksToShow);
-        console.log(this.moreDrinksToShow);
         this.router.navigate(['dashboard']);
     }
 
