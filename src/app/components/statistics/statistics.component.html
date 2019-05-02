@@ -1,0 +1,28 @@
+<ion-header>
+    <ion-toolbar color="dark">
+        <ion-back-button defaultHref="home" slot="start"></ion-back-button>
+        <ion-title>Statistics</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content [scrollY]="false">
+    <div id="background">
+        <google-chart type="LineChart" title="MyTitle" [data]="data">
+        </google-chart>
+    </div>
+</ion-content>
+<ion-footer>
+    <ion-toolbar>
+        <ion-tabs>
+            <ion-tab-bar color="danger" slot="bottom">
+                <ion-tab-button>
+                    <ion-icon name="trending-up"></ion-icon>
+                    <ion-label>Dashboard</ion-label>
+                </ion-tab-button>
+                <ion-tab-button>
+                    <ion-icon name="map"></ion-icon>
+                    <ion-label>Statistics</ion-label>
+                </ion-tab-button>
+            </ion-tab-bar>
+        </ion-tabs>
+    </ion-toolbar>
+</ion-footer>

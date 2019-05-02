@@ -21,14 +21,13 @@ import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {InformationComponent} from './components/information/information.component';
 import {ChallengesComponent} from './components/challenges/challenges.component';
 import {PickerDetailComponent} from './components/picker-detail/picker-detail.component';
-import {StatisticsMainComponent} from './components/statistics-main/statistics-main.component';
-import {StatisticsComponent} from './components/statistics-main/statistics/statistics.component';
-import {StatisticsDetailComponent} from './components/statistics-main/statistics/statistics-detail/statistics-detail.component';
 import {ProfileComponent} from './components/profile/profile.component';
 import {SwitchError} from './helper/switch-error';
 import {HeaderComponent} from './components/header/header.component';
 import {MenuComponent} from './components/menu/menu.component';
 import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
+import {StatisticsComponent} from './components/statistics/statistics.component';
+import {GoogleChartsModule} from 'angular-google-charts';
 
 @NgModule({
     declarations: [
@@ -40,9 +39,7 @@ import {RequestPasswordChangeComponent} from './components/request-password-chan
         InformationComponent,
         ChallengesComponent,
         PickerDetailComponent,
-        StatisticsMainComponent,
         StatisticsComponent,
-        StatisticsDetailComponent,
         ProfileComponent,
         HeaderComponent,
         RequestPasswordChangeComponent,
@@ -55,7 +52,8 @@ import {RequestPasswordChangeComponent} from './components/request-password-chan
         BrowserModule,
         HttpClientModule,
         IonicModule.forRoot(),
-        AppRoutingModule
+        AppRoutingModule,
+        GoogleChartsModule.forRoot()
     ],
     providers: [
         SwitchError,

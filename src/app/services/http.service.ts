@@ -14,7 +14,7 @@ import {Drink} from '../interfaces/drink';
 })
 export class HttpService {
 
-    private ip = 'http://172.18.107.163:8080/rest/';
+    private ip = 'http://localhost:8080/rest/';
 
     public header: HttpHeaders = new HttpHeaders();
 
@@ -81,16 +81,18 @@ export class HttpService {
     getWine() {
         return this.http.get<Array<Drink>>(this.ip + 'getter/getWine', {headers: this.header});
     }
-/*
-    getCocktails() {
-        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getCocktails', {headers: this.header});
-    }
 
-    getSpirituosen() {
-        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getSpirituosen', {headers: this.header});
-    }
+    /*
+        getCocktails() {
+            return this.http.get<Array<Drink>>(this.ipApp + 'auth/getCocktails', {headers: this.header});
+        }
 
-    getPersonalDrinks() {
-        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getPersonalDrinks', {headers: this.header});
-    }*/
+        getSpirituosen() {
+            return this.http.get<Array<Drink>>(this.ipApp + 'auth/getSpirituosen', {headers: this.header});
+        }
+
+        getPersonalDrinks() {
+            return this.http.get<Array<Drink>>(this.ipApp + 'auth/getPersonalDrinks', {headers: this.header});
+        }
+    */
 }

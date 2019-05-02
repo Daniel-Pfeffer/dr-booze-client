@@ -51,7 +51,7 @@ export class HeaderComponent {
 
     calculateBAC(drink: Drink): number {
         const a = (drink.amount * (drink.percentage / 100)) * 0.8;
-        console.log(`A: ${a}`);
+        // console.log(`A: ${a}`);
         return (0.8 * a) / (1.055 * this.gkw);
     }
 }
