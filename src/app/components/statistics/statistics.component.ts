@@ -7,6 +7,8 @@ import {Component, OnInit} from '@angular/core';
 })
 export class StatisticsComponent implements OnInit {
 
+    selectedTab = 'line';
+
     data = [
         ['London', 8136000],
         ['New York', 8538000],

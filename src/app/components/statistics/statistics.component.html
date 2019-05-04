@@ -6,21 +6,26 @@
 </ion-header>
 <ion-content [scrollY]="false">
     <div id="background">
-        <google-chart type="LineChart" title="MyTitle" [data]="data">
-        </google-chart>
+        <div *ngIf="selectedTab === 'line'">
+            <google-chart type="LineChart" title="MyTitle" [data]="data">
+            </google-chart>
+        </div>
+        <div *ngIf="selectedTab === 'map'">
+            <!-- Map Chart -->
+        </div>
     </div>
 </ion-content>
 <ion-footer>
     <ion-toolbar>
         <ion-tabs>
             <ion-tab-bar color="danger" slot="bottom">
-                <ion-tab-button>
+                <ion-tab-button (click)="selectedTab = 'line'">
                     <ion-icon name="trending-up"></ion-icon>
-                    <ion-label>Dashboard</ion-label>
+                    <ion-label>Line Chart</ion-label>
                 </ion-tab-button>
-                <ion-tab-button>
+                <ion-tab-button (click)="selectedTab = 'map'">
                     <ion-icon name="map"></ion-icon>
-                    <ion-label>Statistics</ion-label>
+                    <ion-label>Map</ion-label>
                 </ion-tab-button>
             </ion-tab-bar>
         </ion-tabs>
