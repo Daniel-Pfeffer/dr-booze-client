@@ -21,6 +21,7 @@ const routes: Routes = [
     {path: 'activity', component: CalenderComponent, canActivate: [NeedRegisterGuard]},
     {path: 'pickerDetail', component: PickerDetailComponent, canActivate: [NeedRegisterGuard]},
     {path: 'picker', component: PickerComponent, canActivate: [NeedRegisterGuard]},
+    {path: 'calendar', component: CalenderComponent, canActivate: [NeedRegisterGuard]},
     {path: '**', redirectTo: 'home'}
 ];
 

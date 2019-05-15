@@ -29,6 +29,7 @@ import {SwitchError} from './helper/switch-error';
 import {HeaderComponent} from './components/header/header.component';
 import { MenueComponent } from './components/menue/menue.component';
 import { PwdResetComponent } from './components/pwd-reset/pwd-reset.component';
+import { NgCalendarModule} from 'ionic2-calendar';
 
 @NgModule({
     declarations: [
@@ -56,7 +57,8 @@ import { PwdResetComponent } from './components/pwd-reset/pwd-reset.component';
         BrowserModule,
         HttpClientModule,
         IonicModule.forRoot(),
-        AppRoutingModule
+        AppRoutingModule,
+        NgCalendarModule
     ],
     providers: [
         SwitchError,
