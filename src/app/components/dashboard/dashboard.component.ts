@@ -24,8 +24,7 @@ export class DashboardComponent {
     }
 
     onClick(cardid: number) {
-        console.log('onClick called');
-        this.router.navigate(['pickerDetail'], {queryParams: {id: cardid}});
+        this.router.navigate(['pickerDetail'], {queryParams: { id: cardid}});
     }
 
     onLogout() {
