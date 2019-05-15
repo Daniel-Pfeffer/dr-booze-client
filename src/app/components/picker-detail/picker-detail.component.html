@@ -1,3 +1,9 @@
+<ion-header>
+    <ion-toolbar color="dark">
+        <ion-back-button defaultHref="home" slot="start"></ion-back-button>
+        <ion-title>Statistics</ion-title>
+    </ion-toolbar>
+</ion-header>
 <ion-list>
     <ion-list-header *ngIf="cardid==1">{{name}}</ion-list-header>
     <ion-item *ngFor="let drink of drinksToShow">

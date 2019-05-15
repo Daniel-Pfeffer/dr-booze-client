@@ -43,11 +43,10 @@ export class HeaderComponent {
             });
         }
         if (this.alcoholInBlood > 0) {
-            return this.alcoholInBlood;
+            return (Math.trunc(this.alcoholInBlood * 100) / 100);
         }
         return 0;
     }
-
 
     calculateBAC(drink: Drink): number {
         const a = (drink.amount * (drink.percentage / 100)) * 0.8;

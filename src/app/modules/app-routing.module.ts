@@ -10,6 +10,7 @@ import {NeedRegisterGuard} from '../guards/need-register.guard';
 import {RequestPasswordChangeComponent} from '../components/request-password-change/request-password-change.component';
 import {PickerDetailComponent} from '../components/picker-detail/picker-detail.component';
 import {StatisticsComponent} from '../components/statistics/statistics.component';
+import {MapComponent} from '../components/map/map.component';
 
 
 const routes: Routes = [
