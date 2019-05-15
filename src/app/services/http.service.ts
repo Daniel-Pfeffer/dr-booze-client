@@ -59,19 +59,32 @@ export class HttpService {
         }, {headers: this.header});
     }
 
-    requestPasswordChange(email) {
+    addDrink(id, unixTime, longitude, latitude) {
+        return this.http.post(this.ip + 'manage/addDrink', {
+                id,
+                unixTime,
+                longitude,
+                latitude
+            },
+            {headers: this.header});
+    }
 
+    requestPasswordChange(email) {
         return this.http.post(this.ip + 'auth/requestPasswordChange',
             {email},
             {observe: 'response'});
     }
 
     updatePassword(password, pin) {
-
         return this.http.post(this.ip + 'auth/updatePassword',
-
             {password, pin},
             {observe: 'response'});
+    }
+
+    getDrinks() {
+        return this.http.post<Array<Drink>>(this.ip + 'auth/getDrinks',
+            {observe: 'response'}
+        );
     }
 
     getBeer() {

@@ -13,4 +13,15 @@ export interface Drink {
     timeWhenDrank: Moment;
     // bak due to alcohol
     bak: number;
+    // drinkType
+    drinkType: DrinkType;
+    // longitude of the drink position
+    longitude: number;
+    // latitude of the drink position
+    latitude: number;
+}
+
+enum DrinkType {
+    BEER,
+    WINE
 }
