@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
                         if (person.person == null) {
                             this.dialog.alert(`Hello`, 'Login')
                                 .then(
-                                    () => this.router.navigate(['profile']));
+                                    () => this.router.navigate(['/profile']));
                         } else {
                             if (person.person.firstName !== undefined || person.person.firstName != null) {
                                 this.dialog.alert(`Hello ${person.person.firstName}`, 'Hello')
@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit {
                     }
                 });
             } else {
-                this.dialog.alert('Username or password invalid', 'Mail Activation', 'OK');
+                this.dialog.alert('Username or password invalid', 'Error', 'OK');
             }
         });
     }

@@ -1,7 +1,8 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
+
 import {DrinkPicker} from '../../entities/drinkPicker';
 
 @Component({
@@ -10,6 +11,7 @@ import {DrinkPicker} from '../../entities/drinkPicker';
     styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
+
     drinkCards: Array<DrinkPicker>;
     private route: ActivatedRoute;
 
@@ -22,15 +24,14 @@ export class DashboardComponent {
     }
 
     onClick(cardid: number) {
-        console.log();
         this.router.navigate(['pickerDetail'], {queryParams: { id: cardid}});
     }
+
     onLogout() {
         AuthService.logout();
         this.dialog.alert(`Successfully logged out`, 'Logout')
             .then(
                 () => this.router.navigate(['login']));
     }
-
 
 }

@@ -1,5 +1,6 @@
 <ion-header>
     <ion-toolbar color="dark">
+        <ion-back-button defaultHref="home"></ion-back-button>
         <ion-title>
             Personal Data
         </ion-title>
@@ -69,6 +70,9 @@
                 <ion-button fill="solid" (click)="onChange()" color="danger" [disabled]="!form.valid" class="submit"
                             *ngIf="alreadyReg">
                     Change
+                </ion-button>
+                <ion-button color="primary" (click)="onAutoFill()">
+                    (dev) auto-fill
                 </ion-button>
             </div>
             <br>

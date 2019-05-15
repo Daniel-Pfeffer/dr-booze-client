@@ -3,8 +3,9 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HttpService} from '../../services/http.service';
 import {InsertData} from '../../interfaces/insert-data';
 import {Router} from '@angular/router';
-import {DialogDisplay} from '../../helper/dialog-display';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
+import {Toast} from '@ionic-native/toast/ngx';
+import {Person} from '../../entities/person';
 
 @Component({
     selector: 'app-information',
@@ -17,7 +18,7 @@ export class InformationComponent {
     date: Date;
     alreadyReg: boolean;
 
-    constructor(private fb: FormBuilder, private http: HttpService, private dialog: Dialogs, private router: Router) {
+    constructor(private fb: FormBuilder, private http: HttpService, private dialog: Dialogs, private router: Router, private toast: Toast) {
         this.date = new Date();
         this.form = this.fb.group({
             foreName: ['', [Validators.minLength(1), Validators.maxLength(100), Validators.pattern(/^[a-zA-z]*$/)]],
@@ -31,12 +32,13 @@ export class InformationComponent {
         const tempPerson = JSON.parse(localStorage.getItem('person'));
         if (tempPerson) {
             const person = tempPerson.person;
+            console.log(person);
             if (person) {
                 this.alreadyReg = true;
                 this.form.controls.foreName.setValue(person.firstName);
                 this.form.controls.surName.setValue(person.lastName);
                 this.form.controls.age.setValue(new Date(person.birthday).toISOString());
-                console.log(`Birthday: ${new Date(person.birthday)}\n Birthday ISO: ${new Date(person.birthday).toISOString()}`);
+                // console.log(`Birthday: ${new Date(person.birthday)}\n Birthday ISO: ${new Date(person.birthday).toISOString()}`);
                 this.form.controls.weight.setValue(person.weight);
                 this.form.controls.height.setValue(person.height);
                 this.form.controls.gender.setValue(person.gender.toUpperCase());
@@ -44,14 +46,42 @@ export class InformationComponent {
         }
     }
 
-    private saveDate(res: InsertData) {
+    private saveData(res: InsertData) {
         localStorage.removeItem('person');
         if (!res.error) {
             res.person.user = res.user;
+            res.person.gkw = this.calculateGKW(res.person);
             localStorage.setItem('person', JSON.stringify(res));
             this.dialog.alert('Thanks for joining Dr. Booze!\nYour data will be handled carefully and discrete', 'Login finished')
                 .then(
                     () => this.router.navigate(['/home']));
+        }
+    }
+
+    private calculateGKW(person: Person): number {
+        const age = new Date().getFullYear() - new Date(person.birthday).getFullYear();
+        switch (person.gender.toUpperCase()) {
+            case 'M':
+                const c = 2.447 - (0.09516 * age) + (0.1074 * person.height) + (0.3362 * person.weight);
+                console.log(c);
+                return c;
+            case 'W':
+                const cd = -2.097 + (0.1069 * person.height) + (0.2466 * person.weight);
+                console.log(cd);
+                return cd;
+        }
+    }
+
+    private saveUpdatedData(res: InsertData) {
+        localStorage.removeItem('person');
+        if (!res.error) {
+            res.person.user = res.user;
+            res.person.gkw = this.calculateGKW(res.person);
+            localStorage.setItem('person', JSON.stringify(res));
+            console.log('should open specific whitebread');
+            this.toast.show('Hello', 'long', 'bottom').subscribe(next => {
+                console.log(next);
+            });
         }
     }
 
@@ -60,15 +90,30 @@ export class InformationComponent {
         this.http.insertData(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName)
             .subscribe(
                 res => {
-                    this.saveDate(res);
+                    this.saveData(res);
                 }
             );
     }
 
     onChange() {
         const value = this.form.value;
+        console.log('HI');
         this.http.updateDetails(value.age.toLocaleString(), value.weight, value.height, value.gender, value.foreName, value.surName)
             .subscribe(
-                res => this.saveDate(res));
+                res => {
+                    console.log('onChange:' + res);
+                    this.saveUpdatedData(res);
+                });
+    }
+
+    onAutoFill() {
+        this.form.controls.foreName.setValue('Guenther');
+        this.form.controls.surName.setValue('Friedrich');
+        const date = new Date();
+        date.setFullYear(2000);
+        this.form.controls.age.setValue(date.toISOString());
+        this.form.controls.weight.setValue(80);
+        this.form.controls.height.setValue(167);
+        this.form.controls.gender.setValue('M');
     }
 }

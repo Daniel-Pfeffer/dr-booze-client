@@ -1,3 +1,5 @@
+import {Moment} from 'moment';
+
 export interface Drink {
     // drinkID only important for server
     drinkID: number;
@@ -8,7 +10,7 @@ export interface Drink {
     // percentage of the drink in %
     percentage: number;
     // time when drink was consumed in unix time
-    timeWhenDrank: number;
+    timeWhenDrank: Moment;
     // bak due to alcohol
     bak: number;
 }
