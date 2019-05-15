@@ -20,10 +20,9 @@ const routes: Routes = [
     {path: 'stats', component: StatisticsComponent, canActivate: [NeedRegisterGuard]},
     {path: 'profile', component: InformationComponent, canActivate: [NeedRegisterGuard]},
     {path: 'activity', component: CalenderComponent, canActivate: [NeedRegisterGuard]},
-
     {path: 'request-password-change', component: RequestPasswordChangeComponent, canActivate: [RegisteredGuard]},
-
     {path: 'pickerDetail', component: PickerDetailComponent, canActivate: [NeedRegisterGuard]},
+    {path: 'calendar', component: CalenderComponent, canActivate: [NeedRegisterGuard]},
     {path: '**', redirectTo: 'home'}
 ];
 
