@@ -59,9 +59,10 @@ export class HttpService {
         }, {headers: this.header});
     }
 
-    addDrink(id, unixTime, longitude, latitude) {
+    addDrink(id, type, unixTime, longitude, latitude) {
         return this.http.post(this.ip + 'manage/addDrink', {
                 id,
+                type,
                 unixTime,
                 longitude,
                 latitude
@@ -95,17 +96,17 @@ export class HttpService {
         return this.http.get<Array<Drink>>(this.ip + 'getter/getWine', {headers: this.header});
     }
 
+    getCocktails() {
+        return this.http.get<Array<Drink>>(this.ip + 'getter/getCocktails', {headers: this.header});
+    }
+
+    getLiquor() {
+        return this.http.get<Array<Drink>>(this.ip + 'getter/getLiquor', {headers: this.header});
+    }
+
     /*
-        getCocktails() {
-            return this.http.get<Array<Drink>>(this.ipApp + 'auth/getCocktails', {headers: this.header});
-        }
-
-        getSpirituosen() {
-            return this.http.get<Array<Drink>>(this.ipApp + 'auth/getSpirituosen', {headers: this.header});
-        }
-
-        getPersonalDrinks() {
-            return this.http.get<Array<Drink>>(this.ipApp + 'auth/getPersonalDrinks', {headers: this.header});
-        }
-    */
+    getPersonalDrinks() {
+        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getPersonalDrinks', {headers: this.header});
+    }
+*/
 }

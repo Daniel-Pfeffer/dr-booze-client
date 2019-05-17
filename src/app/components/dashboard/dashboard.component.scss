@@ -3,6 +3,14 @@
   background-color: white;
 }
 
+.card-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
 #background {
   background-image: url('../../../assets/background.jpg');
   height: 100vh;

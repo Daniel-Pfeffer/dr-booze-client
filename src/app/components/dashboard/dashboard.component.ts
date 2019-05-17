@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
-
-import {DrinkPicker} from '../../entities/drinkPicker';
+import {DrinkCard} from '../../entities/drinkCard';
+import {DrinkType} from '../../interfaces/drink';
 
 @Component({
     selector: 'app-dashboard',
@@ -12,26 +12,25 @@ import {DrinkPicker} from '../../entities/drinkPicker';
 })
 export class DashboardComponent {
 
-    drinkCards: Array<DrinkPicker>;
-    private route: ActivatedRoute;
+    cards: DrinkCard[] = [
+        new DrinkCard(DrinkType.BEER, 'Beer', 'beer', null),
+        new DrinkCard(DrinkType.WINE, 'Wine', 'wine', 'ios'),
+        new DrinkCard(DrinkType.COCKTAIL, 'Cocktails', 'wine', 'md'),
+        new DrinkCard(DrinkType.LIQUOR, 'Hard liquor', 'wine', 'md')
+        // new DrinkCard(DrinkType.OTHER, 'Other', '')
+    ];
 
     constructor(private router: Router, private dialog: Dialogs) {
-        this.drinkCards = new Array<DrinkPicker>();
-        this.drinkCards.push(new DrinkPicker('Bier und Wein', '../../../assets/background.jpg', 1));
-        this.drinkCards.push(new DrinkPicker('Cocktails', '../../../assets/background.jpg', 2));
-        this.drinkCards.push(new DrinkPicker('Spirituosen', '../../../assets/background.jpg', 3));
-        this.drinkCards.push(new DrinkPicker('Mehr', '../../../assets/background.jpg', 4));
     }
 
-    onClick(cardid: number) {
-        this.router.navigate(['pickerDetail'], {queryParams: { id: cardid}});
+    onCardClick(type: DrinkType) {
+        this.router.navigate(['pickerDetail', type]);
     }
 
     onLogout() {
         AuthService.logout();
         this.dialog.alert(`Successfully logged out`, 'Logout')
-            .then(
-                () => this.router.navigate(['login']));
+            .then(() => this.router.navigate(['login']));
     }
 
 }

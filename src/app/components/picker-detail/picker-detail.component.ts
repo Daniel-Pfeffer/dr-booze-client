@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Drink} from '../../interfaces/drink';
+import {Drink, DrinkType} from '../../interfaces/drink';
 import {HttpService} from '../../services/http.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as moment from 'moment';
+import {ToastController} from '@ionic/angular';
 
 @Component({
     selector: 'app-picker-detail',
@@ -11,71 +12,94 @@ import * as moment from 'moment';
 })
 export class PickerDetailComponent implements OnInit {
 
-    drinksToShow: Array<Drink>;
-    moreDrinksToShow: Array<Drink>;
-    chooseDrinks: Array<Drink>;
-    cardid;
-    name: string;
-    moreName: string;
+    drinks: Array<Drink>;
+    drinkType: DrinkType;
+    title: string;
+    iconName: string;
+    iconMode: string;
 
-    constructor(private http: HttpService, private route: ActivatedRoute, private router: Router) {
-        const lsDrinks = localStorage.getItem('drinks');
-        this.chooseDrinks = lsDrinks != null ? JSON.parse(lsDrinks) : Array<Drink>();
+    constructor(private http: HttpService,
+                private route: ActivatedRoute,
+                private router: Router,
+                private toastController: ToastController) {
+        this.drinks = new Array<Drink>();
 
-        this.route.queryParams.subscribe(params => {
-            this.cardid = params['id'];
-        });
-
-        this.drinksToShow = new Array<Drink>();
-        this.moreDrinksToShow = new Array<Drink>();
-        this.name = 'Beer';
-        this.moreName = 'Wine';
-
-        if (this.cardid === '1') {
-            this.http.getBeer().subscribe((drinks) => this.drinksToShow = drinks);
-            this.http.getWine().subscribe((drinks) => this.moreDrinksToShow = drinks);
+        this.drinkType = +this.route.snapshot.paramMap.get('type');
+        switch (this.drinkType) {
+            case DrinkType.BEER:
+                this.title = 'Beer';
+                this.iconName = 'beer';
+                this.http.getBeer().subscribe((beer) => this.drinks = beer);
+                break;
+            case DrinkType.WINE:
+                this.title = 'Wine';
+                this.iconName = 'wine';
+                this.iconMode = 'ios';
+                this.http.getWine().subscribe((wine) => this.drinks = wine);
+                break;
+            case DrinkType.COCKTAIL:
+                this.title = 'Cocktails';
+                this.iconName = 'wine';
+                this.iconMode = 'md';
+                this.http.getCocktails().subscribe((cocktails) => this.drinks = cocktails);
+                break;
+            case DrinkType.LIQUOR:
+                this.title = 'Hard Liquor';
+                this.iconName = 'wine';
+                this.iconMode = 'md';
+                this.http.getLiquor().subscribe((liquor) => this.drinks = liquor);
+                break;
+            /*
+            case DrinkType.OTHER:
+                this.title = 'Other drinks';
+                break;
+            */
         }
-
-        /*
-        if (this.cardid === '2') {
-            this.http.getBeer().subscribe(drinks => this.drinksToShow = drinks);
-        }
-        if (this.cardid === 3) {
-            this.http.getSpirituosen().subscribe(drinks => this.drinksToShow = drinks);
-        }
-        if (this.cardid === 4) {
-            this.http.getPersonalDrinks().subscribe(drinks => this.drinksToShow = drinks);
-        }
-        */
-    }
-
-    onChoose(chosenDrink: Drink) {
-        // add time when drank
-        chosenDrink.timeWhenDrank = moment();
-        // add location
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                chosenDrink.latitude = position.coords.latitude;
-                chosenDrink.longitude = position.coords.longitude;
-            },
-            (error) => {
-                console.log('code: ' + error.code + '\n' +
-                    'message: ' + error.message + '\n');
-            }
-        );
-        this.chooseDrinks.push(chosenDrink);
-        this.http.addDrink(
-            chosenDrink.drinkID,
-            chosenDrink.timeWhenDrank,
-            chosenDrink.longitude,
-            chosenDrink.latitude);
-        localStorage.setItem('drinks', JSON.stringify(this.chooseDrinks));
-        this.drinksToShow = this.drinksToShow.filter(item => item === null);
-        this.moreDrinksToShow = this.moreDrinksToShow.filter(item => item === null);
-        this.router.navigate(['dashboard']);
     }
 
     ngOnInit() {
+    }
+
+    onSelection(selectedDrink: Drink) {
+        // add time when drank
+        selectedDrink.timeWhenDrank = moment();
+
+        // add location
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                selectedDrink.longitude = position.coords.longitude;
+                selectedDrink.latitude = position.coords.latitude;
+            },
+            (error) => {
+                console.error('code: ' + error.code + '\nmessage: ' + error.message + '\n');
+                this.presentToast('Note: You have to allow location tracking to use the map feature.');
+            }
+        );
+
+        // update localStorage drinks
+        const storageDrinks = localStorage.getItem('drinks');
+        const chosenDrinks: Array<Drink> = storageDrinks != null ? JSON.parse(storageDrinks) : Array<Drink>();
+        chosenDrinks.push(selectedDrink);
+        localStorage.setItem('drinks', JSON.stringify(chosenDrinks));
+
+        this.http.addDrink(
+            selectedDrink.id,
+            this.drinkType,
+            +selectedDrink.timeWhenDrank,
+            selectedDrink.longitude,
+            selectedDrink.latitude
+        ).subscribe();
+
+        this.router.navigate(['dashboard']);
+    }
+
+    async presentToast(message: string) {
+        const toast = await this.toastController.create({
+            message: message,
+            duration: 2000,
+            showCloseButton: true
+        });
+        toast.present();
     }
 
 }

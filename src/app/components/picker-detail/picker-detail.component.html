@@ -1,26 +1,23 @@
 <ion-header>
     <ion-toolbar color="dark">
         <ion-back-button defaultHref="home" slot="start"></ion-back-button>
-        <ion-title>Statistics</ion-title>
+        <ion-title>Choose your drink</ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-list>
-    <ion-list-header *ngIf="cardid==1">{{name}}</ion-list-header>
-    <ion-item *ngFor="let drink of drinksToShow">
-        <ion-label>
-            <ion-button (click)="onChoose(drink)">{{drink.name}}  |  {{drink.percentage}}% |  {{drink.amount}}ml
-            </ion-button>
-        </ion-label>
-    </ion-item>
-</ion-list>
-<ion-list>
-    <div *ngIf="moreDrinksToShow.length!=0">
-        <ion-list-header *ngIf="cardid==1">{{moreName}}</ion-list-header>
-        <ion-item *ngFor="let drink of moreDrinksToShow">
+<ion-content>
+    <ion-list>
+        <ion-list-header>
+            <ion-label>{{ title }}</ion-label>
+        </ion-list-header>
+        <ion-item *ngFor="let drink of drinks" detail="true" [button]="true" (click)="onSelection(drink)">
+            <ion-icon size="large" [name]="iconName" [mode]="iconMode" style="padding-right: 3vw;"></ion-icon>
             <ion-label>
-                <ion-button (click)="onChoose(drink)">{{drink.name}}  |  {{drink.percentage}}% |  {{drink.amount}}ml
-                </ion-button>
+                <h2>{{ drink.name }}</h2>
+                <p>{{ drink.percentage }}%</p>
             </ion-label>
+            <p style="text-align: right; padding-right: 5vw">
+                {{ drink.amount }}ml
+            </p>
         </ion-item>
-    </div>
-</ion-list>
+    </ion-list>
+</ion-content>

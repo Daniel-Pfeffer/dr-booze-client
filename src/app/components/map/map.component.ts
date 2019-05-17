@@ -40,8 +40,7 @@ export class MapComponent implements OnInit, AfterViewInit {
                 this.lng = position.coords.longitude;
             },
             (error) => {
-                console.log('code: ' + error.code + '\n' +
-                    'message: ' + error.message + '\n');
+                console.error('code: ' + error.code + '\nmessage: ' + error.message + '\n');
             }
         );
     }

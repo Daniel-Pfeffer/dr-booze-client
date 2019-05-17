@@ -22,7 +22,7 @@ const routes: Routes = [
     {path: 'profile', component: InformationComponent, canActivate: [NeedRegisterGuard]},
     {path: 'activity', component: CalenderComponent, canActivate: [NeedRegisterGuard]},
     {path: 'request-password-change', component: RequestPasswordChangeComponent, canActivate: [RegisteredGuard]},
-    {path: 'pickerDetail', component: PickerDetailComponent, canActivate: [NeedRegisterGuard]},
+    {path: 'pickerDetail/:type', component: PickerDetailComponent, canActivate: [NeedRegisterGuard]},
     {path: 'calendar', component: CalenderComponent, canActivate: [NeedRegisterGuard]},
     {path: 'map', component: MapComponent, canActivate: [NeedRegisterGuard]},
     {path: '**', redirectTo: 'home'}
