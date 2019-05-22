@@ -5,6 +5,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import * as moment from 'moment';
 import {ToastController} from '@ionic/angular';
 
+/**
+ * TODO: Add loading animation
+ */
 @Component({
     selector: 'app-picker-detail',
     templateUrl: './picker-detail.component.html',
@@ -69,12 +72,18 @@ export class PickerDetailComponent implements OnInit {
             (position) => {
                 selectedDrink.longitude = position.coords.longitude;
                 selectedDrink.latitude = position.coords.latitude;
+                this.addDrink(selectedDrink);
             },
             (error) => {
                 console.error('code: ' + error.code + '\nmessage: ' + error.message + '\n');
+                this.addDrink(selectedDrink);
                 this.presentToast('Note: You have to allow location tracking to use the map feature.');
             }
         );
+    }
+
+    private addDrink(selectedDrink: Drink) {
+        console.log(selectedDrink);
 
         // update localStorage drinks
         const storageDrinks = localStorage.getItem('drinks');
@@ -93,7 +102,7 @@ export class PickerDetailComponent implements OnInit {
         this.router.navigate(['dashboard']);
     }
 
-    async presentToast(message: string) {
+    private async presentToast(message: string) {
         const toast = await this.toastController.create({
             message: message,
             duration: 2000,

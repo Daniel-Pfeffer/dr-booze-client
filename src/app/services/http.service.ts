@@ -60,6 +60,7 @@ export class HttpService {
     }
 
     addDrink(id, type, unixTime, longitude, latitude) {
+        console.log('addDrink: longitude ' + longitude + ' latitude: ' + latitude);
         return this.http.post(this.ip + 'manage/addDrink', {
                 id,
                 type,
@@ -83,9 +84,7 @@ export class HttpService {
     }
 
     getDrinks() {
-        return this.http.post<Array<Drink>>(this.ip + 'auth/getDrinks',
-            {observe: 'response'}
-        );
+        return this.http.get<Array<Drink>>(this.ip + 'manage/getDrinks', {headers: this.header});
     }
 
     getBeer() {

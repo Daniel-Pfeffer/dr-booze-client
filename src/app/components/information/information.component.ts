@@ -7,6 +7,9 @@ import {Dialogs} from '@ionic-native/dialogs/ngx';
 import {Toast} from '@ionic-native/toast/ngx';
 import {Person} from '../../entities/person';
 
+/**
+ * TODO: Add yummy toast
+ */
 @Component({
     selector: 'app-information',
     templateUrl: './information.component.html',
