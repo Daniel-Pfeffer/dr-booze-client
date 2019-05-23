@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {ProfileComponent} from '../profile/profile.component';
-import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-menu',
@@ -8,7 +7,7 @@ import {Router} from '@angular/router';
     styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent {
-    constructor(private profile: ProfileComponent, private router: Router) {
+    constructor(private profile: ProfileComponent) {
     }
 
     openProfile() {

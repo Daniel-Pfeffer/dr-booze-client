@@ -27,6 +27,7 @@ export class HeaderComponent {
     currentPerMille(): number {
         this.alcoholInBlood = 0;
         this.drinks = <Array<Drink>>JSON.parse(localStorage.getItem('drinks'));
+        const drinksToSave: Array<Drink> = new Array<Drink>();
         if (this.drinks) {
             if (!this.gkw) {
                 this.gkw = (<Person>JSON.parse(localStorage.getItem('person')).person).gkw;
@@ -39,11 +40,13 @@ export class HeaderComponent {
                 const timeSinceDrank = moment().diff(drink.timeWhenDrank, 'm');
                 if ((drink.bak / this.deconstructPerMinute) > timeSinceDrank) {
                     this.alcoholInBlood += drink.bak - timeSinceDrank * this.deconstructPerMinute;
+                    drinksToSave.push(drink);
                 }
             });
         }
+        localStorage.setItem('drinks', JSON.stringify(drinksToSave));
         if (this.alcoholInBlood > 0) {
-            return this.alcoholInBlood;
+            return (Math.trunc(this.alcoholInBlood * 100) / 100);
         }
         return 0;
     }

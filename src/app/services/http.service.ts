@@ -87,10 +87,18 @@ export class HttpService {
             return this.http.get<Array<Drink>>(this.ipApp + 'auth/getCocktails', {headers: this.header});
         }
 
+
+        getCocktails() {
+            return this.http.get<Array<Drink>>(this.ipApp + 'auth/getCocktails', {headers: this.header});
+        }
+
         getSpirituosen() {
             return this.http.get<Array<Drink>>(this.ipApp + 'auth/getSpirituosen', {headers: this.header});
         }
 
+        getPersonalDrinks() {
+            return this.http.get<Array<Drink>>(this.ipApp + 'auth/getPersonalDrinks', {headers: this.header});
+        }
         getPersonalDrinks() {
             return this.http.get<Array<Drink>>(this.ipApp + 'auth/getPersonalDrinks', {headers: this.header});
         }

@@ -24,9 +24,7 @@ import {PickerDetailComponent} from './components/picker-detail/picker-detail.co
 import {ProfileComponent} from './components/profile/profile.component';
 import {SwitchError} from './helper/switch-error';
 import {HeaderComponent} from './components/header/header.component';
-import { MenueComponent } from './components/menue/menue.component';
-import { PwdResetComponent } from './components/pwd-reset/pwd-reset.component';
-import { NgCalendarModule} from 'ionic2-calendar';
+import {NgCalendarModule} from 'ionic2-calendar';
 import {MenuComponent} from './components/menu/menu.component';
 import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
 import {StatisticsComponent} from './components/statistics/statistics.component';
@@ -56,7 +54,7 @@ import {GoogleChartsModule} from 'angular-google-charts';
         HttpClientModule,
         IonicModule.forRoot(),
         AppRoutingModule,
-        NgCalendarModule
+        NgCalendarModule,
         GoogleChartsModule.forRoot()
     ],
     providers: [
