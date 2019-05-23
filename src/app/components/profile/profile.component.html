@@ -1,24 +1,23 @@
-<ion-menu side="end" type="overlay" menuId="profile" contentId="menu-content" id="menu-content">
+<ion-menu side="end" menuId="profile" [contentId]="contentId">
     <ion-header>
-        <ion-toolbar color="danger">
-            <ion-title slot="start">
+        <ion-toolbar color="medium">
+            <ion-title>
                 Profile
             </ion-title>
-            <ion-button slot="end" mode="ios" color="danger" (click)="close()">
-                <ion-icon name="close" size="larger" style="color: white;"></ion-icon>
+            <ion-button slot="end" color="light" fill="clear" (click)="onClose()">
+                <ion-icon name="close" size="larger"></ion-icon>
             </ion-button>
         </ion-toolbar>
     </ion-header>
-    <ion-content >
-         <ion-list>
-             <ion-item *ngIf="person.firstName||person.lastName">
-                 <ion-label >
-                     <ng-container *ngIf=person.firstName>{{person.firstName}} </ng-container>
-                     <ng-container *ngIf="person.lastName">{{person.lastName}}</ng-container>
-                 </ion-label>
-             </ion-item>
-
-             <ion-item>
+    <ion-content>
+        <ion-list>
+            <ion-item *ngIf="person.firstName||person.lastName">
+                <ion-label>
+                    <ng-container *ngIf=person.firstName>{{person.firstName}} </ng-container>
+                    <ng-container *ngIf="person.lastName">{{person.lastName}}</ng-container>
+                </ion-label>
+            </ion-item>
+            <ion-item>
                 <ion-label>{{person.height}}</ion-label>
             </ion-item>
             <ion-item>
@@ -27,12 +26,13 @@
             <ion-item>
                 <ion-label>Challenges coming soon ...</ion-label>
             </ion-item>
-            </ion-list>
-            <ion-button (click)="information()" style="margin-left:30%;width:40%;font-size: 2vh" fill="solid" color="danger">Modify Data</ion-button>
-
+        </ion-list>
+        <ion-button (click)="onModifyData()" fill="solid"
+                    color="danger" style="margin-left: 30%; width: 40%; font-size: 2vh">
+            Modify Data
+        </ion-button>
     </ion-content>
 </ion-menu>
-
 <!--<ng-container *ngFor = "let challenge of Challenges">
   <div *ngIf="challenge.active">
     {{challenge.description}},{{challenge.progress}},{{challenge.reward}}
