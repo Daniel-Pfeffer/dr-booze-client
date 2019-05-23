@@ -8,7 +8,7 @@
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content scrollY="false">
+<ion-content scrollY="false" id="dashboardContent">
     <div id="background">
         <app-header></app-header>
         <ion-grid>
@@ -24,11 +24,30 @@
                 </ion-col>
             </ion-row>
         </ion-grid>
-        <app-profile></app-profile>
     </div>
 </ion-content>
+<app-profile contentId="dashboardContent"></app-profile>
 <ion-footer>
     <ion-toolbar>
-        <app-menu></app-menu>
+        <ion-tabs>
+            <ion-tab-bar color="dark" slot="bottom">
+                <ion-tab-button [routerLink]="['/home']">
+                    <ion-icon name="home"></ion-icon>
+                    <ion-label>Dashboard</ion-label>
+                </ion-tab-button>
+                <ion-tab-button [routerLink]="['/stats']">
+                    <ion-icon name="stats"></ion-icon>
+                    <ion-label>Statistics</ion-label>
+                </ion-tab-button>
+                <ion-tab-button [routerLink]="['/calendar']">
+                    <ion-icon name="calendar"></ion-icon>
+                    <ion-label>Calendar</ion-label>
+                </ion-tab-button>
+                <ion-tab-button (click)="onOpenProfile()">
+                    <ion-icon name="person"></ion-icon>
+                    <ion-label>Me</ion-label>
+                </ion-tab-button>
+            </ion-tab-bar>
+        </ion-tabs>
     </ion-toolbar>
 </ion-footer>

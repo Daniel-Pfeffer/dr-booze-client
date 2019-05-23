@@ -25,7 +25,6 @@ import {ProfileComponent} from './components/profile/profile.component';
 import {SwitchError} from './helper/switch-error';
 import {HeaderComponent} from './components/header/header.component';
 import {NgCalendarModule} from 'ionic2-calendar';
-import {MenuComponent} from './components/menu/menu.component';
 import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
 import {StatisticsComponent} from './components/statistics/statistics.component';
 import {GoogleChartsModule} from 'angular-google-charts';
@@ -45,7 +44,6 @@ import {MapComponent} from './components/map/map.component';
         ProfileComponent,
         HeaderComponent,
         RequestPasswordChangeComponent,
-        MenuComponent,
         MapComponent
     ],
     entryComponents: [],
