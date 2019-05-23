@@ -107,5 +107,5 @@ export class HttpService {
     getPersonalDrinks() {
         return this.http.get<Array<Drink>>(this.ipApp + 'auth/getPersonalDrinks', {headers: this.header});
     }
-*/
+    */
 }

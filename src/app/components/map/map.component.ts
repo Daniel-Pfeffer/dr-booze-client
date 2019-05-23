@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpService} from '../../services/http.service';
 import {Drink} from '../../interfaces/drink';
 import * as moment from 'moment';
@@ -11,7 +11,7 @@ declare var H: any;
     templateUrl: './map.component.html',
     styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements OnInit {
 
     @ViewChild('map')
     public mapElement: ElementRef;
@@ -22,9 +22,6 @@ export class MapComponent implements AfterViewInit {
     private ui: any;
     private bubbles = [];
 
-    private readonly defaultLocation = [16.22, 48.12];
-    private gpsEnabled = false;
-
     constructor(private httpService: HttpService,
                 private toastController: ToastController) {
         this.platform = new H.service.Platform({
@@ -33,39 +30,12 @@ export class MapComponent implements AfterViewInit {
         });
     }
 
-    ngAfterViewInit(): void {
-        this.displayMap();
-    }
-
-    displayMap() {
-        const position = this.getLocation();
-        const defaultLayers = this.platform.createDefaultLayers();
-        this.map = new H.Map(this.mapElement.nativeElement, defaultLayers.normal.map,
-            {
-                zoom: 12,
-                center: {
-                    lng: position[0],
-                    lat: position[1]
-                }
-            }
-        );
-        this.ui = H.ui.UI.createDefault(this.map, defaultLayers);
-        const zoom = this.ui.getControl('zoom');
-        const scalebar = this.ui.getControl('scalebar');
-        zoom.setAlignment('right-middle');
-        scalebar.setAlignment('top-right');
-
-        const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
-        this.displayDrinks();
+    ngOnInit(): void {
+        this.setLocation(true);
     }
 
     onLocate() {
-        const position = this.getLocation();
-        this.map.setCenter({
-            lng: position[0],
-            lat: position[1]
-        });
-        this.map.setZoom(14);
+        this.setLocation(false);
     }
 
     onRefresh() {
@@ -98,22 +68,52 @@ export class MapComponent implements AfterViewInit {
         });
     }
 
-    private getLocation(): number[] {
+    private setLocation(isInit: boolean) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                console.log('Longitude: ' + position.coords.longitude + '\n' +
-                    'Latitude: ' + position.coords.latitude + '\n');
-                this.gpsEnabled = true;
-                return [position.coords.longitude, position.coords.latitude];
+                const lng = position.coords.longitude;
+                const lat = position.coords.latitude;
+                console.log('Longitude: ' + lng + '\n' +
+                    'Latitude: ' + lat + '\n');
+                if (!isInit) {
+                    this.map.setCenter({
+                        lng: lng,
+                        lat: lat
+                    });
+                    this.map.setZoom(14);
+                } else {
+                    this.displayMap(lng, lat);
+                }
             },
             (error) => {
                 console.error('code: ' + error.code + '\nmessage: ' + error.message + '\n');
-                this.gpsEnabled = false;
                 this.presentToast('Note: You have allow location tracking to use all features.');
+                if (isInit) {
+                    this.displayMap(16.22, 48.12);
+                }
             }
         );
-        // default location
-        return this.defaultLocation;
+    }
+
+    private displayMap(lng, lat) {
+        const defaultLayers = this.platform.createDefaultLayers();
+        this.map = new H.Map(this.mapElement.nativeElement, defaultLayers.normal.map,
+            {
+                zoom: 12,
+                center: {
+                    lng: lng,
+                    lat: lat
+                }
+            }
+        );
+        this.ui = H.ui.UI.createDefault(this.map, defaultLayers);
+        const zoom = this.ui.getControl('zoom');
+        const scalebar = this.ui.getControl('scalebar');
+        zoom.setAlignment('right-middle');
+        scalebar.setAlignment('top-right');
+
+        const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
+        this.displayDrinks();
     }
 
     private async presentToast(message: string) {
