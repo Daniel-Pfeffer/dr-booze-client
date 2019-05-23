@@ -8,34 +8,21 @@
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content [scrollY]="false">
+<ion-content scrollY="false">
     <div id="background">
         <app-header></app-header>
-        <ion-grid *ngFor="let card of drinkCards; let i = index">
-            <div *ngIf="i%2==1">
-                <ion-row>
-                    <ion-col [size]="6">
-                        <ion-card (click)="onClick(drinkCards[i-1].id)" class="card">
-                            <ion-card-header>
-                                <ion-card-title>{{drinkCards[i - 1].cardHeader}}</ion-card-title>
-                            </ion-card-header>
-                            <ion-card-content>
-                                <p>{{drinkCards[i - 1].picture}}</p>
-                            </ion-card-content>
-                        </ion-card>
-                    </ion-col>
-                    <ion-col [size]="6">
-                        <ion-card (click)="onClick(drinkCards[i].id)" class="card">
-                            <ion-card-header>
-                                <ion-card-title>{{drinkCards[i].cardHeader}}</ion-card-title>
-                            </ion-card-header>
-                            <ion-card-content>
-                                <p>{{drinkCards[i].picture}}</p>
-                            </ion-card-content>
-                        </ion-card>
-                    </ion-col>
-                </ion-row>
-            </div>
+        <ion-grid>
+            <ion-row>
+                <ion-col size="6" *ngFor="let card of cards">
+                    <ion-card (click)="onCardClick(card.type)" class="card">
+                        <ion-card-content class="card-content">
+                            <ion-icon style="width: 8vh; height: 100%" size="large" [name]="card.iconName"
+                                      [mode]="card.iconMode"></ion-icon>
+                            <h1 style="text-align: center">{{ card.title }}</h1>
+                        </ion-card-content>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
         </ion-grid>
         <app-profile></app-profile>
     </div>

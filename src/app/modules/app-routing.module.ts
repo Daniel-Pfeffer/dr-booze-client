@@ -10,6 +10,7 @@ import {NeedRegisterGuard} from '../guards/need-register.guard';
 import {RequestPasswordChangeComponent} from '../components/request-password-change/request-password-change.component';
 import {PickerDetailComponent} from '../components/picker-detail/picker-detail.component';
 import {StatisticsComponent} from '../components/statistics/statistics.component';
+import {MapComponent} from '../components/map/map.component';
 
 
 const routes: Routes = [
@@ -21,8 +22,9 @@ const routes: Routes = [
     {path: 'profile', component: InformationComponent, canActivate: [NeedRegisterGuard]},
     {path: 'activity', component: CalenderComponent, canActivate: [NeedRegisterGuard]},
     {path: 'request-password-change', component: RequestPasswordChangeComponent, canActivate: [RegisteredGuard]},
-    {path: 'pickerDetail', component: PickerDetailComponent, canActivate: [NeedRegisterGuard]},
+    {path: 'pickerDetail/:type', component: PickerDetailComponent, canActivate: [NeedRegisterGuard]},
     {path: 'calendar', component: CalenderComponent, canActivate: [NeedRegisterGuard]},
+    {path: 'map', component: MapComponent, canActivate: [NeedRegisterGuard]},
     {path: '**', redirectTo: 'home'}
 ];
 

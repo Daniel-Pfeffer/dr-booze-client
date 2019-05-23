@@ -1,8 +1,8 @@
 import {Moment} from 'moment';
 
 export interface Drink {
-    // drinkID only important for server
-    drinkID: number;
+    // id only important for server
+    id: number;
     // drink name just for displaying
     name: string;
     // amount user drank in ml
@@ -13,4 +13,18 @@ export interface Drink {
     timeWhenDrank: Moment;
     // bak due to alcohol
     bak: number;
+    // drinkType
+    drinkType: DrinkType;
+    // longitude of the drink position
+    longitude: number;
+    // latitude of the drink position
+    latitude: number;
+}
+
+export enum DrinkType {
+    BEER,
+    WINE,
+    COCKTAIL,
+    LIQUOR,
+    OTHER
 }

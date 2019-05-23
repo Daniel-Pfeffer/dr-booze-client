@@ -59,19 +59,32 @@ export class HttpService {
         }, {headers: this.header});
     }
 
-    requestPasswordChange(email) {
+    addDrink(id, type, unixTime, longitude, latitude) {
+        console.log('addDrink: longitude ' + longitude + ' latitude: ' + latitude);
+        return this.http.post(this.ip + 'manage/addDrink', {
+                id,
+                type,
+                unixTime,
+                longitude,
+                latitude
+            },
+            {headers: this.header});
+    }
 
+    requestPasswordChange(email) {
         return this.http.post(this.ip + 'auth/requestPasswordChange',
             {email},
             {observe: 'response'});
     }
 
     updatePassword(password, pin) {
-
         return this.http.post(this.ip + 'auth/updatePassword',
-
             {password, pin},
             {observe: 'response'});
+    }
+
+    getDrinks() {
+        return this.http.get<Array<Drink>>(this.ip + 'manage/getDrinks', {headers: this.header});
     }
 
     getBeer() {
@@ -82,25 +95,17 @@ export class HttpService {
         return this.http.get<Array<Drink>>(this.ip + 'getter/getWine', {headers: this.header});
     }
 
+    getCocktails() {
+        return this.http.get<Array<Drink>>(this.ip + 'getter/getCocktails', {headers: this.header});
+    }
+
+    getLiquor() {
+        return this.http.get<Array<Drink>>(this.ip + 'getter/getLiquor', {headers: this.header});
+    }
+
     /*
-        getCocktails() {
-            return this.http.get<Array<Drink>>(this.ipApp + 'auth/getCocktails', {headers: this.header});
-        }
-
-
-        getCocktails() {
-            return this.http.get<Array<Drink>>(this.ipApp + 'auth/getCocktails', {headers: this.header});
-        }
-
-        getSpirituosen() {
-            return this.http.get<Array<Drink>>(this.ipApp + 'auth/getSpirituosen', {headers: this.header});
-        }
-
-        getPersonalDrinks() {
-            return this.http.get<Array<Drink>>(this.ipApp + 'auth/getPersonalDrinks', {headers: this.header});
-        }
-        getPersonalDrinks() {
-            return this.http.get<Array<Drink>>(this.ipApp + 'auth/getPersonalDrinks', {headers: this.header});
-        }
+    getPersonalDrinks() {
+        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getPersonalDrinks', {headers: this.header});
+    }
     */
 }

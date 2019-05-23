@@ -7,6 +7,9 @@ import {Dialogs} from '@ionic-native/dialogs/ngx';
 import {Toast} from '@ionic-native/toast/ngx';
 import {Person} from '../../entities/person';
 
+/**
+ * TODO: Add yummy toast
+ */
 @Component({
     selector: 'app-information',
     templateUrl: './information.component.html',
@@ -18,7 +21,11 @@ export class InformationComponent {
     date: Date;
     alreadyReg: boolean;
 
-    constructor(private fb: FormBuilder, private http: HttpService, private dialog: Dialogs, private router: Router, private toast: Toast) {
+    constructor(private fb: FormBuilder,
+                private http: HttpService,
+                private dialog: Dialogs,
+                private router: Router,
+                private toast: Toast) {
         this.date = new Date();
         this.form = this.fb.group({
             foreName: ['', [Validators.minLength(1), Validators.maxLength(100), Validators.pattern(/^[a-zA-z]*$/)]],

@@ -29,6 +29,7 @@ import {MenuComponent} from './components/menu/menu.component';
 import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
 import {StatisticsComponent} from './components/statistics/statistics.component';
 import {GoogleChartsModule} from 'angular-google-charts';
+import {MapComponent} from './components/map/map.component';
 
 @NgModule({
     declarations: [
@@ -44,7 +45,8 @@ import {GoogleChartsModule} from 'angular-google-charts';
         ProfileComponent,
         HeaderComponent,
         RequestPasswordChangeComponent,
-        MenuComponent
+        MenuComponent,
+        MapComponent
     ],
     entryComponents: [],
     imports: [
