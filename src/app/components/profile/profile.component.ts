@@ -1,5 +1,4 @@
 import {Component, Input} from '@angular/core';
-import {MenuController} from '@ionic/angular';
 import {Person} from '../../entities/person';
 import {Router} from '@angular/router';
 
@@ -15,8 +14,7 @@ export class ProfileComponent {
 
     person: Person;
 
-    constructor(private router: Router,
-                private menu: MenuController) {
+    constructor(private router: Router) {
         const tempPerson = <Person>JSON.parse(localStorage.getItem('person')).person;
 
         if (tempPerson !== null) {
@@ -29,10 +27,6 @@ export class ProfileComponent {
 
     onModifyData() {
         this.router.navigate(['/profile']);
-    }
-
-    onClose() {
-        this.menu.close('profile');
     }
 
 }

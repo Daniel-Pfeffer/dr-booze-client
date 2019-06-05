@@ -1,6 +1,7 @@
 <ion-header>
     <ion-toolbar color="dark">
-        <ion-title slot="start">Dashboard</ion-title>
+        <ion-menu-button slot="start"></ion-menu-button>
+        <ion-title>Dashboard</ion-title>
         <ion-buttons slot="end">
             <ion-button (click)="onLogout()">
                 <ion-icon name="log-out"></ion-icon>
@@ -44,9 +45,9 @@
                     <ion-icon name="calendar"></ion-icon>
                     <ion-label>Calendar</ion-label>
                 </ion-tab-button>
-                <ion-tab-button (click)="onOpenProfile()">
-                    <ion-icon name="person"></ion-icon>
-                    <ion-label>Me</ion-label>
+                <ion-tab-button [routerLink]="['/map']">
+                    <ion-icon name="map"></ion-icon>
+                    <ion-label>Map</ion-label>
                 </ion-tab-button>
             </ion-tab-bar>
         </ion-tabs>
