@@ -24,7 +24,16 @@
                 <ion-label>{{person.weight}}</ion-label>
             </ion-item>
             <ion-item>
-                <ion-label>Challenges coming soon ...</ion-label>
+                <ion-list>
+                    <ion-item *ngFor="let challenge of challenges">
+                        <ion-label>
+                            {{challenge.desc}}
+                        </ion-label>
+                        <ion-label>
+                            {{challenge.amount}}
+                        </ion-label>
+                    </ion-item>
+                </ion-list>
             </ion-item>
         </ion-list>
         <ion-button (click)="onModifyData()" fill="solid"
@@ -33,8 +42,3 @@
         </ion-button>
     </ion-content>
 </ion-menu>
-<!--<ng-container *ngFor = "let challenge of Challenges">
-  <div *ngIf="challenge.active">
-    {{challenge.description}},{{challenge.progress}},{{challenge.reward}}
-  </div>
-</ng-container>-->
