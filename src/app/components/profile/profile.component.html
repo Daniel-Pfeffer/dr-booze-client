@@ -1,14 +1,14 @@
-<ion-menu side="end" menuId="profile" [contentId]="contentId">
-    <ion-header>
-        <ion-toolbar color="medium">
-            <ion-title>
-                Profile
-            </ion-title>
-            <ion-button slot="end" color="light" fill="clear" (click)="onClose()">
-                <ion-icon name="close" size="larger"></ion-icon>
-            </ion-button>
-        </ion-toolbar>
-    </ion-header>
+<ion-menu type="overlay" side="start" menuId="profile" [contentId]="contentId">
+    <ion-toolbar color="dark">
+        <ion-title>
+            Profile
+        </ion-title>
+        <!--
+        <ion-button slot="end" color="light" fill="clear" (click)="onClose()">
+            <ion-icon name="close" size="larger"></ion-icon>
+        </ion-button>
+        -->
+    </ion-toolbar>
     <ion-content>
         <ion-list>
             <ion-item *ngIf="person.firstName||person.lastName">

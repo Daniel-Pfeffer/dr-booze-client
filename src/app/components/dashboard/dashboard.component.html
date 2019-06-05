@@ -1,6 +1,7 @@
 <ion-header>
     <ion-toolbar color="dark">
-        <ion-title slot="start">Dashboard</ion-title>
+        <ion-menu-button slot="start"></ion-menu-button>
+        <ion-title>Dashboard</ion-title>
         <ion-buttons slot="end">
             <ion-button (click)="onLogout()">
                 <ion-icon name="log-out"></ion-icon>
@@ -9,15 +10,16 @@
     </ion-toolbar>
 </ion-header>
 <ion-content scrollY="false" id="dashboardContent">
-    <div id="background">
+    <div class="background">
+        <br>
         <app-header></app-header>
         <ion-grid>
             <ion-row>
                 <ion-col size="6" *ngFor="let card of cards">
                     <ion-card (click)="onCardClick(card.type)" class="card">
                         <ion-card-content class="card-content">
-                            <ion-icon style="width: 8vh; height: 100%" size="large" [name]="card.iconName"
-                                      [mode]="card.iconMode"></ion-icon>
+                            <ion-icon class="card-icon"
+                                      size="large" [name]="card.iconName" [mode]="card.iconMode"></ion-icon>
                             <h1 style="text-align: center">{{ card.title }}</h1>
                         </ion-card-content>
                     </ion-card>
@@ -43,9 +45,9 @@
                     <ion-icon name="calendar"></ion-icon>
                     <ion-label>Calendar</ion-label>
                 </ion-tab-button>
-                <ion-tab-button (click)="onOpenProfile()">
-                    <ion-icon name="person"></ion-icon>
-                    <ion-label>Me</ion-label>
+                <ion-tab-button [routerLink]="['/map']">
+                    <ion-icon name="map"></ion-icon>
+                    <ion-label>Map</ion-label>
                 </ion-tab-button>
             </ion-tab-bar>
         </ion-tabs>

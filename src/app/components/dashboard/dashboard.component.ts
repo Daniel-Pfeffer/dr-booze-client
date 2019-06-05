@@ -4,7 +4,6 @@ import {AuthService} from '../../services/auth.service';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
 import {DrinkCard} from '../../entities/drinkCard';
 import {DrinkType} from '../../interfaces/drink';
-import {MenuController} from '@ionic/angular';
 
 @Component({
     selector: 'app-dashboard',
@@ -22,8 +21,7 @@ export class DashboardComponent {
     ];
 
     constructor(private router: Router,
-                private dialog: Dialogs,
-                private menu: MenuController) {
+                private dialog: Dialogs) {
     }
 
     onCardClick(type: DrinkType) {
@@ -34,10 +32,6 @@ export class DashboardComponent {
         AuthService.logout();
         this.dialog.alert(`Successfully logged out`, 'Logout')
             .then(() => this.router.navigate(['login']));
-    }
-
-    onOpenProfile() {
-        this.menu.open('profile');
     }
 
 }

@@ -20,7 +20,6 @@ export class ProfileComponent {
     private regexp = '\${param}';
 
     constructor(private router: Router,
-                private menu: MenuController,
                 private http: HttpService) {
         const tempPerson = <Person>JSON.parse(localStorage.getItem('person')).person;
         this.challenges = new Array<Challenge>();
@@ -44,10 +43,6 @@ export class ProfileComponent {
 
     onModifyData() {
         this.router.navigate(['/profile']);
-    }
-
-    onClose() {
-        this.menu.close('profile');
     }
 
 }

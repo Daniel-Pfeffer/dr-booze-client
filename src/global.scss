@@ -14,26 +14,13 @@
   font-family: 'Exo 2', sans-serif !important;
 }
 
-/*
+$background-url: "src/assets/background2.png";
+
 .background {
-  background-image: url("assets/background3.jpg");
+  background-image: url($background-url);
+  background-repeat: no-repeat;
+  background-position: center;
   background-size: cover;
   width: 100%;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
+  height: 100%;
 }
-*/
-
-/*
-.background-imgUrl {
-  background-image: url("assets/background.jpg");
-  background-repeat: repeat;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-}
-*/

@@ -4,17 +4,25 @@
         <ion-title>Statistics</ion-title>
     </ion-toolbar>
 </ion-header>
-<div id="background">
+<div class="background">
     <google-chart type="LineChart" title="MyTitle" [data]="data">
     </google-chart>
 </div>
 <ion-footer>
     <ion-toolbar>
         <ion-tabs>
-            <ion-tab-bar color="danger" slot="bottom">
-                <ion-tab-button>
-                    <ion-icon name="trending-up"></ion-icon>
-                    <ion-label>Line Chart</ion-label>
+            <ion-tab-bar color="dark" slot="bottom">
+                <ion-tab-button [routerLink]="['/home']">
+                    <ion-icon name="home"></ion-icon>
+                    <ion-label>Dashboard</ion-label>
+                </ion-tab-button>
+                <ion-tab-button [routerLink]="['/stats']">
+                    <ion-icon name="stats"></ion-icon>
+                    <ion-label>Statistics</ion-label>
+                </ion-tab-button>
+                <ion-tab-button [routerLink]="['/calendar']">
+                    <ion-icon name="calendar"></ion-icon>
+                    <ion-label>Calendar</ion-label>
                 </ion-tab-button>
                 <ion-tab-button [routerLink]="['/map']">
                     <ion-icon name="map"></ion-icon>

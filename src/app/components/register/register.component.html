@@ -6,57 +6,69 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div class="background">
-            <img src="../../../assets/icon/logo.svg" alt="logo">
-            <div class="content">
-                <ion-item color="dark">
-                    <ion-icon style="color: white" name="person"></ion-icon>
-                    <ion-input name="username" formControlName="username" placeholder="Username" required></ion-input>
-                    <ion-badge color="danger" *ngIf="form.controls.username.errors?.required">Username is required
-                    </ion-badge>
-                    <ion-badge color="danger" *ngIf="form.controls.username.errors?.minLength">Username is too short
-                    </ion-badge>
-                    <ion-badge color="danger" *ngIf="form.controls.username.errors?.maxLength">Username is too long
-                    </ion-badge>
-                </ion-item>
-                <br>
-                <ion-item color="dark">
-                    <ion-icon style="color:white" name="mail"></ion-icon>
-                    <ion-input name="email" formControlName="email" placeholder="E-Mail" required></ion-input>
-                    <ion-badge color="danger" *ngIf="form.controls.email.errors?.required">E-Mail is required
-                    </ion-badge>
-                    <ion-badge color="danger" *ngIf="form.controls.email.errors?.pattern">No E-Mail</ion-badge>
-                    <ion-badge color="danger" *ngIf="form.controls.email.errors?.maxLength">E-Mail too long</ion-badge>
-                </ion-item>
-                <br>
-                <ion-item color="dark" id="last">
-                    <ion-icon style="color:white" name="lock"></ion-icon>
-                    <ion-input name="password" formControlName="password" placeholder="Password" type="password"
-                               required></ion-input>
-                    <ion-badge color="danger" *ngIf="form.controls.password.errors?.required">Password is required
-                    </ion-badge>
-                    <ion-badge color="danger" *ngIf="form.controls.password.errors?.pattern">No Password</ion-badge>
-                    <!--No pun intended-->
-                    <ion-badge color="danger" *ngIf="form.controls.password.errors?.maxLength">Password too long
-                    </ion-badge>
-                </ion-item>
-                <ion-note style="">Password must be 8-25 chars long and has to contain a capital letter and a number</ion-note>
-                <br><br>
-                <ion-button [disabled]="!form.valid" color="danger" expand="block" fill="solid" type="submit"
-                            class="submit">Register
-                </ion-button>
-                <br>
-                <ion-button [routerLink]="['/login']" color="medium">
-                    I already have an account
-                </ion-button>
-                <ion-button color="primary" (click)="onAutoFill()">
-                    (dev) auto-fill
-                </ion-button>
-                <ion-button color="primary" (click)="onAutoLog()">
-                    (dev) auto-log
-                </ion-button>
+    <div class="background">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="container">
+                <img src="../../../assets/icon/logo.svg" alt="logo" class="logo">
+                <div class="input-container">
+                    <ion-item color="dark">
+                        <ion-icon color="light" name="person"></ion-icon>
+                        <ion-input name="username" formControlName="username" placeholder="Username"
+                                   required></ion-input>
+                        <ion-badge color="secondary" *ngIf="form.controls.username.errors?.required">
+                            Username is required
+                        </ion-badge>
+                        <ion-badge color="secondary" *ngIf="form.controls.username.errors?.minLength">
+                            Username is too short
+                        </ion-badge>
+                        <ion-badge color="secondary" *ngIf="form.controls.username.errors?.maxLength">
+                            Username is too long
+                        </ion-badge>
+                    </ion-item>
+                    <ion-item color="dark">
+                        <ion-icon color="light" name="mail"></ion-icon>
+                        <ion-input name="email" formControlName="email" placeholder="E-Mail" required></ion-input>
+                        <ion-badge color="secondary" *ngIf="form.controls.email.errors?.required">
+                            E-Mail is required
+                        </ion-badge>
+                        <ion-badge color="secondary" *ngIf="form.controls.email.errors?.pattern">
+                            No E-Mail
+                        </ion-badge>
+                        <ion-badge color="secondary" *ngIf="form.controls.email.errors?.maxLength">
+                            E-Mail too long
+                        </ion-badge>
+                    </ion-item>
+                    <ion-item color="dark">
+                        <ion-icon color="light" name="lock"></ion-icon>
+                        <ion-input name="password" formControlName="password" placeholder="Password" type="password"
+                                   required></ion-input>
+                        <ion-badge color="secondary" *ngIf="form.controls.password.errors?.required">
+                            Password is required
+                        </ion-badge>
+                        <ion-badge color="secondary" *ngIf="form.controls.password.errors?.pattern">
+                            No Password
+                        </ion-badge>
+                        <ion-badge color="secondary" *ngIf="form.controls.password.errors?.maxLength">
+                            Password too long
+                        </ion-badge>
+                    </ion-item>
+                </div>
+                <div style="text-align: center">
+                    <ion-note color="light">
+                        Password must be 8-25 characters long and has to contain a capital letter and a number
+                    </ion-note>
+                    <ion-button [disabled]="!form.valid" color="primary" expand="block" fill="solid" type="submit">
+                        Register
+                    </ion-button>
+                    <br>
+                    <ion-button [routerLink]="['/login']" color="dark">
+                        I already have an account
+                    </ion-button>
+                    <ion-button color="light" (click)="onAutoFill()">
+                        (dev) auto-fill
+                    </ion-button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </ion-content>
