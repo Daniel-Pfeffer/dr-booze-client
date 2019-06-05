@@ -9,4 +9,5 @@ export class Person {
     height: number;
     user: User;
     gkw: number;
+    token: number;
 }
