@@ -1,3 +1,4 @@
+
 .card {
   height: 27vh;
   background-color: white;
@@ -11,7 +12,7 @@
   align-items: center;
 }
 
-#background {
-  background-image: url('../../../assets/background.jpg');
-  height: 100vh;
+.card-icon {
+  width: 8vh;
+  height: 100%;
 }

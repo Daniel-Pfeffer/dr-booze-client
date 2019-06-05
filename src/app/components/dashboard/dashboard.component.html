@@ -9,15 +9,16 @@
     </ion-toolbar>
 </ion-header>
 <ion-content scrollY="false" id="dashboardContent">
-    <div id="background">
+    <div class="background">
+        <br>
         <app-header></app-header>
         <ion-grid>
             <ion-row>
                 <ion-col size="6" *ngFor="let card of cards">
                     <ion-card (click)="onCardClick(card.type)" class="card">
                         <ion-card-content class="card-content">
-                            <ion-icon style="width: 8vh; height: 100%" size="large" [name]="card.iconName"
-                                      [mode]="card.iconMode"></ion-icon>
+                            <ion-icon class="card-icon"
+                                      size="large" [name]="card.iconName" [mode]="card.iconMode"></ion-icon>
                             <h1 style="text-align: center">{{ card.title }}</h1>
                         </ion-card-content>
                     </ion-card>
