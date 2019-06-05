@@ -8,6 +8,7 @@ import {Register} from '../interfaces/register';
 import {InsertData} from '../interfaces/insert-data';
 import {GetPerson} from '../interfaces/get-person';
 import {Drink} from '../interfaces/drink';
+import {Challenge} from '../interfaces/challenge';
 
 @Injectable({
     providedIn: 'root'
@@ -103,9 +104,7 @@ export class HttpService {
         return this.http.get<Array<Drink>>(this.ip + 'getter/getLiquor', {headers: this.header});
     }
 
-    /*
-    getPersonalDrinks() {
-        return this.http.get<Array<Drink>>(this.ipApp + 'auth/getPersonalDrinks', {headers: this.header});
+    getChallenges() {
+        return this.http.get<Array<Challenge>>(this.ip + 'manage/manageChallenges', {headers: this.header});
     }
-    */
 }
