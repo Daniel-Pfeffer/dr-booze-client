@@ -2,11 +2,6 @@
     <ion-toolbar color="dark">
         <ion-menu-button slot="start"></ion-menu-button>
         <ion-title>Dashboard</ion-title>
-        <ion-buttons slot="end">
-            <ion-button (click)="onLogout()">
-                <ion-icon name="log-out"></ion-icon>
-            </ion-button>
-        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 <ion-content scrollY="false" id="dashboardContent">
@@ -33,10 +28,10 @@
     <ion-toolbar>
         <ion-tabs>
             <ion-tab-bar color="dark" slot="bottom">
-                <ion-tab-button [routerLink]="['/home']">
+                <!--<ion-tab-button [routerLink]="['/home']">
                     <ion-icon name="home"></ion-icon>
                     <ion-label>Dashboard</ion-label>
-                </ion-tab-button>
+                </ion-tab-button>-->
                 <ion-tab-button [routerLink]="['/stats']">
                     <ion-icon name="stats"></ion-icon>
                     <ion-label>Statistics</ion-label>

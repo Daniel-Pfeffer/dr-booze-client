@@ -19,9 +19,8 @@ import {LoginComponent} from './components/login/login.component';
 import {CalenderComponent} from './components/calender/calender.component';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {InformationComponent} from './components/information/information.component';
-import {ChallengesComponent} from './components/challenges/challenges.component';
 import {PickerDetailComponent} from './components/picker-detail/picker-detail.component';
-import {ProfileComponent} from './components/profile/profile.component';
+import {SideMenuComponent} from './components/side-menu/side-menu.component';
 import {SwitchError} from './helper/switch-error';
 import {HeaderComponent} from './components/header/header.component';
 import {NgCalendarModule} from 'ionic2-calendar';
@@ -38,10 +37,9 @@ import {MapComponent} from './components/map/map.component';
         CalenderComponent,
         DashboardComponent,
         InformationComponent,
-        ChallengesComponent,
         PickerDetailComponent,
         StatisticsComponent,
-        ProfileComponent,
+        SideMenuComponent,
         HeaderComponent,
         RequestPasswordChangeComponent,
         MapComponent
@@ -64,7 +62,7 @@ import {MapComponent} from './components/map/map.component';
         StatusBar,
         SplashScreen,
         Toast,
-        ProfileComponent,
+        SideMenuComponent,
         DashboardComponent,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
     ],

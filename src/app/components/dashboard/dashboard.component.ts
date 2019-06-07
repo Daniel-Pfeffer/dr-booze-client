@@ -1,7 +1,5 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthService} from '../../services/auth.service';
-import {Dialogs} from '@ionic-native/dialogs/ngx';
 import {DrinkCard} from '../../entities/drinkCard';
 import {DrinkType} from '../../interfaces/drink';
 
@@ -20,18 +18,11 @@ export class DashboardComponent {
         // new DrinkCard(DrinkType.OTHER, 'Other', '')
     ];
 
-    constructor(private router: Router,
-                private dialog: Dialogs) {
+    constructor(private router: Router) {
     }
 
     onCardClick(type: DrinkType) {
         this.router.navigate(['pickerDetail', type]);
-    }
-
-    onLogout() {
-        AuthService.logout();
-        this.dialog.alert(`Successfully logged out`, 'Logout')
-            .then(() => this.router.navigate(['login']));
     }
 
 }
