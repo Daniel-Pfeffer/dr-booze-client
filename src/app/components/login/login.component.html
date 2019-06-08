@@ -6,49 +6,47 @@
         <ion-title>Login</ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content>
-    <div class="background">
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <div class="container">
-                <img src="../../../assets/icon/logo.svg" alt="logo" class="logo">
-                <div class="input-container">
-                    <ion-item color="dark">
-                        <ion-icon color="light" name="person"></ion-icon>
-                        <ion-input type="text" name="username" placeholder="Username"
-                                   formControlName="username"></ion-input>
-                        <ion-badge color="secondary" *ngIf="form.controls.username.errors?.required">
-                            Username is required
-                        </ion-badge>
-                    </ion-item>
-                    <ion-item color="dark">
-                        <ion-icon color="light" name="lock"></ion-icon>
-                        <ion-input type="password" name="password" placeholder="Password"
-                                   formControlName="password"></ion-input>
-                        <ion-badge color="secondary" *ngIf="form.controls.password.errors?.required">
-                            Password is required
-                        </ion-badge>
-                        <ion-badge color="secondary" *ngIf="form.controls.password.errors?.pattern">
-                            This is no password
-                        </ion-badge>
-                    </ion-item>
-                </div>
-                <div style="text-align: center">
-                    <ion-button [disabled]="!form.valid" expand="block" fill="solid" type="submit" color="primary">
-                        Login
-                    </ion-button>
-                    <br>
-                    <ion-button fill="solid" color="dark" [routerLink]="['/register']">
-                        I don't have an account
-                    </ion-button>
-                    <ion-button fill="solid" color="tertiary" [routerLink]="['/request-password-change']">
-                        Forgot your password?
-                    </ion-button>
-                    <ion-button color="light" (click)="onAutoFill()">
-                        (dev) auto-fill
-                    </ion-button>
-                </div>
-                <br>
-            </div>
-        </form>
-    </div>
+<ion-content class="background">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <ion-img src="assets/logo.svg" class="logo"></ion-img>
+        <div class="input-container">
+            <ion-item color="dark">
+                <ion-icon color="light" name="person"></ion-icon>
+                <ion-input type="text" name="username" placeholder="Username"
+                           formControlName="username"></ion-input>
+                <ion-badge color="secondary" *ngIf="form.controls.username.errors?.required">
+                    Username is required
+                </ion-badge>
+            </ion-item>
+            <br>
+            <ion-item color="dark">
+                <ion-icon color="light" name="lock"></ion-icon>
+                <ion-input type="password" name="password" placeholder="Password"
+                           formControlName="password"></ion-input>
+                <ion-badge color="secondary" *ngIf="form.controls.password.errors?.required">
+                    Password is required
+                </ion-badge>
+                <ion-badge color="secondary" *ngIf="form.controls.password.errors?.pattern">
+                    This is no password
+                </ion-badge>
+            </ion-item>
+        </div>
+        <div class="button-container">
+            <ion-button [disabled]="!form.valid" expand="block" fill="solid" type="submit" color="primary">
+                Login
+            </ion-button>
+            <br>
+            <ion-button fill="solid" color="dark" [routerLink]="['/register']">
+                I don't have an account
+            </ion-button>
+            <br>
+            <ion-button fill="solid" color="tertiary" [routerLink]="['/request-password-change']">
+                Forgot your password?
+            </ion-button>
+            <ion-button color="light" (click)="onAutoFill()">
+                (dev) auto-fill
+            </ion-button>
+        </div>
+        <br>
+    </form>
 </ion-content>

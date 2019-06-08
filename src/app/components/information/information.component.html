@@ -6,90 +6,91 @@
         </ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content>
-    <div class="background">
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <div class="container">
-                <div class="input-container">
-                    <ion-item color="dark">
-                        <ion-input name="foreName" formControlName="foreName" placeholder="Forename (optional)">
-                        </ion-input>
-                        <ion-badge color="secondary" *ngIf="form.controls.foreName.errors?.pattern">
-                            Not a name
-                        </ion-badge>
-                        <ion-badge color="secondary" *ngIf="form.controls.foreName.errors?.maxLength">
-                            Forename too long
-                        </ion-badge>
-                        <ion-badge color="secondary" *ngIf="form.controls.foreName.errors?.minLength">
-                            Forename too short
-                        </ion-badge>
-                    </ion-item>
-                    <ion-item color="dark">
-                        <ion-input name="surName" formControlName="surName" placeholder="Surname (optional)">
-                        </ion-input>
-                        <ion-badge color="secondary" *ngIf="form.controls.surName.errors?.pattern">
-                            Not a name
-                        </ion-badge>
-                        <ion-badge color="secondary" *ngIf="form.controls.surName.errors?.maxLength">
-                            Surname too long
-                        </ion-badge>
-                        <ion-badge color="secondary" *ngIf="form.controls.surName.errors?.minLength">
-                            Surname too short
-                        </ion-badge>
-                    </ion-item>
-                    <ion-item color="dark">
-                        <ion-datetime [max]="date.getFullYear()-16" [min]="date.getFullYear()-90" formControlName="age"
-                                      placeholder="Birthday"></ion-datetime>
-                    </ion-item>
-                    <ion-item color="dark">
-                        <ion-input name="weight" formControlName="weight" placeholder="Weight" required type="number">
-                        </ion-input>
-                        <ion-badge color="secondary" *ngIf="form.controls.weight.errors?.pattern">
-                            Not a weight
-                        </ion-badge>
-                        <ion-badge color="secondary" *ngIf="form.controls.weight.errors?.max">
-                            Too heavy
-                        </ion-badge>
-                        <ion-badge color="secondary" *ngIf="form.controls.weight.errors?.min">
-                            Too light
-                        </ion-badge>
-                        <ion-badge color="secondary" *ngIf="form.controls.weight.errors?.required">
-                            Weight required
-                        </ion-badge>
-                    </ion-item>
-                    <ion-item color="dark">
-                        <ion-input name="height" formControlName="height" placeholder="Height" required
-                                   type="number"></ion-input>
-                        <ion-badge color="secondary" *ngIf="form.controls.height.errors?.pattern">Not a height
-                        </ion-badge>
-                        <ion-badge color="secondary" *ngIf="form.controls.height.errors?.max">Too large</ion-badge>
-                        <ion-badge color="secondary" *ngIf="form.controls.height.errors?.min">Too small</ion-badge>
-                        <ion-badge color="secondary" *ngIf="form.controls.height.errors?.required">Height required
-                        </ion-badge>
-                    </ion-item>
-                    <ion-item color="dark">
-                        <ion-select placeholder="Gender" formControlName="gender">
-                            <ion-select-option value="M">Male</ion-select-option>
-                            <ion-select-option value="F">Female</ion-select-option>
-                        </ion-select>
-                    </ion-item>
-                </div>
-                <div style="text-align: center">
-                    <ion-button fill="solid" type="submit" color="primary" [disabled]="!form.valid" class="submit"
-                                *ngIf="!alreadyReg">
-                        Submit
-                    </ion-button>
-                    <ion-button fill="solid" (click)="onChange()" color="primary" [disabled]="!form.valid"
-                                class="submit"
-                                *ngIf="alreadyReg">
-                        Change
-                    </ion-button>
-                    <br>
-                    <ion-button color="light" (click)="onAutoFill()">
-                        (dev) auto-fill
-                    </ion-button>
-                </div>
-            </div>
-        </form>
-    </div>
+<ion-content class="background">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="input-container">
+            <ion-item color="dark">
+                <ion-input name="foreName" formControlName="foreName" placeholder="Forename (optional)">
+                </ion-input>
+                <ion-badge color="secondary" *ngIf="form.controls.foreName.errors?.pattern">
+                    Not a name
+                </ion-badge>
+                <ion-badge color="secondary" *ngIf="form.controls.foreName.errors?.maxLength">
+                    Forename too long
+                </ion-badge>
+                <ion-badge color="secondary" *ngIf="form.controls.foreName.errors?.minLength">
+                    Forename too short
+                </ion-badge>
+            </ion-item>
+            <br>
+            <ion-item color="dark">
+                <ion-input name="surName" formControlName="surName" placeholder="Surname (optional)">
+                </ion-input>
+                <ion-badge color="secondary" *ngIf="form.controls.surName.errors?.pattern">
+                    Not a name
+                </ion-badge>
+                <ion-badge color="secondary" *ngIf="form.controls.surName.errors?.maxLength">
+                    Surname too long
+                </ion-badge>
+                <ion-badge color="secondary" *ngIf="form.controls.surName.errors?.minLength">
+                    Surname too short
+                </ion-badge>
+            </ion-item>
+            <br>
+            <ion-item color="dark">
+                <ion-datetime [max]="date.getFullYear()-16" [min]="date.getFullYear()-90" formControlName="age"
+                              placeholder="Birthday"></ion-datetime>
+            </ion-item>
+            <br>
+            <ion-item color="dark">
+                <ion-input name="weight" formControlName="weight" placeholder="Weight" required type="number">
+                </ion-input>
+                <ion-badge color="secondary" *ngIf="form.controls.weight.errors?.pattern">
+                    Not a weight
+                </ion-badge>
+                <ion-badge color="secondary" *ngIf="form.controls.weight.errors?.max">
+                    Too heavy
+                </ion-badge>
+                <ion-badge color="secondary" *ngIf="form.controls.weight.errors?.min">
+                    Too light
+                </ion-badge>
+                <ion-badge color="secondary" *ngIf="form.controls.weight.errors?.required">
+                    Weight required
+                </ion-badge>
+            </ion-item>
+            <br>
+            <ion-item color="dark">
+                <ion-input name="height" formControlName="height" placeholder="Height" required
+                           type="number"></ion-input>
+                <ion-badge color="secondary" *ngIf="form.controls.height.errors?.pattern">Not a height
+                </ion-badge>
+                <ion-badge color="secondary" *ngIf="form.controls.height.errors?.max">Too large</ion-badge>
+                <ion-badge color="secondary" *ngIf="form.controls.height.errors?.min">Too small</ion-badge>
+                <ion-badge color="secondary" *ngIf="form.controls.height.errors?.required">Height required
+                </ion-badge>
+            </ion-item>
+            <br>
+            <ion-item color="dark">
+                <ion-select placeholder="Gender" formControlName="gender">
+                    <ion-select-option value="M">Male</ion-select-option>
+                    <ion-select-option value="F">Female</ion-select-option>
+                </ion-select>
+            </ion-item>
+        </div>
+        <div style="text-align: center">
+            <ion-button fill="solid" type="submit" color="primary" [disabled]="!form.valid" class="submit"
+                        *ngIf="!alreadyReg">
+                Submit
+            </ion-button>
+            <ion-button fill="solid" (click)="onChange()" color="primary" [disabled]="!form.valid"
+                        class="submit"
+                        *ngIf="alreadyReg">
+                Change
+            </ion-button>
+            <br>
+            <ion-button color="light" (click)="onAutoFill()">
+                (dev) auto-fill
+            </ion-button>
+        </div>
+    </form>
 </ion-content>

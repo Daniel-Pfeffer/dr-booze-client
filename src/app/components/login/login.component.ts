@@ -57,19 +57,9 @@ export class LoginComponent implements OnInit {
                         AuthService.setToken(item.token, person);
 
                         if (person.person == null) {
-                            this.dialog.alert(`Hello`, 'Login')
-                                .then(
-                                    () => this.router.navigate(['/side-menu']));
+                            this.router.navigate(['/profile']);
                         } else {
-                            if (person.person.firstName !== undefined || person.person.firstName != null) {
-                                this.dialog.alert(`Hello ${person.person.firstName}`, 'Hello')
-                                    .then(
-                                        () => this.router.navigate(['/home']));
-                            } else {
-                                this.dialog.alert(`Hello ${person.person.user.username}`, 'Hello')
-                                    .then(
-                                        () => this.router.navigate(['/home']));
-                            }
+                            this.router.navigate(['/home']);
                         }
                     }
                 });

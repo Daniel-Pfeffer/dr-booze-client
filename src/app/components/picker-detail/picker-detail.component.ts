@@ -32,25 +32,41 @@ export class PickerDetailComponent implements OnInit {
             case DrinkType.BEER:
                 this.title = 'Beer';
                 this.iconName = 'beer';
-                this.http.getBeer().subscribe((beer) => this.drinks = beer);
+                this.http.getBeer().subscribe((beer) => {
+                    this.drinks = beer;
+                }, () => {
+                    this.presentToast('Server not reachable', 3000);
+                });
                 break;
             case DrinkType.WINE:
                 this.title = 'Wine';
                 this.iconName = 'wine';
                 this.iconMode = 'ios';
-                this.http.getWine().subscribe((wine) => this.drinks = wine);
+                this.http.getWine().subscribe((wine) => {
+                    this.drinks = wine;
+                }, () => {
+                    this.presentToast('Server not reachable', 3000);
+                });
                 break;
             case DrinkType.COCKTAIL:
                 this.title = 'Cocktails';
                 this.iconName = 'wine';
                 this.iconMode = 'md';
-                this.http.getCocktails().subscribe((cocktails) => this.drinks = cocktails);
+                this.http.getCocktails().subscribe((cocktails) => {
+                    this.drinks = cocktails;
+                }, () => {
+                    this.presentToast('Server not reachable', 3000);
+                });
                 break;
             case DrinkType.LIQUOR:
                 this.title = 'Hard Liquor';
                 this.iconName = 'wine';
                 this.iconMode = 'md';
-                this.http.getLiquor().subscribe((liquor) => this.drinks = liquor);
+                this.http.getLiquor().subscribe((liquor) => {
+                    this.drinks = liquor;
+                }, () => {
+                    this.presentToast('Server not reachable', 3000);
+                });
                 break;
             /*
             case DrinkType.OTHER:
@@ -77,7 +93,10 @@ export class PickerDetailComponent implements OnInit {
             (error) => {
                 console.error('code: ' + error.code + '\nmessage: ' + error.message + '\n');
                 this.addDrink(selectedDrink);
-                this.presentToast('Note: You have to allow location tracking to use the map feature.');
+                this.presentToast(
+                    'Note: You have to allow location tracking to use the map feature.',
+                    2000
+                );
             }
         );
     }
@@ -102,10 +121,10 @@ export class PickerDetailComponent implements OnInit {
         this.router.navigate(['dashboard']);
     }
 
-    private async presentToast(message: string) {
+    private async presentToast(message: string, duration: number) {
         const toast = await this.toastController.create({
             message: message,
-            duration: 2000,
+            duration: duration,
             showCloseButton: true
         });
         toast.present();

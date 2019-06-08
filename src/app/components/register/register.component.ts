@@ -15,8 +15,11 @@ export class RegisterComponent {
     form: FormGroup;
     error = '';
 
-    constructor(private fb: FormBuilder, private httpService: HttpService, private router: Router,
-                private dialog: Dialogs, private switcher: SwitchError) {
+    constructor(private fb: FormBuilder,
+                private httpService: HttpService,
+                private router: Router,
+                private dialog: Dialogs,
+                private switcher: SwitchError) {
         this.form = this.fb.group({
             email:
                 ['', [Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/), Validators.maxLength(100)]],

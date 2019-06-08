@@ -11,6 +11,9 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
 import {DatePicker} from '@ionic-native/date-picker/ngx';
 import {Toast} from '@ionic-native/toast/ngx';
+import {Keyboard} from '@ionic-native/keyboard/ngx';
+
+import {GoogleChartsModule} from 'angular-google-charts';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './modules/app-routing.module';
@@ -26,7 +29,6 @@ import {HeaderComponent} from './components/header/header.component';
 import {NgCalendarModule} from 'ionic2-calendar';
 import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
 import {StatisticsComponent} from './components/statistics/statistics.component';
-import {GoogleChartsModule} from 'angular-google-charts';
 import {MapComponent} from './components/map/map.component';
 
 @NgModule({
@@ -50,7 +52,10 @@ import {MapComponent} from './components/map/map.component';
         FormsModule,
         BrowserModule,
         HttpClientModule,
-        IonicModule.forRoot(),
+        IonicModule.forRoot({
+            scrollPadding: 'true',
+            scrollAssist: false,
+        }),
         AppRoutingModule,
         NgCalendarModule,
         GoogleChartsModule.forRoot()
@@ -61,6 +66,7 @@ import {MapComponent} from './components/map/map.component';
         Dialogs,
         StatusBar,
         SplashScreen,
+        Keyboard,
         Toast,
         SideMenuComponent,
         DashboardComponent,
