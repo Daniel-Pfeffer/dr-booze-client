@@ -18,10 +18,9 @@ export class StatisticsComponent implements OnInit {
         hAxis: {textStyle: {fontSize: 11, bold: true}}
     };
     daydata = [];
+    flipdata = [];
     private permille: number;
-    private oldpermille: number;
-    private time: String;
-    value = 10;
+    value = 1;
     maxValue: number;
     lastMaxValue = -1;
     private sum = 0;
@@ -37,47 +36,46 @@ export class StatisticsComponent implements OnInit {
 
     constructor() {
         this.daydata = JSON.parse(localStorage.getItem('permilleStorage'));
-        console.log(this.daydata);
-        if (this.daydata !== null) {
-            this.maxValue = this.daydata.length - 1;
-            for (let i = 0; i < 10; i++) {
-                this.permille = this.daydata[this.daydata.length - 10 + i].permille;
-                this.oldpermille = this.daydata[this.daydata.length - 11 + i].permille;
-                this.time = this.daydata[this.daydata.length - 10 + i].time;
-                this.data[i] = [this.time, 0, this.permille];
+        if (this.daydata !== undefined) {
+            this.daydata.reverse();
+            for (let i = 0; i < this.value; i++) {
+                this.flipdata[i] = [this.daydata[i].time, 0, this.daydata[i].permille];
+                console.log(this.data[i]);
+                console.log(i);
             }
+            this.flipdata.reverse();
+            this.data = this.flipdata;
+            this.daydata.reverse();
+
             this.validateStatistik();
         }
     }
 
     forceRedraw(event) {
-        if (this.daydata !== null) {
+        this.data = [];
+        if (this.daydata !== undefined) {
             this.value = event.detail.value;
             if (this.lastMaxValue > this.value) {
                 this.data = [];
             }
             this.maxValue = this.daydata.length - 1;
-            console.log(this.maxValue);
 
-            console.log(this.daydata);
-            console.log(this.value);
+            this.daydata.reverse();
             for (let i = 0; i < this.value; i++) {
-                console.log(this.daydata[this.daydata.length - this.value + i]);
-                this.permille = this.daydata[this.daydata.length - this.value + i].permille;
-                console.log(this.permille);
-
-                this.oldpermille = this.daydata[this.daydata.length - this.value - 1 + i].permille;
-                this.time = this.daydata[this.daydata.length - this.value + i].time;
-                this.data[i] = [this.time, 0, this.permille];
-                this.data = Object.assign([], this.data);
+                this.flipdata[i] = [this.daydata[i].time, 0, this.daydata[i].permille];
+                console.log(this.flipdata);
             }
+            this.flipdata.reverse();
+            this.data = this.flipdata;
+            this.daydata.reverse();
+            this.data = Object.assign([], this.data);
             this.lastMaxValue = this.value;
             this.validateStatistik();
         }
     }
 
     validateStatistik() {
-        if (this.daydata !== null) {
+        if (this.daydata !== undefined) {
 
             for (let i = this.maxValue; i > this.daydata.length - this.value; i--) {
                 this.sum += this.daydata[i].permille;
@@ -117,11 +115,11 @@ export class StatisticsComponent implements OnInit {
                 'You need to change something about your drinking.';
         } else {
 
-            if (this.maxEntry.permille > this.overallAvg + 1) {
-                this.sampleText = 'Your max Permille is way higher than your overall Average. Bingdrinking on one day ' +
+            if (this.maxEntry.permille > this.overallAvg) {
+                this.sampleText = 'Your max Permille is higher than your overall Average. Bingdrinking on one day ' +
                     'is not healthy for your body either.';
             }
-            if (this.maxEntry.permille <= this.overallAvg + 1 && this.overallAvg <= 1) {
+            if (this.maxEntry.permille <= this.overallAvg && this.overallAvg <= 0.5) {
                 this.sampleText = 'Your drinking behaviour is in the norm, but you could still do better... we believe in you!';
             }
         }
