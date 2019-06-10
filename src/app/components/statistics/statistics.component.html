@@ -23,9 +23,10 @@
     </div>
 </ion-content>
 
-<ion-card>
+<ion-card *ngIf="daydata !== null">
     <ion-card-header>
     </ion-card-header>
+
 
     <ion-card-content>
         <ion-text>Average of the displayed Values: {{focusAvg}}<br>
@@ -36,7 +37,7 @@
     </ion-card-content>
 </ion-card>
 
-<ion-card>
+<ion-card *ngIf="daydata !== null">
     <ion-card-content>
         <ion-text>{{sampleText}}
         </ion-text>
@@ -44,7 +45,7 @@
     </ion-card-content>
 
 </ion-card>
-<ion-button (click)="suspendMax()" style="--color:white;">Want a Second Chance</ion-button>
+<ion-button (click)="suspendMax()" style="--color:white;">Remove Highest Value</ion-button>
 <ion-button (click)="returnToNormal()" style="--color:white;">Undo</ion-button>
 <ion-footer>
     <ion-toolbar>
