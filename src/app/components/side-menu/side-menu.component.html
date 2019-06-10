@@ -13,9 +13,9 @@
                 </ion-label>
             </ion-list-header>
             <ion-item *ngFor="let challenge of challenges">
-                <ion-label>
+                <ion-text style="max-width: 75%; font-size: 90%">
                     {{ challenge.desc }}
-                </ion-label>
+                </ion-text>
                 <ion-label style="text-align: right">
                     {{ challenge.amount }} pt
                 </ion-label>

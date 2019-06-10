@@ -14,7 +14,7 @@ export class DashboardComponent {
         new DrinkCard(DrinkType.BEER, 'Beer', 'beer', null),
         new DrinkCard(DrinkType.WINE, 'Wine', 'wine', 'ios'),
         new DrinkCard(DrinkType.COCKTAIL, 'Cocktails', 'wine', 'md'),
-        new DrinkCard(DrinkType.LIQUOR, 'Hard liquor', 'wine', 'md')
+        new DrinkCard(DrinkType.LIQUOR, 'Hard liquor', null, null)
         // new DrinkCard(DrinkType.OTHER, 'Other', '')
     ];
 
