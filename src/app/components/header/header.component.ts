@@ -16,6 +16,10 @@ export class HeaderComponent {
     alcoholInBlood: number;
     deconstructPerMinute: number;
     timeSinceLastCalled: Moment;
+    newPermille = 0;
+    tempStorage = [];
+
+
 
     constructor() {
         this.gkw = (<Person>JSON.parse(localStorage.getItem('person'))).gkw;
@@ -46,7 +50,34 @@ export class HeaderComponent {
         }
         localStorage.setItem('drinks', JSON.stringify(drinksToSave));
         if (this.alcoholInBlood > 0) {
-            return (Math.trunc(this.alcoholInBlood * 100) / 100);
+            this.newPermille = Math.trunc(this.alcoholInBlood * 100) / 100;
+
+            // Prüfen ob PromilleStorage im localStorage ist
+            // Prüfen ob PromilleStorage im localStorage ist
+            if (localStorage.getItem('permilleStorage')) {
+                this.tempStorage = JSON.parse(localStorage.getItem('permilleStorage'));
+
+                // Prüfen ob sich der Promillewert geändert hat
+                if (this.tempStorage[this.tempStorage.length - 1].permille !== this.newPermille) {
+                    this.tempStorage.push({
+                        'time': moment().format('HH:mm'),
+                        'permille': this.newPermille
+                    });
+
+                }
+
+                // permilleStorage ist noch nicht im localStorage
+            } else {
+                this.tempStorage.push({
+                    'time': moment().format('HH:mm'),
+                    'permille': this.newPermille
+                });
+            }
+
+            // PermilleStorage in den localStorage speichern
+            localStorage.setItem('permilleStorage', JSON.stringify(this.tempStorage));
+
+            return this.newPermille;
         }
         return 0;
     }
