@@ -59,7 +59,7 @@ export class PickerDetailComponent implements OnInit {
                 });
                 break;
             case DrinkType.LIQUOR:
-                this.title = 'Hard Liquor';
+                this.title = 'Hard liquor';
                 this.iconName = 'wine';
                 this.iconMode = 'md';
                 this.http.getLiquor().subscribe((liquor) => {

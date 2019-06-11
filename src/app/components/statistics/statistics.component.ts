@@ -1,14 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
     selector: 'app-statistics',
     templateUrl: './statistics.component.html',
     styleUrls: ['./statistics.component.scss']
 })
-export class StatisticsComponent implements OnInit {
+export class StatisticsComponent {
 
     selectedTab = 'line';
-
 
     data = [];
     options = {
@@ -30,9 +29,7 @@ export class StatisticsComponent implements OnInit {
     private maxEntry: any;
     private littleEntry: any;
     private sampleText = '';
-    private statistikCheat = 1;
-
-
+    private statisticCheat = 1;
 
     constructor() {
         this.daydata = JSON.parse(localStorage.getItem('permilleStorage'));
@@ -47,7 +44,7 @@ export class StatisticsComponent implements OnInit {
             this.data = this.flipdata;
             this.daydata.reverse();
 
-            this.validateStatistik();
+            this.validateStatistic();
         }
     }
 
@@ -70,16 +67,14 @@ export class StatisticsComponent implements OnInit {
             this.daydata.reverse();
             this.data = Object.assign([], this.data);
             this.lastMaxValue = this.value;
-            this.validateStatistik();
+            this.validateStatistic();
         }
     }
 
-    validateStatistik() {
+    validateStatistic() {
         if (this.daydata !== undefined) {
-
             for (let i = this.maxValue; i > this.daydata.length - this.value; i--) {
                 this.sum += this.daydata[i].permille;
-
             }
             this.focusAvg = Math.trunc(this.sum / this.value * 100) / 100;
             this.sum = 0;
@@ -89,15 +84,13 @@ export class StatisticsComponent implements OnInit {
                 return a.permille - b.permille;
             });
 
-
-            for (let i = 0; i < this.sortdata.length - this.statistikCheat + 1; i++) {
+            for (let i = 0; i < this.sortdata.length - this.statisticCheat + 1; i++) {
                 this.sum += this.daydata[i].permille;
             }
             this.overallAvg = Math.trunc(this.sum / this.daydata.length * 100) / 100;
             this.sum = 0;
 
-
-            this.maxEntry = this.sortdata[this.sortdata.length - this.statistikCheat];
+            this.maxEntry = this.sortdata[this.sortdata.length - this.statisticCheat];
             this.littleEntry = this.sortdata[0];
 
             this.maxEntry.permille = Math.trunc(this.maxEntry.permille * 100) / 100;
@@ -106,10 +99,7 @@ export class StatisticsComponent implements OnInit {
         }
     }
 
-
     createSampleText() {
-
-
         if (this.overallAvg > 2) {
             this.sampleText = 'Your Average with is with ' + this.overallAvg + ' Permille in a very critical zone. ' +
                 'You need to change something about your drinking.';
@@ -126,18 +116,13 @@ export class StatisticsComponent implements OnInit {
     }
 
     suspendMax() {
-        this.statistikCheat++;
-        this.validateStatistik();
+        this.statisticCheat++;
+        this.validateStatistic();
     }
 
     returnToNormal() {
-        this.statistikCheat = 1;
-        this.validateStatistik();
+        this.statisticCheat = 1;
+        this.validateStatistic();
     }
-
-    ngOnInit() {
-    }
-
 
 }
-
