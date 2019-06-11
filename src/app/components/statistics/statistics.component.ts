@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Moment} from 'moment';
 
 @Component({
     selector: 'app-statistics',
@@ -27,20 +28,21 @@ export class StatisticsComponent {
     private maxEntry: any;
     private littleEntry: any;
     private sampleText = '';
+    private sorted: any;
+    timestamp : String;
     private statisticCheat = 1;
 
     hasDayData = true;
 
     constructor() {
         this.daydata = JSON.parse(localStorage.getItem('permilleStorage'));
-        console.log(this.daydata);
         if (this.daydata !== undefined && this.daydata !== null) {
+
             this.daydata.reverse();
-            for (let i = 0; i < this.value; i++) {
-                this.flipdata[i] = [this.daydata[i].time, 0, this.daydata[i].permille];
-            }
-            this.flipdata.reverse();
-            this.data = this.flipdata;
+            this.timestamp = this.daydata[0].time.split("&")[1];
+            this.data[0] = [this.timestamp,0,this.daydata[0].permille];
+            this.focusAvg = this.daydata[0].permille;
+            this.data.reverse();
             this.daydata.reverse();
 
             this.validateStatistic();
@@ -53,17 +55,20 @@ export class StatisticsComponent {
         this.data = [];
         if (this.hasDayData) {
             this.value = event.detail.value;
-            if (this.lastMaxValue > this.value) {
-                this.data = [];
+            if(this.daydata.length === 0 ){
+                this.maxValue = 1;
+            } else {
+                this.maxValue = this.daydata.length-1;
             }
-            this.maxValue = this.daydata.length - 1;
-
+            this.daydata = JSON.parse(localStorage.getItem('permilleStorage'));
             this.daydata.reverse();
-            for (let i = 0; i < this.value; i++) {
-                this.flipdata[i] = [this.daydata[i].time, 0, this.daydata[i].permille];
+            for (let i = 0; i < this.value; i++){
+
+                this.timestamp = this.daydata[i].time.split("&")[1];
+                this.data[i] = [this.timestamp,0,this.daydata[i].permille];
             }
-            this.flipdata.reverse();
-            this.data = this.flipdata;
+
+            this.data.reverse();
             this.daydata.reverse();
             this.data = Object.assign([], this.data);
             this.lastMaxValue = this.value;
@@ -71,12 +76,22 @@ export class StatisticsComponent {
         }
     }
 
-    validateStatistic() {
+    validateStatistik() {
         if (this.hasDayData) {
-            for (let i = this.maxValue; i > this.daydata.length - this.value; i--) {
-                this.sum += this.daydata[i].permille;
+
+            for (let i = this.data.length - 1; i > this.data.length - this.value; i--) {
+                this.sum += this.data[i][2];
+                console.log(this.data[i]);
+                console.log(this.data[i].permille);
             }
-            this.focusAvg = Math.trunc(this.sum / this.value * 100) / 100;
+
+
+            if(this.daydata.length == 1) {
+                this.focusAvg = Math.trunc(this.sum / 1 * 100) / 100;
+                console.log('i am in');
+            } else {
+                this.focusAvg = Math.trunc(this.sum / this.value * 100) / 100;
+            }
             this.sum = 0;
 
             this.sortdata = this.daydata;
@@ -90,11 +105,11 @@ export class StatisticsComponent {
             this.overallAvg = Math.trunc(this.sum / this.daydata.length * 100) / 100;
             this.sum = 0;
 
-            this.maxEntry = this.sortdata[this.sortdata.length - this.statisticCheat];
-            this.littleEntry = this.sortdata[0];
+
+            this.maxEntry = this.sortdata[this.sortdata.length - this.statistikCheat];
+            this.maxEntry.time = this.maxEntry.time.split("&")[1] + ' (' + this.maxEntry.time.split("&")[0]+')';
 
             this.maxEntry.permille = Math.trunc(this.maxEntry.permille * 100) / 100;
-            this.littleEntry.permille = Math.trunc(this.littleEntry.permille * 100) / 100;
             this.createSampleText();
         }
     }
@@ -115,8 +130,10 @@ export class StatisticsComponent {
     }
 
     suspendMax() {
-        this.statisticCheat++;
-        this.validateStatistic();
+        if(this.statistikCheat < this.daydata.length) {
+            this.statisticCheat++;
+            this.validateStatistic();
+        }
     }
 
     returnToNormal() {

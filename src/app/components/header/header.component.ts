@@ -60,7 +60,8 @@ export class HeaderComponent {
                 // Prüfen ob sich der Promillewert geändert hat
                 if (this.tempStorage[this.tempStorage.length - 1].permille !== this.newPermille) {
                     this.tempStorage.push({
-                        'time': moment().format('HH:mm'),
+
+                        'time': moment().format('DD.MM.YYYY&hh:mm'),
                         'permille': this.newPermille
                     });
 
@@ -69,7 +70,7 @@ export class HeaderComponent {
                 // permilleStorage ist noch nicht im localStorage
             } else {
                 this.tempStorage.push({
-                    'time': moment().format('HH:mm'),
+                    'time': moment().format('DD.MM.YYYY&hh:mm'),
                     'permille': this.newPermille
                 });
             }
