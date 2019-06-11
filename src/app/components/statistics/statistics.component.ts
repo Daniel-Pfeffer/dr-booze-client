@@ -7,8 +7,6 @@ import {Component} from '@angular/core';
 })
 export class StatisticsComponent {
 
-    selectedTab = 'line';
-
     data = [];
     options = {
         legend: {'position': 'none'},
@@ -31,26 +29,29 @@ export class StatisticsComponent {
     private sampleText = '';
     private statisticCheat = 1;
 
+    hasDayData = true;
+
     constructor() {
         this.daydata = JSON.parse(localStorage.getItem('permilleStorage'));
-        if (this.daydata !== undefined) {
+        console.log(this.daydata);
+        if (this.daydata !== undefined && this.daydata !== null) {
             this.daydata.reverse();
             for (let i = 0; i < this.value; i++) {
                 this.flipdata[i] = [this.daydata[i].time, 0, this.daydata[i].permille];
-                console.log(this.data[i]);
-                console.log(i);
             }
             this.flipdata.reverse();
             this.data = this.flipdata;
             this.daydata.reverse();
 
             this.validateStatistic();
+        } else {
+            this.hasDayData = false;
         }
     }
 
     forceRedraw(event) {
         this.data = [];
-        if (this.daydata !== undefined) {
+        if (this.hasDayData) {
             this.value = event.detail.value;
             if (this.lastMaxValue > this.value) {
                 this.data = [];
@@ -60,7 +61,6 @@ export class StatisticsComponent {
             this.daydata.reverse();
             for (let i = 0; i < this.value; i++) {
                 this.flipdata[i] = [this.daydata[i].time, 0, this.daydata[i].permille];
-                console.log(this.flipdata);
             }
             this.flipdata.reverse();
             this.data = this.flipdata;
@@ -72,7 +72,7 @@ export class StatisticsComponent {
     }
 
     validateStatistic() {
-        if (this.daydata !== undefined) {
+        if (this.hasDayData) {
             for (let i = this.maxValue; i > this.daydata.length - this.value; i--) {
                 this.sum += this.daydata[i].permille;
             }
@@ -104,7 +104,6 @@ export class StatisticsComponent {
             this.sampleText = 'Your Average with is with ' + this.overallAvg + ' Permille in a very critical zone. ' +
                 'You need to change something about your drinking.';
         } else {
-
             if (this.maxEntry.permille > this.overallAvg) {
                 this.sampleText = 'Your max Permille is higher than your overall Average. Bingdrinking on one day ' +
                     'is not healthy for your body either.';

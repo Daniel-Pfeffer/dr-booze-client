@@ -5,17 +5,26 @@
     </ion-toolbar>
 </ion-header>
 <ion-content class="background" [scrollY]="false">
-    <google-chart type="LineChart" [data]="data" [options]="options" style="width:100%; position: center;">
+    <google-chart *ngIf="hasDayData; else noDataFound" type="LineChart" [data]="data" [options]="options"
+                  style="width:100%; position: center;">
     </google-chart>
-    <ion-item>
-        <ion-range min="1" [max]="maxValue" color="danger" [value]="value" (ionChange)="forceRedraw($event)"
+    <ng-template #noDataFound>
+        <ion-card color="light" style="text-align: center">
+            <ion-card-content>
+                No data can be evaluated because you have not drank something yet.
+            </ion-card-content>
+        </ion-card>
+    </ng-template>
+    <ion-item *ngIf="hasDayData">
+        <ion-range min="1" [max]="maxValue" color="danger" [value]="value"
+                   (ionChange)="forceRedraw($event)"
                    [pin]="true">
             <ion-label slot="start">Min. Points showed: 1</ion-label>
             <ion-label slot="end">{{maxValue}}</ion-label>
         </ion-range>
     </ion-item>
     <br>
-    <ion-card color="light" *ngIf="daydata !== null">
+    <ion-card color="light" *ngIf="hasDayData">
         <ion-card-content>
             <ion-text>Average of the displayed Values: {{focusAvg}}<br>
                 Average of all Values: {{overallAvg}}<br>
@@ -24,13 +33,16 @@
             </ion-text>
         </ion-card-content>
     </ion-card>
-    <ion-card color="light" *ngIf="daydata !== null">
+    <ion-card color="light" *ngIf="hasDayData">
         <ion-card-content>
             <ion-text>{{sampleText}}
             </ion-text>
         </ion-card-content>
     </ion-card>
     <br>
-    <ion-button (click)="suspendMax()" expand="block" style="--color: white;">Remove Highest Value</ion-button>
-    <ion-button (click)="returnToNormal()" expand="block" style="--color: white;">Undo</ion-button>
+    <ion-button *ngIf="hasDayData" (click)="suspendMax()" expand="block" style="--color: white;">Remove Highest
+        Value
+    </ion-button>
+    <ion-button *ngIf="hasDayData" (click)="returnToNormal()" expand="block" style="--color: white;">Undo
+    </ion-button>
 </ion-content>
