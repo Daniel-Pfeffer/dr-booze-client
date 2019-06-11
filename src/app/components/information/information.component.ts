@@ -4,8 +4,8 @@ import {HttpService} from '../../services/http.service';
 import {InsertData} from '../../interfaces/insert-data';
 import {Router} from '@angular/router';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
-import {Toast} from '@ionic-native/toast/ngx';
 import {Person} from '../../entities/person';
+import {ToastController} from '@ionic/angular';
 
 /**
  * TODO: Add yummy toast
@@ -25,7 +25,7 @@ export class InformationComponent {
                 private http: HttpService,
                 private dialog: Dialogs,
                 private router: Router,
-                private toast: Toast) {
+                private toast: ToastController) {
         this.date = new Date();
         this.form = this.fb.group({
             foreName: ['', [Validators.minLength(1), Validators.maxLength(100), Validators.pattern(/^[a-zA-z]*$/)]],
@@ -85,10 +85,9 @@ export class InformationComponent {
             res.person.user = res.user;
             res.person.gkw = this.calculateGKW(res.person);
             localStorage.setItem('person', JSON.stringify(res));
-            console.log('should open specific whitebread');
-            this.toast.show('Hello', 'long', 'bottom').subscribe(next => {
-                console.log(next);
-            });
+            this.presentToast('Profile updated', 2000).then(
+                () => this.router.navigate(['/home'])
+            );
         }
     }
 
@@ -122,5 +121,14 @@ export class InformationComponent {
         this.form.controls.weight.setValue(80);
         this.form.controls.height.setValue(167);
         this.form.controls.gender.setValue('M');
+    }
+
+    private async presentToast(message: string, duration: number) {
+        const toast = await this.toast.create({
+            message: message,
+            duration: duration,
+            showCloseButton: true
+        });
+        toast.present();
     }
 }
