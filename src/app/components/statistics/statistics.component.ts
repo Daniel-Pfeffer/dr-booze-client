@@ -1,5 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {Moment} from 'moment';
+import {Component} from '@angular/core';
 
 @Component({
     selector: 'app-statistics',
@@ -29,7 +28,7 @@ export class StatisticsComponent {
     private littleEntry: any;
     private sampleText = '';
     private sorted: any;
-    timestamp : String;
+    timestamp: String;
     private statisticCheat = 1;
 
     hasDayData = true;
@@ -39,8 +38,8 @@ export class StatisticsComponent {
         if (this.daydata !== undefined && this.daydata !== null) {
 
             this.daydata.reverse();
-            this.timestamp = this.daydata[0].time.split("&")[1];
-            this.data[0] = [this.timestamp,0,this.daydata[0].permille];
+            this.timestamp = this.daydata[0].time.split('&')[1];
+            this.data[0] = [this.timestamp, 0, this.daydata[0].permille];
             this.focusAvg = this.daydata[0].permille;
             this.data.reverse();
             this.daydata.reverse();
@@ -55,17 +54,16 @@ export class StatisticsComponent {
         this.data = [];
         if (this.hasDayData) {
             this.value = event.detail.value;
-            if(this.daydata.length === 0 ){
+            if (this.daydata.length === 0) {
                 this.maxValue = 1;
             } else {
-                this.maxValue = this.daydata.length-1;
+                this.maxValue = this.daydata.length - 1;
             }
             this.daydata = JSON.parse(localStorage.getItem('permilleStorage'));
             this.daydata.reverse();
-            for (let i = 0; i < this.value; i++){
-
-                this.timestamp = this.daydata[i].time.split("&")[1];
-                this.data[i] = [this.timestamp,0,this.daydata[i].permille];
+            for (let i = 0; i < this.value; i++) {
+                this.timestamp = this.daydata[i].time.split('&')[1];
+                this.data[i] = [this.timestamp, 0, this.daydata[i].permille];
             }
 
             this.data.reverse();
@@ -76,7 +74,7 @@ export class StatisticsComponent {
         }
     }
 
-    validateStatistik() {
+    validateStatistic() {
         if (this.hasDayData) {
 
             for (let i = this.data.length - 1; i > this.data.length - this.value; i--) {
@@ -86,7 +84,7 @@ export class StatisticsComponent {
             }
 
 
-            if(this.daydata.length == 1) {
+            if (this.daydata.length === 1) {
                 this.focusAvg = Math.trunc(this.sum / 1 * 100) / 100;
                 console.log('i am in');
             } else {
@@ -105,9 +103,9 @@ export class StatisticsComponent {
             this.overallAvg = Math.trunc(this.sum / this.daydata.length * 100) / 100;
             this.sum = 0;
 
-
-            this.maxEntry = this.sortdata[this.sortdata.length - this.statistikCheat];
-            this.maxEntry.time = this.maxEntry.time.split("&")[1] + ' (' + this.maxEntry.time.split("&")[0]+')';
+            console.log(this.sortdata[this.sortdata.length - this.statisticCheat]);
+            this.maxEntry = this.sortdata[this.sortdata.length - this.statisticCheat];
+            this.maxEntry.time = this.maxEntry.time.split('&')[1] + ' (' + this.maxEntry.time.split('&')[0] + ')';
 
             this.maxEntry.permille = Math.trunc(this.maxEntry.permille * 100) / 100;
             this.createSampleText();
@@ -130,7 +128,7 @@ export class StatisticsComponent {
     }
 
     suspendMax() {
-        if(this.statistikCheat < this.daydata.length) {
+        if (this.statisticCheat < this.daydata.length) {
             this.statisticCheat++;
             this.validateStatistic();
         }

@@ -4,73 +4,6 @@
         <ion-title>Statistics</ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content [scrollY]="false">
-    <div id="background">
-        <div *ngIf="selectedTab === 'line'">
-            <google-chart type="LineChart" [data]="data" [options]="options" style="width:100%; position: center;">
-            </google-chart>
-            <ion-item>
-                <ion-range min="1" [max]="maxValue + 1" color="danger" [value]="value" (ionChange)="forceRedraw($event)"
-                           [pin]="true">
-                    <ion-label slot="start">Min. Points showed: 1</ion-label>
-                    <ion-label slot="end" *ngIf="value > 1">{{maxValue +1}}</ion-label>
-                </ion-range>
-            </ion-item>
-        </div>
-        <div *ngIf="selectedTab === 'map'">
-            <!-- Map Chart -->
-        </div>
-    </div>
-</ion-content>
-
-<ion-card *ngIf="daydata !== null">
-    <ion-card-header>
-    </ion-card-header>
-
-
-    <ion-card-content>
-        <ion-text *ngIf="value > 1">Average of the displayed Values: {{focusAvg}}<br></ion-text>
-        <ion-text>Average of all Values: {{overallAvg}}<br>
-            Highest Value: {{maxEntry.permille}} at {{maxEntry.time}}<br>
-
-        </ion-text>
-    </ion-card-content>
-</ion-card>
-
-<ion-card *ngIf="daydata !== null">
-    <ion-card-content>
-        <ion-text>{{sampleText}}
-        </ion-text>
-
-    </ion-card-content>
-
-</ion-card>
-<ion-button (click)="suspendMax()" style="--color:white;">Remove Highest Value</ion-button>
-<ion-button (click)="returnToNormal()" style="--color:white;">Undo</ion-button>
-<ion-footer>
-    <ion-toolbar>
-        <ion-tabs>
-            <ion-tab-bar color="dark" slot="bottom">
-                <ion-tab-button [routerLink]="['/home']">
-                    <ion-icon name="home"></ion-icon>
-                    <ion-label>Dashboard</ion-label>
-                </ion-tab-button>
-                <ion-tab-button [routerLink]="['/stats']">
-                    <ion-icon name="stats"></ion-icon>
-                    <ion-label>Statistics</ion-label>
-                </ion-tab-button>
-                <ion-tab-button [routerLink]="['/calendar']">
-                    <ion-icon name="calendar"></ion-icon>
-                    <ion-label>Calendar</ion-label>
-                </ion-tab-button>
-                <ion-tab-button [routerLink]="['/map']">
-                    <ion-icon name="map"></ion-icon>
-                    <ion-label>Map</ion-label>
-                </ion-tab-button>
-            </ion-tab-bar>
-        </ion-tabs>
-    </ion-toolbar>
-</ion-footer>
 <ion-content class="background" [scrollY]="false">
     <google-chart *ngIf="hasDayData; else noDataFound" type="LineChart" [data]="data" [options]="options"
                   style="width:100%; position: center;">
@@ -83,11 +16,10 @@
         </ion-card>
     </ng-template>
     <ion-item *ngIf="hasDayData">
-        <ion-range min="1" [max]="maxValue" color="danger" [value]="value"
-                   (ionChange)="forceRedraw($event)"
+        <ion-range min="1" [max]="maxValue + 1" color="danger" [value]="value" (ionChange)="forceRedraw($event)"
                    [pin]="true">
             <ion-label slot="start">Min. Points showed: 1</ion-label>
-            <ion-label slot="end">{{maxValue}}</ion-label>
+            <ion-label slot="end" *ngIf="value <= 1">{{maxValue + 1}}</ion-label>
         </ion-range>
     </ion-item>
     <br>
@@ -95,8 +27,7 @@
         <ion-card-content>
             <ion-text>Average of the displayed Values: {{focusAvg}}<br>
                 Average of all Values: {{overallAvg}}<br>
-                Highest Value: {{maxEntry.permille}} at {{maxEntry.time}}<br>
-                Lowest Value: {{littleEntry.permille}} at {{littleEntry.time}}
+                Highest Value: {{maxEntry.permille}} at {{maxEntry.time}}
             </ion-text>
         </ion-card-content>
     </ion-card>
