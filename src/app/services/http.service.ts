@@ -15,7 +15,7 @@ import {Challenge} from '../interfaces/challenge';
 })
 export class HttpService {
 
-    private ip = 'http://localhost:8080/rest/';
+    private ip = 'http://213.174.225.143:8080/rest/';
 
     public header: HttpHeaders = new HttpHeaders();
 

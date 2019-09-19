@@ -59,6 +59,7 @@ export class InformationComponent {
             res.person.user = res.user;
             res.person.gkw = this.calculateGKW(res.person);
             localStorage.setItem('person', JSON.stringify(res));
+            this.alreadyReg = true;
             this.dialog.alert('Thanks for joining Dr. Booze!\nYour data will be handled carefully and discrete', 'Login finished')
                 .then(
                     () => this.router.navigate(['/home']));
@@ -72,7 +73,7 @@ export class InformationComponent {
                 const c = 2.447 - (0.09516 * age) + (0.1074 * person.height) + (0.3362 * person.weight);
                 console.log(c);
                 return c;
-            case 'W':
+            case 'F':
                 const cd = -2.097 + (0.1069 * person.height) + (0.2466 * person.weight);
                 console.log(cd);
                 return cd;
