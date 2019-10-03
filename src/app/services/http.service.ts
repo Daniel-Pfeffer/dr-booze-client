@@ -1,6 +1,3 @@
-/*
-Handles ALL HTTP/s-Request
- */
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Login} from '../interfaces/login';
@@ -10,6 +7,9 @@ import {GetPerson} from '../interfaces/get-person';
 import {Drink} from '../interfaces/drink';
 import {Challenge} from '../interfaces/challenge';
 
+/*
+Handles ALL HTTP/s-Request
+ */
 @Injectable({
     providedIn: 'root'
 })
