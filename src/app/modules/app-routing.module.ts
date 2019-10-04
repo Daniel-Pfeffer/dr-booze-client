@@ -4,7 +4,6 @@ import {LoginComponent} from '../components/login/login.component';
 import {RegisterComponent} from '../components/register/register.component';
 import {DashboardComponent} from '../components/dashboard/dashboard.component';
 import {InformationComponent} from '../components/information/information.component';
-import {CalenderComponent} from '../components/calender/calender.component';
 import {RegisteredGuard} from '../guards/registered.guard';
 import {NeedRegisterGuard} from '../guards/need-register.guard';
 import {RequestPasswordChangeComponent} from '../components/request-password-change/request-password-change.component';
@@ -20,10 +19,8 @@ const routes: Routes = [
     {path: 'home', component: DashboardComponent, canActivate: [NeedRegisterGuard]},
     {path: 'stats', component: StatisticsComponent, canActivate: [NeedRegisterGuard]},
     {path: 'profile', component: InformationComponent, canActivate: [NeedRegisterGuard]},
-    {path: 'activity', component: CalenderComponent, canActivate: [NeedRegisterGuard]},
     {path: 'request-password-change', component: RequestPasswordChangeComponent, canActivate: [RegisteredGuard]},
     {path: 'pickerDetail/:type', component: PickerDetailComponent, canActivate: [NeedRegisterGuard]},
-    {path: 'calendar', component: CalenderComponent, canActivate: [NeedRegisterGuard]},
     {path: 'map', component: MapComponent, canActivate: [NeedRegisterGuard]},
     {path: '**', redirectTo: 'home'}
 ];

@@ -6,6 +6,7 @@ import {HttpService} from '../../services/http.service';
 import {ChallengeDisplay} from '../../interfaces/challenge-display';
 import {AuthService} from '../../services/auth.service';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
+import {DataService} from '../../services/data.service';
 
 @Component({
     selector: 'app-profile',
@@ -22,14 +23,17 @@ export class SideMenuComponent {
 
     constructor(private router: Router,
                 private http: HttpService,
-                private dialog: Dialogs) {
-        const tempPerson = <Person>JSON.parse(localStorage.getItem('person')).person;
+                private dialog: Dialogs,
+                private data: DataService,
+                private auth: AuthService
+    ) {
+        const tempPerson = this.data.getData('person').person;
         this.challenges = new Array<Challenge>();
 
         if (tempPerson !== null) {
             const person = tempPerson;
-            if (person) {
-                this.person = person;
+                if (person) {
+                    this.person = person;
             }
         }
 
@@ -48,7 +52,7 @@ export class SideMenuComponent {
     }
 
     onLogout() {
-        AuthService.logout();
+        this.auth.logout();
         this.dialog.alert(`Successfully logged out`, 'Logout')
             .then(() => this.router.navigate(['login']));
     }

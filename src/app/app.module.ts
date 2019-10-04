@@ -19,7 +19,6 @@ import {AppComponent} from './app.component';
 import {AppRoutingModule} from './modules/app-routing.module';
 import {RegisterComponent} from './components/register/register.component';
 import {LoginComponent} from './components/login/login.component';
-import {CalenderComponent} from './components/calender/calender.component';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {InformationComponent} from './components/information/information.component';
 import {PickerDetailComponent} from './components/picker-detail/picker-detail.component';
@@ -36,7 +35,6 @@ import {MapComponent} from './components/map/map.component';
         AppComponent,
         RegisterComponent,
         LoginComponent,
-        CalenderComponent,
         DashboardComponent,
         InformationComponent,
         PickerDetailComponent,

@@ -4,6 +4,7 @@ import {HttpService} from '../../services/http.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as moment from 'moment';
 import {ToastController} from '@ionic/angular';
+import {DataService} from '../../services/data.service';
 
 /**
  * TODO: Add loading animation
@@ -24,7 +25,8 @@ export class PickerDetailComponent implements OnInit {
     constructor(private http: HttpService,
                 private route: ActivatedRoute,
                 private router: Router,
-                private toastController: ToastController) {
+                private toastController: ToastController,
+                private data: DataService) {
         this.drinks = new Array<Drink>();
 
         this.drinkType = +this.route.snapshot.paramMap.get('type');
@@ -105,10 +107,9 @@ export class PickerDetailComponent implements OnInit {
         console.log(selectedDrink);
 
         // update localStorage drinks
-        const storageDrinks = localStorage.getItem('drinks');
-        const chosenDrinks: Array<Drink> = storageDrinks != null ? JSON.parse(storageDrinks) : Array<Drink>();
+        const chosenDrinks = this.data.getData('drinks');
         chosenDrinks.push(selectedDrink);
-        localStorage.setItem('drinks', JSON.stringify(chosenDrinks));
+        this.data.setData('drinks', chosenDrinks);
 
         this.http.addDrink(
             selectedDrink.id,

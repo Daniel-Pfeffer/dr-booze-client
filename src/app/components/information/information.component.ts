@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
 import {Person} from '../../entities/person';
 import {ToastController} from '@ionic/angular';
+import {DataService} from '../../services/data.service';
 
 /**
  * TODO: Add yummy toast
@@ -25,7 +26,8 @@ export class InformationComponent {
                 private http: HttpService,
                 private dialog: Dialogs,
                 private router: Router,
-                private toast: ToastController) {
+                private toast: ToastController,
+                private data: DataService) {
         this.date = new Date();
         this.form = this.fb.group({
             foreName: ['', [Validators.minLength(1), Validators.maxLength(100), Validators.pattern(/^[a-zA-z]*$/)]],
@@ -36,7 +38,7 @@ export class InformationComponent {
             gender: ['', [Validators.required]]
         });
 
-        const tempPerson = JSON.parse(localStorage.getItem('person'));
+        const tempPerson = this.data.getData('person');
         if (tempPerson) {
             const person = tempPerson.person;
             console.log(person);
@@ -54,11 +56,11 @@ export class InformationComponent {
     }
 
     private saveData(res: InsertData) {
-        localStorage.removeItem('person');
+        this.data.removeData('person');
         if (!res.error) {
             res.person.user = res.user;
             res.person.gkw = this.calculateGKW(res.person);
-            localStorage.setItem('person', JSON.stringify(res));
+            this.data.setData('person', res);
             this.alreadyReg = true;
             this.dialog.alert('Thanks for joining Dr. Booze!\nYour data will be handled carefully and discrete', 'Login finished')
                 .then(
@@ -81,11 +83,11 @@ export class InformationComponent {
     }
 
     private saveUpdatedData(res: InsertData) {
-        localStorage.removeItem('person');
+        this.data.removeData('person');
         if (!res.error) {
             res.person.user = res.user;
             res.person.gkw = this.calculateGKW(res.person);
-            localStorage.setItem('person', JSON.stringify(res));
+            this.data.setData('person', res);
             this.presentToast('Profile updated', 2000).then(
                 () => this.router.navigate(['/home'])
             );

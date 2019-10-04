@@ -4,24 +4,23 @@ import {Observable} from 'rxjs';
 import {AuthService} from '../services/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 /*
 When the user is logged in he is automatically send to the home screen if he navigates to the Login/Register page
  */
 export class RegisteredGuard implements CanActivate {
 
-  constructor(private router: Router, private auth: AuthService) {
-  }
-
-  canActivate(
-      next: ActivatedRouteSnapshot,
-      state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.auth.isLoggedIn()) {
-      this.router.navigateByUrl('/home');
-      return false;
-    } else {
-      return true;
+    constructor(private router: Router, private auth: AuthService) {
     }
-  }
+
+    canActivate(
+        next: ActivatedRouteSnapshot,
+        state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+        if (this.auth.isLoggedIn()) {
+            this.router.navigateByUrl('/home');
+            return false;
+        }
+        return true;
+    }
 }

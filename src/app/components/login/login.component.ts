@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
 
                     if (!person.error) {
                         console.log(person);
-                        AuthService.setToken(item.token, person);
+                        this.authService.setToken(item.token, person);
 
                         if (person.person == null) {
                             this.router.navigate(['/profile']);
