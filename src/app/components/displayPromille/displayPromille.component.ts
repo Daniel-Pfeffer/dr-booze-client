@@ -6,10 +6,10 @@ import {Moment} from 'moment';
 
 @Component({
     selector: 'app-header',
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
+    templateUrl: './displayPromille.component.html',
+    styleUrls: ['./displayPromille.component.scss']
 })
-export class HeaderComponent {
+export class DisplayPromilleComponent {
 
     drinks = new Array<Drink>();
     gkw: number;
@@ -18,8 +18,6 @@ export class HeaderComponent {
     timeSinceLastCalled: Moment;
     newPermille = 0;
     tempStorage = [];
-
-
 
     constructor() {
         this.gkw = (<Person>JSON.parse(localStorage.getItem('person'))).gkw;
@@ -53,14 +51,12 @@ export class HeaderComponent {
             this.newPermille = Math.trunc(this.alcoholInBlood * 100) / 100;
 
             // Prüfen ob PromilleStorage im localStorage ist
-            // Prüfen ob PromilleStorage im localStorage ist
             if (localStorage.getItem('permilleStorage')) {
                 this.tempStorage = JSON.parse(localStorage.getItem('permilleStorage'));
 
                 // Prüfen ob sich der Promillewert geändert hat
                 if (this.tempStorage[this.tempStorage.length - 1].permille !== this.newPermille) {
                     this.tempStorage.push({
-
                         'time': moment().format('DD.MM.YYYY&hh:mm'),
                         'permille': this.newPermille
                     });

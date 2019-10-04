@@ -15,7 +15,7 @@ Handles ALL HTTP/s-Request
 })
 export class HttpService {
 
-    private ip = 'http://213.174.225.143:8080/rest/';
+    private ip = 'http://localhost:8080/rest/';
 
     public header: HttpHeaders = new HttpHeaders();
 

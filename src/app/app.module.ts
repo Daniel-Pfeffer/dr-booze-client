@@ -25,7 +25,7 @@ import {InformationComponent} from './components/information/information.compone
 import {PickerDetailComponent} from './components/picker-detail/picker-detail.component';
 import {SideMenuComponent} from './components/side-menu/side-menu.component';
 import {SwitchError} from './helper/switch-error';
-import {HeaderComponent} from './components/header/header.component';
+import {DisplayPromilleComponent} from './components/displayPromille/displayPromille.component';
 import {NgCalendarModule} from 'ionic2-calendar';
 import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
 import {StatisticsComponent} from './components/statistics/statistics.component';
@@ -42,7 +42,7 @@ import {MapComponent} from './components/map/map.component';
         PickerDetailComponent,
         StatisticsComponent,
         SideMenuComponent,
-        HeaderComponent,
+        DisplayPromilleComponent,
         RequestPasswordChangeComponent,
         MapComponent
     ],
@@ -53,7 +53,7 @@ import {MapComponent} from './components/map/map.component';
         BrowserModule,
         HttpClientModule,
         IonicModule.forRoot({
-            scrollPadding: 'true',
+            scrollPadding: true,
             scrollAssist: false,
         }),
         AppRoutingModule,
