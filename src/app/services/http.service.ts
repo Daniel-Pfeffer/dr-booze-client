@@ -1,22 +1,15 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Login} from '../interfaces/login';
-import {Register} from '../interfaces/register';
-import {InsertData} from '../interfaces/insert-data';
-import {GetPerson} from '../interfaces/get-person';
 import {Drink} from '../interfaces/drink';
 import {Challenge} from '../interfaces/challenge';
+import {User} from '../entities/user';
 
-/*
-Handles ALL HTTP/s-Request
- */
 @Injectable({
     providedIn: 'root'
 })
 export class HttpService {
-
-    private ip = 'http://localhost:8080/rest/';
-
+    private uri = 'http://localhost:8080/booze/';
     public header: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient) {
@@ -25,44 +18,46 @@ export class HttpService {
         }
     }
 
-    login(username, password) {
-        return this.http.post<Login>(this.ip + 'auth/login', {username, password});
+    register(username: string, email: string, password: string) {
+        return this.http.post(this.uri + 'auth/register', {email, password, username});
     }
 
-    register(email, password, username) {
-        return this.http.post<Register>(this.ip + 'auth/register', {email, password, username});
+    login(username: string, password: string) {
+        return this.http.post<Login>(this.uri + 'auth/login', {username, password});
     }
 
-    getPerson() {
-        return this.http.get<GetPerson>(this.ip + 'manage/getPerson', {headers: this.header});
+    getUser() {
+        return this.http.get<User>(this.uri + 'manage/user', {headers: this.header});
     }
 
-    insertData(birthday, weight, height, gender, firstName?, lastName?) {
-        console.log(`bday: ${birthday}\nweight: ${weight}\nheight: ${height}\ngender: ${gender}\nfirstname: ${firstName}\nlastName: ${lastName}`);
-        return this.http.post<InsertData>(this.ip + 'manage/insertDetails', {
+    insertDetails(gender: string, birthday: string, height: number,
+                  weight: number, firstName?: string, lastName?: string) {
+        return this.http.post<User>(this.uri + 'manage/details', {
+            firstName,
+            lastName,
+            gender,
             birthday,
             weight,
-            height,
-            gender,
-            firstName,
-            lastName
+            height
         }, {headers: this.header});
     }
 
-    updateDetails(birthday, weight, height, gender, firstName?, lastName?) {
-        return this.http.post<InsertData>(this.ip + 'manage/updateDetails', {
+    updateDetails(gender: string, birthday: string, height: number,
+                  weight: number, username?: string, firstName?: string, lastName?: string) {
+        return this.http.put<User>(this.uri + 'manage/details', {
+            username,
+            firstName,
+            lastName,
+            gender,
             birthday,
             weight,
-            height,
-            gender,
-            firstName,
-            lastName
+            height
         }, {headers: this.header});
     }
 
     addDrink(id, type, unixTime, longitude, latitude) {
         console.log('addDrink: longitude ' + longitude + ' latitude: ' + latitude);
-        return this.http.post(this.ip + 'manage/addDrink', {
+        return this.http.post(this.uri + 'manage/addDrink', {
                 id,
                 type,
                 unixTime,
@@ -73,38 +68,38 @@ export class HttpService {
     }
 
     requestPasswordChange(email) {
-        return this.http.post(this.ip + 'auth/requestPasswordChange',
+        return this.http.post(this.uri + 'auth/requestPasswordChange',
             {email},
             {observe: 'response'});
     }
 
     updatePassword(password, pin) {
-        return this.http.post(this.ip + 'auth/updatePassword',
+        return this.http.post(this.uri + 'auth/updatePassword',
             {password, pin},
             {observe: 'response'});
     }
 
     getDrinks() {
-        return this.http.get<Array<Drink>>(this.ip + 'manage/getDrinks', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.uri + 'manage/getDrinks', {headers: this.header});
     }
 
     getBeer() {
-        return this.http.get<Array<Drink>>(this.ip + 'getter/getBeer', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.uri + 'getter/getBeer', {headers: this.header});
     }
 
     getWine() {
-        return this.http.get<Array<Drink>>(this.ip + 'getter/getWine', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.uri + 'getter/getWine', {headers: this.header});
     }
 
     getCocktails() {
-        return this.http.get<Array<Drink>>(this.ip + 'getter/getCocktails', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.uri + 'getter/getCocktails', {headers: this.header});
     }
 
     getLiquor() {
-        return this.http.get<Array<Drink>>(this.ip + 'getter/getLiquor', {headers: this.header});
+        return this.http.get<Array<Drink>>(this.uri + 'getter/getLiquor', {headers: this.header});
     }
 
     getChallenges() {
-        return this.http.get<Array<Challenge>>(this.ip + 'manage/manageChallenges', {headers: this.header});
+        return this.http.get<Array<Challenge>>(this.uri + 'manage/manageChallenges', {headers: this.header});
     }
 }

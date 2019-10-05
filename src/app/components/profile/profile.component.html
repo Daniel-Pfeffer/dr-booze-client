@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar color="dark">
-        <ion-back-button *ngIf="alreadyReg" defaultHref="home" slot="start"></ion-back-button>
+        <ion-back-button *ngIf="isUpdate" defaultHref="home" slot="start"></ion-back-button>
         <ion-title>
             Personal Data
         </ion-title>
@@ -10,30 +10,30 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="input-container">
             <ion-item color="dark">
-                <ion-input name="foreName" formControlName="foreName" placeholder="Forename (optional)">
+                <ion-input name="firstName" formControlName="firstName" placeholder="First name (optional)">
                 </ion-input>
-                <ion-badge color="secondary" *ngIf="form.controls.foreName.errors?.pattern">
+                <ion-badge color="secondary" *ngIf="form.controls.firstName.errors?.pattern">
                     Not a name
                 </ion-badge>
-                <ion-badge color="secondary" *ngIf="form.controls.foreName.errors?.maxLength">
-                    Forename too long
+                <ion-badge color="secondary" *ngIf="form.controls.firstName.errors?.maxLength">
+                    First name too long
                 </ion-badge>
-                <ion-badge color="secondary" *ngIf="form.controls.foreName.errors?.minLength">
-                    Forename too short
+                <ion-badge color="secondary" *ngIf="form.controls.firstName.errors?.minLength">
+                    First name too short
                 </ion-badge>
             </ion-item>
             <br>
             <ion-item color="dark">
-                <ion-input name="surName" formControlName="surName" placeholder="Surname (optional)">
+                <ion-input name="lastName" formControlName="lastName" placeholder="Last name (optional)">
                 </ion-input>
-                <ion-badge color="secondary" *ngIf="form.controls.surName.errors?.pattern">
+                <ion-badge color="secondary" *ngIf="form.controls.lastName.errors?.pattern">
                     Not a name
                 </ion-badge>
-                <ion-badge color="secondary" *ngIf="form.controls.surName.errors?.maxLength">
-                    Surname too long
+                <ion-badge color="secondary" *ngIf="form.controls.lastName.errors?.maxLength">
+                    Last name too long
                 </ion-badge>
-                <ion-badge color="secondary" *ngIf="form.controls.surName.errors?.minLength">
-                    Surname too short
+                <ion-badge color="secondary" *ngIf="form.controls.lastName.errors?.minLength">
+                    Last name too short
                 </ion-badge>
             </ion-item>
             <br>
@@ -79,12 +79,12 @@
         </div>
         <div style="text-align: center">
             <ion-button fill="solid" type="submit" color="primary" [disabled]="!form.valid" class="submit"
-                        *ngIf="!alreadyReg">
+                        *ngIf="!isUpdate">
                 Submit
             </ion-button>
             <ion-button fill="solid" (click)="onChange()" color="primary" [disabled]="!form.valid"
                         class="submit"
-                        *ngIf="alreadyReg">
+                        *ngIf="isUpdate">
                 Change
             </ion-button>
             <br>

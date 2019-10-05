@@ -1,7 +1,12 @@
-import {Person} from './person';
-
 export class User {
     username: string;
     email: string;
-    person?: Person;
+    firstName?: string;
+    lastName?: string;
+    gender: string;
+    birthday: Date;
+    height: number;
+    weight: number;
+    points: number;
+    gkw: number;
 }

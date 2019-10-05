@@ -22,7 +22,7 @@ export class DashboardComponent {
     }
 
     onCardClick(type: DrinkType) {
-        this.router.navigate(['pickerDetail', type]);
+        this.router.navigate(['picker-detail', type]);
     }
 
 }

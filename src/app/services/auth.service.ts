@@ -1,28 +1,29 @@
-/*
-Used for all of the authentication
- */
 import {Injectable} from '@angular/core';
-// Custom time management class
-import {GetPerson} from '../interfaces/get-person';
 import {DataService} from './data.service';
+import {User} from '../entities/user';
 
+/*
+    Used for all of the authentication
+ */
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
 
-
     constructor(private data: DataService) {
     }
 
-    public setToken(token: string, person: GetPerson) {
+    public setToken(token: string) {
         this.data.setData('auth', token);
-        this.data.setData('person', person);
+    }
+
+    public setUser(user: User) {
+        this.data.setData('user', user);
     }
 
     public logout() {
         this.data.removeData('auth');
-        this.data.removeData('person');
+        this.data.removeData('user');
     }
 
     public isLoggedIn(): boolean {
