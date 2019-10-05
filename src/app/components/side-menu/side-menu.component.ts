@@ -14,19 +14,14 @@ import {User} from '../../entities/user';
     styleUrls: ['./side-menu.component.scss']
 })
 export class SideMenuComponent {
-
     @Input()
     contentId: string;
     user: User;
     challenges: Array<ChallengeDisplay>;
     private regexp = '\${param}';
 
-    constructor(private router: Router,
-                private http: HttpService,
-                private dialog: Dialogs,
-                private data: DataService,
-                private auth: AuthService
-    ) {
+    constructor(private router: Router, private http: HttpService,
+                private dialog: Dialogs, private data: DataService, private auth: AuthService) {
         this.challenges = new Array<Challenge>();
         this.user = this.data.getData('user');
         http.getChallenges().subscribe(challenges => {
@@ -48,5 +43,4 @@ export class SideMenuComponent {
         this.dialog.alert(`Successfully logged out`, 'Logout')
             .then(() => this.router.navigate(['login']));
     }
-
 }

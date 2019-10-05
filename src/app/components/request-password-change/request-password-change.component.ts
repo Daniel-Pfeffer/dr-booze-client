@@ -50,7 +50,7 @@ export class RequestPasswordChangeComponent {
 
     onPasswordReset() {
         const val = this.formUpdate.value;
-        this.httpService.updatePassword(val.password, val.pin).subscribe(() => {
+        this.httpService.changePassword(val.password, val.pin).subscribe(() => {
                 this.dialog.alert('Your password has been successfully updated', 'Success');
                 this.router.navigate(['login']);
             },

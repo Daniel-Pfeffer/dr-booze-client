@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {Drink} from '../interfaces/drink';
+import {Drink} from '../entities/drink';
 import {DataService} from './data.service';
 import {User} from '../entities/user';
 
@@ -22,7 +22,7 @@ export class PermilleCalculationService {
     }
 
     private calculateBAC(drink: Drink): number {
-        const a = (drink.amount * (drink.percentage / 100)) * 0.8;
+        const a = (drink.alcohol.amount * (drink.alcohol.percentage / 100)) * 0.8;
         return (0.8 * a) / (1.055 * (<User>this.data.getData('user')).gkw);
     }
 

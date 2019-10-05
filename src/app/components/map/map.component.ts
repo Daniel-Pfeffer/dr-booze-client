@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpService} from '../../services/http.service';
-import {Drink} from '../../interfaces/drink';
+import {Drink} from '../../entities/drink';
 import * as moment from 'moment';
 import {ToastController} from '@ionic/angular';
 
@@ -50,10 +50,10 @@ export class MapComponent implements OnInit {
         // add drinks to map
         this.httpService.getDrinks().subscribe((drinks: Array<Drink>) => {
             for (const drink of drinks) {
-                const date = moment(new Date(+drink.timeWhenDrank));
+                const date = moment(new Date(+drink.drankDate));
                 const content =
-                    '<b>' + drink.name + '</b>\n' +
-                    '<span style="font-size: 0.8em">' + drink.amount + 'ml ' + date.format('DD.MM.YY hh:mm') + '</span>';
+                    '<b>' + drink.alcohol.name + '</b>\n' +
+                    '<span style="font-size: 0.8em">' + drink.alcohol.amount + 'ml ' + date.format('DD.MM.YY hh:mm') + '</span>';
                 const bubble = new H.ui.InfoBubble(
                     {
                         lng: drink.longitude,
