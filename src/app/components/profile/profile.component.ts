@@ -7,6 +7,9 @@ import {DataService} from '../../services/data.service';
 import {User} from '../../entities/user';
 import {HttpErrorResponse} from '@angular/common/http';
 
+/**
+ * TODO: correctly display if insert or update
+ */
 @Component({
     selector: 'app-information',
     templateUrl: './profile.component.html',
@@ -14,11 +17,11 @@ import {HttpErrorResponse} from '@angular/common/http';
 })
 export class ProfileComponent {
     form: FormGroup;
-    isUpdate: boolean;
+    isUpdate = false;
     date = new Date();
 
-    constructor(private http: HttpService, private router: Router,
-                private toast: ToastController, private data: DataService, fb: FormBuilder) {
+    constructor(private http: HttpService, private data: DataService,
+                private router: Router, private toast: ToastController, fb: FormBuilder) {
         this.form = fb.group({
             firstName: ['', [Validators.minLength(1), Validators.maxLength(100),
                 Validators.pattern(/^[a-zA-z]*$/)]
@@ -26,7 +29,7 @@ export class ProfileComponent {
             lastName: ['', [Validators.minLength(1), Validators.maxLength(100),
                 Validators.pattern(/^[a-zA-z]*$/)]
             ],
-            age: ['', Validators.required],
+            birthday: ['', Validators.required],
             weight: ['', [Validators.required, Validators.pattern(/^[0-9]+$/), Validators.max(200),
                 Validators.min(30)]
             ],
@@ -38,18 +41,19 @@ export class ProfileComponent {
         if (this.data.existsData('user')) {
             this.isUpdate = true;
             const user: User = this.data.getData('user');
-            this.form.controls.firstName.setValue(user.firstName);
-            this.form.controls.lastName.setValue(user.lastName);
-            this.form.controls.gender.setValue(user.gender.toUpperCase());
-            this.form.controls.age.setValue(new Date(user.birthday).toISOString());
-            this.form.controls.height.setValue(user.height);
-            this.form.controls.weight.setValue(user.weight);
+            const controls = this.form.controls;
+            controls.firstName.setValue(user.firstName);
+            controls.lastName.setValue(user.lastName);
+            controls.gender.setValue(user.gender.toUpperCase());
+            controls.birthday.setValue(user.birthday.toISOString());
+            controls.height.setValue(user.height);
+            controls.weight.setValue(user.weight);
         }
     }
 
     onSubmit() {
         const value = this.form.value;
-        this.http.insertDetails(value.gender, value.age.toLocaleString(), value.height, value.weight, value.firstName, value.lastName)
+        this.http.setDetails(value.gender, value.birthday, value.height, value.weight, value.firstName, value.lastName)
             .subscribe(user => {
                 this.saveData(user);
             }, (error: HttpErrorResponse) => {
@@ -67,57 +71,27 @@ export class ProfileComponent {
             });
     }
 
-    onChange() {
-        const value = this.form.value;
-        this.http.updateDetails(value.age.toLocaleString(), value.weight, value.height, value.gender, value.firstName, value.lastName)
-            .subscribe(user => {
-                this.saveUpdatedData(user);
-            }, (error: HttpErrorResponse) => {
-                switch (error.status) {
-                    case 401:
-                        // TODO: auth token invalid -> logout
-                        break;
-                    case 403:
-                        this.presentToast('At least one of the given credentials is invalid');
-                        break;
-                    case 409:
-                        this.presentToast('Cannot change the profile if it has not been inserted yet');
-                        break;
-                    default:
-                        console.log(error);
-                        break;
-                }
-            });
-    }
-
     onAutoFill() {
-        this.form.controls.firstName.setValue('Dr');
-        this.form.controls.lastName.setValue('Booze');
-        this.form.controls.gender.setValue('M');
+        const controls = this.form.controls;
+        controls.firstName.setValue('Dr');
+        controls.lastName.setValue('Booze');
+        controls.gender.setValue('M');
         const date = new Date();
-        date.setFullYear(2000);
-        this.form.controls.age.setValue(date.toISOString());
-        this.form.controls.weight.setValue(80);
-        this.form.controls.height.setValue(167);
+        date.setFullYear(2000, 1, 31);
+        controls.birthday.setValue(date.toISOString());
+        controls.height.setValue(167);
+        controls.weight.setValue(80);
     }
 
     private saveData(user: User) {
+        console.log(this.isUpdate);
         if (this.data.existsData('user')) {
             this.data.removeData('user');
         }
         user.gkw = this.calculateGKW(user);
         this.data.setData('user', user);
-        this.isUpdate = true;
-        this.presentToast('Thanks for joining Dr. Booze!').then(() => this.router.navigate(['/home']));
-    }
-
-    private saveUpdatedData(user: User) {
-        if (this.data.existsData('user')) {
-            this.data.removeData('user');
-        }
-        user.gkw = this.calculateGKW(user);
-        this.data.setData('user', user);
-        this.presentToast('Your profile has been updated').then(() => this.router.navigate(['/home']));
+        const message = this.isUpdate ? 'Profile updated' : 'Thanks for joining Dr. Booze!';
+        this.presentToast(message).then(() => this.router.navigate(['/home']));
     }
 
     private calculateGKW(user: User): number {

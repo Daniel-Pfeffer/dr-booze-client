@@ -3,7 +3,6 @@ import {Router} from '@angular/router';
 import {Challenge} from '../../interfaces/challenge';
 import {HttpService} from '../../services/http.service';
 import {ChallengeDisplay} from '../../interfaces/challenge-display';
-import {AuthService} from '../../services/auth.service';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
 import {DataService} from '../../services/data.service';
 import {User} from '../../entities/user';
@@ -20,8 +19,8 @@ export class SideMenuComponent {
     challenges: Array<ChallengeDisplay>;
     private regexp = '\${param}';
 
-    constructor(private router: Router, private http: HttpService,
-                private dialog: Dialogs, private data: DataService, private auth: AuthService) {
+    constructor(private http: HttpService, private data: DataService,
+                private router: Router, private dialog: Dialogs) {
         this.challenges = new Array<Challenge>();
         this.user = this.data.getData('user');
         http.getChallenges().subscribe(challenges => {
@@ -39,7 +38,8 @@ export class SideMenuComponent {
     }
 
     onLogout() {
-        this.auth.logout();
+        this.data.removeData('auth');
+        this.data.removeData('user');
         this.dialog.alert(`Successfully logged out`, 'Logout')
             .then(() => this.router.navigate(['login']));
     }

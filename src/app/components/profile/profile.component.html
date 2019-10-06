@@ -38,7 +38,7 @@
             </ion-item>
             <br>
             <ion-item color="dark">
-                <ion-datetime [max]="date.getFullYear()-16" [min]="date.getFullYear()-90" formControlName="age"
+                <ion-datetime [max]="date.getFullYear()-16" [min]="date.getFullYear()-90" formControlName="birthday"
                               placeholder="Birthday"></ion-datetime>
             </ion-item>
             <br>
@@ -78,14 +78,8 @@
             </ion-item>
         </div>
         <div style="text-align: center">
-            <ion-button fill="solid" type="submit" color="primary" [disabled]="!form.valid" class="submit"
-                        *ngIf="!isUpdate">
+            <ion-button fill="solid" type="submit" color="primary" [disabled]="!form.valid" class="submit">
                 Submit
-            </ion-button>
-            <ion-button fill="solid" (click)="onChange()" color="primary" [disabled]="!form.valid"
-                        class="submit"
-                        *ngIf="isUpdate">
-                Change
             </ion-button>
             <br>
             <ion-button color="light" (click)="onAutoFill()">

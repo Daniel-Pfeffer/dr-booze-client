@@ -5,6 +5,7 @@ import {Drink} from '../entities/drink';
 import {Challenge} from '../interfaces/challenge';
 import {User} from '../entities/user';
 import {Alcohol} from '../entities/alcohol';
+import {DataService} from './data.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +14,7 @@ export class HttpService {
     private uri = 'http://localhost:8080/booze/';
     public header: HttpHeaders = new HttpHeaders();
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private data: DataService) {
         if (!!localStorage.getItem('auth')) {
             this.header = this.header.set('Authorization', 'Bearer ' + localStorage.getItem('auth'));
         }
@@ -42,22 +43,9 @@ export class HttpService {
         return this.http.get<User>(this.uri + 'manage/user', {headers: this.header});
     }
 
-    insertDetails(gender: string, birthday: string, height: number,
-                  weight: number, firstName?: string, lastName?: string) {
+    setDetails(gender: string, birthday: string, height: number,
+               weight: number, firstName?: string, lastName?: string) {
         return this.http.post<User>(this.uri + 'manage/details', {
-            firstName,
-            lastName,
-            gender,
-            birthday,
-            weight,
-            height
-        }, {headers: this.header});
-    }
-
-    updateDetails(gender: string, birthday: string, height: number,
-                  weight: number, username?: string, firstName?: string, lastName?: string) {
-        return this.http.put<User>(this.uri + 'manage/details', {
-            username,
             firstName,
             lastName,
             gender,

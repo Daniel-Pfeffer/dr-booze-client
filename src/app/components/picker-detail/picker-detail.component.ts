@@ -89,11 +89,9 @@ export class PickerDetailComponent {
     }
 
     private addDrink(drink: Drink) {
-        // update localStorage drinks
-        const chosenDrinks = this.data.getData('drinks');
-        chosenDrinks.push(drink);
-        this.data.setData('drinks', chosenDrinks);
-
+        const drinks = this.data.existsData('drinks') ? this.data.getData('drinks') : new Array<Drink>();
+        drinks.push(drink);
+        this.data.setData('drinks', drinks);
         this.http.addDrink(drink.alcohol.id, drink.drankDate.toISOString(), drink.longitude, drink.latitude)
             .subscribe(_ => {
                 this.router.navigate(['dashboard']);

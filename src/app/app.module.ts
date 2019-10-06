@@ -23,7 +23,6 @@ import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {ProfileComponent} from './components/profile/profile.component';
 import {PickerDetailComponent} from './components/picker-detail/picker-detail.component';
 import {SideMenuComponent} from './components/side-menu/side-menu.component';
-import {SwitchError} from './helper/switch-error';
 import {DisplayPermilleComponent} from './components/display-permille/display-permille.component';
 import {NgCalendarModule} from 'ionic2-calendar';
 import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
@@ -59,7 +58,6 @@ import {MapComponent} from './components/map/map.component';
         GoogleChartsModule.forRoot()
     ],
     providers: [
-        SwitchError,
         DatePicker,
         Dialogs,
         StatusBar,

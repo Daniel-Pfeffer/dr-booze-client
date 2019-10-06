@@ -13,7 +13,7 @@ import {ToastController} from '@ionic/angular';
 export class RegisterComponent {
     form: FormGroup;
 
-    constructor(private httpService: HttpService, private router: Router,
+    constructor(private http: HttpService, private router: Router,
                 private toastController: ToastController, fb: FormBuilder) {
         this.form = fb.group({
             email:
@@ -33,8 +33,8 @@ export class RegisterComponent {
 
     onSubmit() {
         const val = this.form.value;
-        this.httpService.register(val.username, val.email, val.password).subscribe(() => {
-            this.presentToast('Welcome to Dr. Booze').then(() => this.router.navigate(['login']));
+        this.http.register(val.username, val.email, val.password).subscribe(() => {
+            this.presentToast('Registration completed').then(() => this.router.navigate(['login']));
         }, (error: HttpErrorResponse) => {
             switch (error.status) {
                 case 403:

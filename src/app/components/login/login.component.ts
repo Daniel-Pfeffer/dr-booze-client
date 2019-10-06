@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../../services/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../services/http.service';
-import {Dialogs} from '@ionic-native/dialogs/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
+import {ToastController} from '@ionic/angular';
+import {DataService} from '../../services/data.service';
 
 @Component({
     selector: 'app-login',
@@ -13,11 +13,10 @@ import {HttpErrorResponse} from '@angular/common/http';
 })
 export class LoginComponent implements OnInit {
     form: FormGroup;
-
     // activatedMailResponse: string;
 
-    constructor(private authService: AuthService, private router: Router, private dialog: Dialogs,
-                private activatedRoute: ActivatedRoute, private httpService: HttpService, fb: FormBuilder) {
+    constructor(private http: HttpService, private data: DataService, private router: Router,
+                private activatedRoute: ActivatedRoute, private toastController: ToastController, fb: FormBuilder) {
         this.form = fb.group({
             username:
                 ['', [Validators.required]],
@@ -49,30 +48,32 @@ export class LoginComponent implements OnInit {
 
     onSubmit() {
         const val = this.form.value;
-        this.httpService.login(val.username, val.password).subscribe(loginRes => {
-                this.httpService.header = this.httpService.header.set('Authorization', 'Bearer ' + loginRes.token);
-                this.authService.setToken(loginRes.token);
-                this.httpService.getUser().subscribe(user => {
-                    this.authService.setUser(user);
+        this.http.login(val.username, val.password).subscribe(loginRes => {
+            this.http.header = this.http.header.set('Authorization', 'Bearer ' + loginRes.token);
+            this.data.setData('auth', loginRes.token);
+            this.http.getUser().subscribe(user => {
+                this.data.setData('user', user);
                     this.router.navigate(['/home']);
                 }, (error: HttpErrorResponse) => {
                     switch (error.status) {
                         case 401:
                             // the authentication token is missing or invalid
-                            this.authService.logout();
+                            this.data.removeData('auth');
+                            this.data.removeData('user');
                             break;
                         case 409:
                             // the details haven't been inserted yet
                             this.router.navigate(['/profile']);
                             break;
                         default:
+                            this.presentToast('An unexpected error occurred. Please try again');
                             console.error(error);
                             break;
                     }
                 });
             }, (error: HttpErrorResponse) => {
                 if (error.status === 401) {
-                    this.dialog.alert('The username or password is wrong.', 'Error', 'Ok');
+                    this.presentToast('Username or password is wrong');
                 } else {
                     console.error(error);
                 }
@@ -84,7 +85,13 @@ export class LoginComponent implements OnInit {
         this.form.setValue({username: 'Boozeman', password: 'v3rySafePassw0rd'});
     }
 
-    private openDialog(msg) {
-        this.dialog.alert(msg, 'Mail Activation', 'OK');
+    private async presentToast(message: string) {
+        const toast = await this.toastController.create({
+            message: message,
+            duration: 2000,
+            showCloseButton: true,
+            keyboardClose: true
+        });
+        await toast.present();
     }
 }
