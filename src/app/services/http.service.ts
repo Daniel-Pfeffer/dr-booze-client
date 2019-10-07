@@ -63,7 +63,7 @@ export class HttpService {
         return this.http.get<Array<Drink>>(this.uri + 'manage/drinks', {headers: this.header});
     }
 
-    addDrink(alcoholId: number, drankDate: string, longitude: number, latitude: number) {
+    addDrink(alcoholId: number, drankDate: number, longitude: number, latitude: number) {
         return this.http.post(this.uri + 'manage/drinks', {
             alcoholId,
             drankDate,

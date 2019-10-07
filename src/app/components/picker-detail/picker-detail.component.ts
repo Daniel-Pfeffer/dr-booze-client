@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {Drink} from '../../entities/drink';
 import {HttpService} from '../../services/http.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import * as moment from 'moment';
 import {ToastController} from '@ionic/angular';
 import {DataService} from '../../services/data.service';
 import {Alcohol, AlcoholType} from '../../entities/alcohol';
@@ -72,7 +71,7 @@ export class PickerDetailComponent {
     onSelection(alcohol: Alcohol) {
         const drink = new Drink();
         drink.alcohol = alcohol;
-        drink.drankDate = moment();
+        drink.drankDate = Date.now();
         // add location
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -92,7 +91,7 @@ export class PickerDetailComponent {
         const drinks = this.data.existsData('drinks') ? this.data.getData('drinks') : new Array<Drink>();
         drinks.push(drink);
         this.data.setData('drinks', drinks);
-        this.http.addDrink(drink.alcohol.id, drink.drankDate.toISOString(), drink.longitude, drink.latitude)
+        this.http.addDrink(drink.alcohol.id, drink.drankDate, drink.longitude, drink.latitude)
             .subscribe(_ => {
                 this.router.navigate(['dashboard']);
             }, (error: HttpErrorResponse) => {
