@@ -15,8 +15,8 @@ export class HttpService {
     public header: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient, private data: DataService) {
-        if (!!localStorage.getItem('auth')) {
-            this.header = this.header.set('Authorization', 'Bearer ' + localStorage.getItem('auth'));
+        if (data.existsData('auth')) {
+            this.header = this.header.set('Authorization', 'Bearer ' + data.getData('auth'));
         }
     }
 
@@ -43,7 +43,7 @@ export class HttpService {
         return this.http.get<User>(this.uri + 'manage/user', {headers: this.header});
     }
 
-    setDetails(gender: string, birthday: string, height: number,
+    setDetails(gender: string, birthday: number, height: number,
                weight: number, firstName?: string, lastName?: string) {
         return this.http.post<User>(this.uri + 'manage/details', {
             firstName,
@@ -63,7 +63,7 @@ export class HttpService {
         return this.http.get<Array<Drink>>(this.uri + 'manage/drinks', {headers: this.header});
     }
 
-    addDrink(alcoholId: number, drankDate: string, longitude: number, latitude: number) {
+    addDrink(alcoholId: number, drankDate: number, longitude: number, latitude: number) {
         return this.http.post(this.uri + 'manage/drinks', {
             alcoholId,
             drankDate,

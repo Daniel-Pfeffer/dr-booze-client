@@ -17,7 +17,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 })
 export class ProfileComponent {
     form: FormGroup;
-    isUpdate = false;
+    isUpdate: boolean;
     date = new Date();
 
     constructor(private http: HttpService, private data: DataService,
@@ -41,13 +41,12 @@ export class ProfileComponent {
         if (this.data.existsData('user')) {
             this.isUpdate = true;
             const user: User = this.data.getData('user');
-            user.birthday = new Date(user.birthday);
-            console.log(user.birthday);
+            console.log(user);
             const controls = this.form.controls;
             controls.firstName.setValue(user.firstName);
             controls.lastName.setValue(user.lastName);
             controls.gender.setValue(user.gender.toUpperCase());
-            controls.birthday.setValue(user.birthday.toISOString());
+            controls.birthday.setValue(new Date(user.birthday).toISOString());
             controls.height.setValue(user.height);
             controls.weight.setValue(user.weight);
         }
@@ -55,7 +54,7 @@ export class ProfileComponent {
 
     onSubmit() {
         const value = this.form.value;
-        this.http.setDetails(value.gender, value.birthday, value.height, value.weight, value.firstName, value.lastName)
+        this.http.setDetails(value.gender, Date.parse(value.birthday), value.height, value.weight, value.firstName, value.lastName)
             .subscribe(user => {
                 this.saveData(user);
             }, (error: HttpErrorResponse) => {
@@ -78,9 +77,7 @@ export class ProfileComponent {
         controls.firstName.setValue('Dr');
         controls.lastName.setValue('Booze');
         controls.gender.setValue('M');
-        const date = new Date();
-        date.setFullYear(2000, 1, 31);
-        controls.birthday.setValue(date.toISOString());
+        controls.birthday.setValue('2000-01-31T00:00:00.000Z');
         controls.height.setValue(167);
         controls.weight.setValue(80);
     }
@@ -99,7 +96,6 @@ export class ProfileComponent {
     private calculateGKW(user: User): number {
         console.log(user);
         const age = new Date().getFullYear() - new Date(user.birthday).getFullYear();
-        console.log(age);
         switch (user.gender.toUpperCase()) {
             case 'M':
                 const c = 2.447 - (0.09516 * age) + (0.1074 * user.height) + (0.3362 * user.weight);

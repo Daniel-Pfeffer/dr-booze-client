@@ -1,25 +1,22 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../services/http.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ToastController} from '@ionic/angular';
 import {DataService} from '../../services/data.service';
-import {SecureStorage, SecureStorageObject} from '@ionic-native/secure-storage/ngx';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
     form: FormGroup;
-
     // activatedMailResponse: string;
 
     constructor(private http: HttpService, private data: DataService, private router: Router,
-                private activatedRoute: ActivatedRoute, private toastController: ToastController, fb: FormBuilder,
-                private ss: SecureStorage) {
+                private activatedRoute: ActivatedRoute, private toastController: ToastController, fb: FormBuilder) {
         this.form = fb.group({
             username:
                 ['', [Validators.required]],
@@ -31,35 +28,13 @@ export class LoginComponent implements OnInit {
         });
     }
 
-    ngOnInit(): void {
-        this.ss.create('drBoozeSS').then((storage: SecureStorageObject) => {
-            storage.get('auth').then(
-                (data) => {
-                    console.log(data);
-                },
-                (error) => {
-                    console.log(error);
-                });
-        });
-    }
-
     onSubmit() {
         const val = this.form.value;
         this.http.login(val.username, val.password).subscribe(loginRes => {
-                this.http.header = this.http.header.set('Authorization', 'Bearer ' + loginRes.token);
-                this.data.setData('auth', loginRes.token);
-                this.ss.create('drBoozeSS').then((storage: SecureStorageObject) => {
-                    storage.set('auth', loginRes.token).then(
-                        (data) => {
-                            console.log(data);
-                        },
-                        (error) => {
-                            console.log(error);
-                        });
-                });
-                this.http.getUser().subscribe(user => {
-                    console.log(user.birthday);
-                    this.data.setData('user', user);
+            this.http.header = this.http.header.set('Authorization', 'Bearer ' + loginRes.token);
+            this.data.setData('auth', loginRes.token);
+            this.http.getUser().subscribe(user => {
+                this.data.setData('user', user);
                     this.router.navigate(['/home']);
                 }, (error: HttpErrorResponse) => {
                     switch (error.status) {
