@@ -5,11 +5,7 @@ import {Injectable} from '@angular/core';
 })
 export class DataService {
 
-    private data: object;
-
-    constructor() {
-        this.data = {};
-    }
+    private data = {};
 
     setData(name, value) {
         this.data[name] = value;

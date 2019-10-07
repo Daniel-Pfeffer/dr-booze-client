@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../../services/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../services/http.service';
-import {Dialogs} from '@ionic-native/dialogs/ngx';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ToastController} from '@ionic/angular';
+import {DataService} from '../../services/data.service';
 
 @Component({
     selector: 'app-login',
@@ -12,19 +13,23 @@ import {Dialogs} from '@ionic-native/dialogs/ngx';
 })
 export class LoginComponent implements OnInit {
     form: FormGroup;
-    activatedMailResponse: string;
+    // activatedMailResponse: string;
 
-    constructor(private fb: FormBuilder, private authService: AuthService, private router: Router,
-                private dialog: Dialogs, private activatedRoute: ActivatedRoute, private httpService: HttpService) {
-        this.form = this.fb.group({
+    constructor(private http: HttpService, private data: DataService, private router: Router,
+                private activatedRoute: ActivatedRoute, private toastController: ToastController, fb: FormBuilder) {
+        this.form = fb.group({
             username:
                 ['', [Validators.required]],
             password:
-                ['', [Validators.required, Validators.pattern(/^.*(?=.{8,})(?=.*\d)((?=.*[a-z]))((?=.*[A-Z])).*$/), Validators.maxLength(25)]]
+                ['', [Validators.required,
+                    Validators.pattern(/^.*(?=.{8,})(?=.*\d)((?=.*[a-z]))((?=.*[A-Z])).*$/),
+                    Validators.maxLength(25)]
+                ]
         });
     }
 
     ngOnInit(): void {
+        /*
         this.activatedRoute.queryParams.subscribe(params => {
             const activatedMail = params['token'];
             if (activatedMail) {
@@ -35,46 +40,58 @@ export class LoginComponent implements OnInit {
                         'Your account wasn\'t activated. Please login and try again.' +
                         ' Note that you can\'t use the app properly without a verified account';
                 }
-                this.openSnackbar(this.activatedMailResponse);
+                this.openDialog(this.activatedMailResponse);
             }
         });
+        */
     }
 
     onSubmit() {
         const val = this.form.value;
-        this.httpService.login(val.username, val.password).subscribe(item => {
-            console.log('token from rep ' + item.token);
-
-            if (!item.error) {
-                this.httpService.header = this.httpService.header.set('Authorization', 'Bearer ' + item.token);
-                console.log(this.httpService.header.keys());
-                console.log('token in auth ' + this.httpService.header.get('Authorization'));
-
-                this.httpService.getPerson().subscribe(person => {
-
-                    if (!person.error) {
-                        console.log(person);
-                        this.authService.setToken(item.token, person);
-
-                        if (person.person == null) {
+        this.http.login(val.username, val.password).subscribe(loginRes => {
+            this.http.header = this.http.header.set('Authorization', 'Bearer ' + loginRes.token);
+            this.data.setData('auth', loginRes.token);
+            this.http.getUser().subscribe(user => {
+                this.data.setData('user', user);
+                    this.router.navigate(['/home']);
+                }, (error: HttpErrorResponse) => {
+                    switch (error.status) {
+                        case 401:
+                            // the authentication token is missing or invalid
+                            this.data.removeData('auth');
+                            this.data.removeData('user');
+                            break;
+                        case 409:
+                            // the details haven't been inserted yet
                             this.router.navigate(['/profile']);
-                        } else {
-                            this.router.navigate(['/home']);
-                        }
+                            break;
+                        default:
+                            this.presentToast('An unexpected error occurred. Please try again');
+                            console.error(error);
+                            break;
                     }
                 });
-            } else {
-                this.dialog.alert('Username or password invalid', 'Error', 'OK');
+            }, (error: HttpErrorResponse) => {
+                if (error.status === 401) {
+                    this.presentToast('Username or password is wrong');
+                } else {
+                    console.error(error);
+                }
             }
-        });
-    }
-
-    private openSnackbar(msg) {
-        this.dialog.alert(msg, 'Mail Activation', 'OK');
+        );
     }
 
     onAutoFill() {
-        this.form.setValue({username: 'User1', password: 's3fePassword'});
+        this.form.setValue({username: 'Boozeman', password: 'v3rySafePassw0rd'});
     }
 
+    private async presentToast(message: string) {
+        const toast = await this.toastController.create({
+            message: message,
+            duration: 2000,
+            showCloseButton: true,
+            keyboardClose: true
+        });
+        await toast.present();
+    }
 }

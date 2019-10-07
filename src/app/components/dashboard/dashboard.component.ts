@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {DrinkCard} from '../../entities/drinkCard';
-import {DrinkType} from '../../interfaces/drink';
+import {DrinkCard} from '../../entities/drink-card';
+import {AlcoholType} from '../../entities/alcohol';
 
 @Component({
     selector: 'app-dashboard',
@@ -9,20 +9,17 @@ import {DrinkType} from '../../interfaces/drink';
     styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
-
     cards: DrinkCard[] = [
-        new DrinkCard(DrinkType.BEER, 'Beer', 'beer', null),
-        new DrinkCard(DrinkType.WINE, 'Wine', 'wine', 'ios'),
-        new DrinkCard(DrinkType.COCKTAIL, 'Cocktails', 'wine', 'md'),
-        new DrinkCard(DrinkType.LIQUOR, 'Hard liquor', null, null)
-        // new DrinkCard(DrinkType.OTHER, 'Other', '')
+        new DrinkCard(AlcoholType.BEER, 'Beer', 'beer', null),
+        new DrinkCard(AlcoholType.WINE, 'Wine', 'wine', 'ios'),
+        new DrinkCard(AlcoholType.COCKTAIL, 'Cocktails', 'wine', 'md'),
+        new DrinkCard(AlcoholType.LIQUOR, 'Hard liquor', null, null)
     ];
 
     constructor(private router: Router) {
     }
 
-    onCardClick(type: DrinkType) {
-        this.router.navigate(['pickerDetail', type]);
+    onCardClick(type: AlcoholType) {
+        this.router.navigate(['picker-detail', type.toString()]);
     }
-
 }

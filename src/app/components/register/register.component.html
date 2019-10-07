@@ -31,7 +31,7 @@
                     E-Mail is required
                 </ion-badge>
                 <ion-badge color="secondary" *ngIf="form.controls.email.errors?.pattern">
-                    No E-Mail
+                    Not an E-Mail
                 </ion-badge>
                 <ion-badge color="secondary" *ngIf="form.controls.email.errors?.maxLength">
                     E-Mail too long
@@ -46,7 +46,7 @@
                     Password is required
                 </ion-badge>
                 <ion-badge color="secondary" *ngIf="form.controls.password.errors?.pattern">
-                    No Password
+                    Not a password
                 </ion-badge>
                 <ion-badge color="secondary" *ngIf="form.controls.password.errors?.maxLength">
                     Password too long

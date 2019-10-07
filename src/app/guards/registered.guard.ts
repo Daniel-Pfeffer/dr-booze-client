@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
-import {AuthService} from '../services/auth.service';
+import {DataService} from '../services/data.service';
 
 @Injectable({
     providedIn: 'root'
@@ -11,13 +11,13 @@ When the user is logged in he is automatically send to the home screen if he nav
  */
 export class RegisteredGuard implements CanActivate {
 
-    constructor(private router: Router, private auth: AuthService) {
+    constructor(private router: Router, private data: DataService) {
     }
 
     canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-        if (this.auth.isLoggedIn()) {
+        if (this.data.existsData('auth')) {
             this.router.navigateByUrl('/home');
             return false;
         }

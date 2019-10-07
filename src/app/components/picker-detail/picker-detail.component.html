@@ -9,7 +9,7 @@
         <ion-list-header>
             <ion-label>{{ title }}</ion-label>
         </ion-list-header>
-        <ion-item *ngFor="let drink of drinks" detail="true" [button]="true" (click)="onSelection(drink)">
+        <ion-item *ngFor="let alcohol of alcohols" detail="true" [button]="true" (click)="onSelection(alcohol)">
             <ion-icon *ngIf="title != 'Hard liquor'; else hardLiquor" size="large" class="item-icon"
                       [name]="iconName" [mode]="iconMode">
             </ion-icon>
@@ -17,11 +17,11 @@
                 <ion-icon class="item-icon" size="large" src="../../../assets/whiskey.svg"></ion-icon>
             </ng-template>
             <ion-label>
-                <h2>{{ drink.name }}</h2>
-                <p>{{ drink.percentage }}%</p>
+                <h2>{{ alcohol.name }}</h2>
+                <p>{{ alcohol.percentage }}%</p>
             </ion-label>
             <p style="text-align: right; padding-right: 5vw">
-                {{ drink.amount }}ml
+                {{ alcohol.amount }}ml
             </p>
         </ion-item>
     </ion-list>

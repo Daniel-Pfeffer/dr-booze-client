@@ -1,10 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {Drink, DrinkType} from '../../interfaces/drink';
+import {Component} from '@angular/core';
+import {Drink} from '../../entities/drink';
 import {HttpService} from '../../services/http.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as moment from 'moment';
 import {ToastController} from '@ionic/angular';
 import {DataService} from '../../services/data.service';
+import {Alcohol, AlcoholType} from '../../entities/alcohol';
+import {HttpErrorResponse} from '@angular/common/http';
 
 /**
  * TODO: Add loading animation
@@ -14,121 +16,106 @@ import {DataService} from '../../services/data.service';
     templateUrl: './picker-detail.component.html',
     styleUrls: ['./picker-detail.component.scss']
 })
-export class PickerDetailComponent implements OnInit {
-
-    drinks: Array<Drink>;
-    drinkType: DrinkType;
+export class PickerDetailComponent {
+    type: AlcoholType;
     title: string;
     iconName: string;
     iconMode: string;
+    alcohols: Array<Alcohol> = new Array<Alcohol>();
 
-    constructor(private http: HttpService,
-                private route: ActivatedRoute,
-                private router: Router,
-                private toastController: ToastController,
-                private data: DataService) {
-        this.drinks = new Array<Drink>();
-
-        this.drinkType = +this.route.snapshot.paramMap.get('type');
-        switch (this.drinkType) {
-            case DrinkType.BEER:
+    constructor(private http: HttpService, private router: Router,
+                private toastController: ToastController, private data: DataService, route: ActivatedRoute) {
+        this.type = +route.snapshot.paramMap.get('type');
+        let typeStr;
+        switch (this.type) {
+            case AlcoholType.BEER:
                 this.title = 'Beer';
                 this.iconName = 'beer';
-                this.http.getBeer().subscribe((beer) => {
-                    this.drinks = beer;
-                }, () => {
-                    this.presentToast('Server not reachable', 3000);
-                });
+                typeStr = 'beer';
                 break;
-            case DrinkType.WINE:
+            case AlcoholType.WINE:
                 this.title = 'Wine';
                 this.iconName = 'wine';
                 this.iconMode = 'ios';
-                this.http.getWine().subscribe((wine) => {
-                    this.drinks = wine;
-                }, () => {
-                    this.presentToast('Server not reachable', 3000);
-                });
+                typeStr = 'wine';
                 break;
-            case DrinkType.COCKTAIL:
+            case AlcoholType.COCKTAIL:
                 this.title = 'Cocktails';
                 this.iconName = 'wine';
                 this.iconMode = 'md';
-                this.http.getCocktails().subscribe((cocktails) => {
-                    this.drinks = cocktails;
-                }, () => {
-                    this.presentToast('Server not reachable', 3000);
-                });
+                typeStr = 'cocktail';
                 break;
-            case DrinkType.LIQUOR:
+            case AlcoholType.LIQUOR:
                 this.title = 'Hard liquor';
-                this.iconName = 'wine';
-                this.iconMode = 'md';
-                this.http.getLiquor().subscribe((liquor) => {
-                    this.drinks = liquor;
-                }, () => {
-                    this.presentToast('Server not reachable', 3000);
-                });
+                this.iconName = null;
+                this.iconMode = null;
+                typeStr = 'liquor';
                 break;
-            /*
-            case DrinkType.OTHER:
-                this.title = 'Other drinks';
-                break;
-            */
         }
+        http.getAlcohols(typeStr).subscribe(alcohols => {
+            this.alcohols = alcohols;
+        }, (error: HttpErrorResponse) => {
+            switch (error.status) {
+                case 401:
+                    // TODO: auth token invalid -> logout
+                    break;
+                case 404:
+                    this.presentToast('The given alcohol type does not exist');
+                    break;
+                default:
+                    console.error(error);
+                    break;
+            }
+        });
     }
 
-    ngOnInit() {
-    }
-
-    onSelection(selectedDrink: Drink) {
-        // add time when drank
-        selectedDrink.timeWhenDrank = moment();
-
+    onSelection(alcohol: Alcohol) {
+        const drink = new Drink();
+        drink.alcohol = alcohol;
+        drink.drankDate = moment();
         // add location
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                selectedDrink.longitude = position.coords.longitude;
-                selectedDrink.latitude = position.coords.latitude;
-                this.addDrink(selectedDrink);
+                drink.longitude = position.coords.longitude;
+                drink.latitude = position.coords.latitude;
+                this.addDrink(drink);
             },
             (error) => {
                 console.error('code: ' + error.code + '\nmessage: ' + error.message + '\n');
-                this.addDrink(selectedDrink);
-                this.presentToast(
-                    'Note: You have to allow location tracking to use the map feature.',
-                    2000
-                );
+                this.addDrink(drink);
+                this.presentToast('Note: You have to allow location tracking to use the map feature.');
             }
         );
     }
 
-    private addDrink(selectedDrink: Drink) {
-        console.log(selectedDrink);
-
-        // update localStorage drinks
-        const chosenDrinks = this.data.getData('drinks');
-        chosenDrinks.push(selectedDrink);
-        this.data.setData('drinks', chosenDrinks);
-
-        this.http.addDrink(
-            selectedDrink.id,
-            this.drinkType,
-            +selectedDrink.timeWhenDrank,
-            selectedDrink.longitude,
-            selectedDrink.latitude
-        ).subscribe();
-
-        this.router.navigate(['dashboard']);
+    private addDrink(drink: Drink) {
+        const drinks = this.data.existsData('drinks') ? this.data.getData('drinks') : new Array<Drink>();
+        drinks.push(drink);
+        this.data.setData('drinks', drinks);
+        this.http.addDrink(drink.alcohol.id, drink.drankDate.toISOString(), drink.longitude, drink.latitude)
+            .subscribe(_ => {
+                this.router.navigate(['dashboard']);
+            }, (error: HttpErrorResponse) => {
+                switch (error.status) {
+                    case 401:
+                        // TODO: auth token invalid -> logout
+                        break;
+                    case 404:
+                        this.presentToast('No alcohol has been found with the given alcoholId');
+                        break;
+                    default:
+                        console.error(error);
+                        break;
+                }
+            });
     }
 
-    private async presentToast(message: string, duration: number) {
+    private async presentToast(message: string) {
         const toast = await this.toastController.create({
             message: message,
-            duration: duration,
+            duration: 2000,
             showCloseButton: true
         });
-        toast.present();
+        await toast.present();
     }
-
 }

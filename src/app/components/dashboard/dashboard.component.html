@@ -13,9 +13,9 @@
                 <ion-col size="6" *ngFor="let card of cards">
                     <ion-card (click)="onCardClick(card.type)" class="card">
                         <ion-card-content class="card-content">
-                            <ion-icon *ngIf="card.title != 'Hard liquor'; else hardLiquor" class="card-icon"
+                            <ion-icon *ngIf="card.title != 'Hard liquor'; else hardLiquorIcon" class="card-icon"
                                       size="large" [name]="card.iconName" [mode]="card.iconMode"></ion-icon>
-                            <ng-template #hardLiquor>
+                            <ng-template #hardLiquorIcon>
                                 <ion-icon class="card-icon" size="large" src="../../../assets/whiskey.svg"></ion-icon>
                             </ng-template>
                             <h1 style="text-align: center">{{ card.title }}</h1>
@@ -39,7 +39,6 @@
                     <ion-icon name="stats"></ion-icon>
                     <ion-label>Statistics</ion-label>
                 </ion-tab-button>
-
                 <ion-tab-button [routerLink]="['/map']">
                     <ion-icon name="map"></ion-icon>
                     <ion-label>Map</ion-label>

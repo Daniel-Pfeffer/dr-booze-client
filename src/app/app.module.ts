@@ -20,11 +20,10 @@ import {AppRoutingModule} from './modules/app-routing.module';
 import {RegisterComponent} from './components/register/register.component';
 import {LoginComponent} from './components/login/login.component';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
-import {InformationComponent} from './components/information/information.component';
+import {ProfileComponent} from './components/profile/profile.component';
 import {PickerDetailComponent} from './components/picker-detail/picker-detail.component';
 import {SideMenuComponent} from './components/side-menu/side-menu.component';
-import {SwitchError} from './helper/switch-error';
-import {DisplayPromilleComponent} from './components/displayPromille/displayPromille.component';
+import {DisplayPermilleComponent} from './components/display-permille/display-permille.component';
 import {NgCalendarModule} from 'ionic2-calendar';
 import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
 import {StatisticsComponent} from './components/statistics/statistics.component';
@@ -36,11 +35,11 @@ import {MapComponent} from './components/map/map.component';
         RegisterComponent,
         LoginComponent,
         DashboardComponent,
-        InformationComponent,
+        ProfileComponent,
         PickerDetailComponent,
         StatisticsComponent,
         SideMenuComponent,
-        DisplayPromilleComponent,
+        DisplayPermilleComponent,
         RequestPasswordChangeComponent,
         MapComponent
     ],
@@ -59,7 +58,6 @@ import {MapComponent} from './components/map/map.component';
         GoogleChartsModule.forRoot()
     ],
     providers: [
-        SwitchError,
         DatePicker,
         Dialogs,
         StatusBar,
