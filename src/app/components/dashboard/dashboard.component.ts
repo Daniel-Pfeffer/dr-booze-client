@@ -8,6 +8,7 @@ import {AlcoholType} from '../../entities/alcohol';
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss']
 })
+
 export class DashboardComponent {
     cards: DrinkCard[] = [
         new DrinkCard(AlcoholType.BEER, 'Beer', 'beer', null),

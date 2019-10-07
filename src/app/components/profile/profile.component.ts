@@ -41,6 +41,8 @@ export class ProfileComponent {
         if (this.data.existsData('user')) {
             this.isUpdate = true;
             const user: User = this.data.getData('user');
+            user.birthday = new Date(user.birthday);
+            console.log(user.birthday);
             const controls = this.form.controls;
             controls.firstName.setValue(user.firstName);
             controls.lastName.setValue(user.lastName);
@@ -97,6 +99,7 @@ export class ProfileComponent {
     private calculateGKW(user: User): number {
         console.log(user);
         const age = new Date().getFullYear() - new Date(user.birthday).getFullYear();
+        console.log(age);
         switch (user.gender.toUpperCase()) {
             case 'M':
                 const c = 2.447 - (0.09516 * age) + (0.1074 * user.height) + (0.3362 * user.weight);

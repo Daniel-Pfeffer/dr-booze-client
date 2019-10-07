@@ -7,6 +7,7 @@ import {ToastController} from '@ionic/angular';
 import {DataService} from '../../services/data.service';
 import {Alcohol, AlcoholType} from '../../entities/alcohol';
 import {HttpErrorResponse} from '@angular/common/http';
+import {PermilleCalculationService} from '../../services/permille-calculation.service';
 
 /**
  * TODO: Add loading animation
@@ -23,8 +24,12 @@ export class PickerDetailComponent {
     iconMode: string;
     alcohols: Array<Alcohol> = new Array<Alcohol>();
 
-    constructor(private http: HttpService, private router: Router,
-                private toastController: ToastController, private data: DataService, route: ActivatedRoute) {
+    constructor(private http: HttpService,
+                private router: Router,
+                private toastController: ToastController,
+                private data: DataService,
+                route: ActivatedRoute,
+                private permille: PermilleCalculationService) {
         this.type = +route.snapshot.paramMap.get('type');
         let typeStr;
         switch (this.type) {
@@ -92,6 +97,7 @@ export class PickerDetailComponent {
         const drinks = this.data.existsData('drinks') ? this.data.getData('drinks') : new Array<Drink>();
         drinks.push(drink);
         this.data.setData('drinks', drinks);
+        this.permille.addDrink(drink);
         this.http.addDrink(drink.alcohol.id, drink.drankDate.toISOString(), drink.longitude, drink.latitude)
             .subscribe(_ => {
                 this.router.navigate(['dashboard']);
