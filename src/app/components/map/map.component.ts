@@ -12,7 +12,6 @@ declare var H: any;
     styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit {
-
     @ViewChild('map')
     public mapElement: ElementRef;
 
@@ -50,7 +49,7 @@ export class MapComponent implements OnInit {
         // add drinks to map
         this.httpService.getDrinks().subscribe((drinks: Array<Drink>) => {
             for (const drink of drinks) {
-                const date = moment(new Date(+drink.drankDate));
+                const date = moment(drink.drankDate);
                 const content =
                     '<b>' + drink.alcohol.name + '</b>\n' +
                     '<span style="font-size: 0.8em">' + drink.alcohol.amount + 'ml ' + date.format('DD.MM.YY hh:mm') + '</span>';
@@ -122,7 +121,6 @@ export class MapComponent implements OnInit {
             duration: 2000,
             showCloseButton: true
         });
-        toast.present();
+        await toast.present();
     }
-
 }
