@@ -93,9 +93,9 @@ export class PickerDetailComponent {
     }
 
     private addDrink(drink: Drink) {
-        const drinks = this.data.existsData('drinks') ? this.data.getData('drinks') : new Array<Drink>();
+        const drinks = this.data.exist('drinks') ? this.data.get('drinks') : new Array<Drink>();
         drinks.push(drink);
-        this.data.setData('drinks', drinks);
+        this.data.set('drinks', drinks);
         this.permille.addDrink(drink);
         this.http.addDrink(drink.alcohol.id, drink.drankDate, drink.longitude, drink.latitude)
             .subscribe(_ => {

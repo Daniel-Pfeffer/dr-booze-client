@@ -38,9 +38,9 @@ export class ProfileComponent {
             ],
             gender: ['', [Validators.required]]
         });
-        if (this.data.existsData('user')) {
+        if (this.data.exist('user')) {
             this.isUpdate = true;
-            const user: User = this.data.getData('user');
+            const user: User = this.data.get('user');
             console.log(user);
             const controls = this.form.controls;
             controls.firstName.setValue(user.firstName);
@@ -84,11 +84,11 @@ export class ProfileComponent {
 
     private saveData(user: User) {
         console.log(this.isUpdate);
-        if (this.data.existsData('user')) {
-            this.data.removeData('user');
+        if (this.data.exist('user')) {
+            this.data.remove('user');
         }
         user.gkw = this.calculateGKW(user);
-        this.data.setData('user', user);
+        this.data.set('user', user);
         const message = this.isUpdate ? 'Profile updated' : 'Thanks for joining Dr. Booze!';
         this.presentToast(message).then(() => this.router.navigate(['/home']));
     }

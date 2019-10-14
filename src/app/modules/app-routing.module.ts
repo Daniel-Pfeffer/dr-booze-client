@@ -12,7 +12,7 @@ import {StatisticsComponent} from '../components/statistics/statistics.component
 import {MapComponent} from '../components/map/map.component';
 
 const routes: Routes = [
-    {path: '', component: RegisterComponent, canActivate: [RegisteredGuard]},
+    {path: '', component: LoginComponent, canActivate: [RegisteredGuard]},
     {path: 'login', component: LoginComponent, canActivate: [RegisteredGuard]},
     {path: 'register', component: RegisterComponent, canActivate: [RegisteredGuard]},
     {path: 'home', component: DashboardComponent, canActivate: [NeedRegisterGuard]},

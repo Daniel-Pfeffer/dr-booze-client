@@ -22,7 +22,7 @@ export class SideMenuComponent {
     constructor(private http: HttpService, private data: DataService,
                 private router: Router, private dialog: Dialogs) {
         this.challenges = new Array<Challenge>();
-        this.user = this.data.getData('user');
+        this.user = this.data.get('user');
         http.getChallenges().subscribe(challenges => {
             challenges.forEach(challenge => {
                 challenge.params.reverse().forEach(paramToInsert => {
@@ -38,8 +38,8 @@ export class SideMenuComponent {
     }
 
     onLogout() {
-        this.data.removeData('auth');
-        this.data.removeData('user');
+        this.data.remove('auth');
+        this.data.remove('user');
         this.dialog.alert(`Successfully logged out`, 'Logout')
             .then(() => this.router.navigate(['login']));
     }

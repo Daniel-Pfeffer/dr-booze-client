@@ -11,6 +11,8 @@ export class DisplayPermilleComponent {
     currentPerMille: number;
 
     constructor(data: PermilleCalculationService) {
-        data.perMilleObservable.subscribe(item => this.currentPerMille = item);
+        data.perMilleObservable.subscribe(item => {
+            this.currentPerMille = Math.floor(item * 100) / 100;
+        });
     }
 }

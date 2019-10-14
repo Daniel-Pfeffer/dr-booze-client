@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {HttpService} from '../../services/http.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ToastController} from '@ionic/angular';
+import {StorageService} from '../../services/storage.service';
 
 @Component({
     selector: 'app-register',
@@ -14,7 +15,8 @@ export class RegisterComponent {
     form: FormGroup;
 
     constructor(private http: HttpService, private router: Router,
-                private toastController: ToastController, fb: FormBuilder) {
+                private toastController: ToastController,
+                fb: FormBuilder) {
         this.form = fb.group({
             email:
                 ['', [Validators.required,

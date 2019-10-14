@@ -15,8 +15,8 @@ export class HttpService {
     public header: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient, private data: DataService) {
-        if (data.existsData('auth')) {
-            this.header = this.header.set('Authorization', 'Bearer ' + data.getData('auth'));
+        if (data.exist('auth')) {
+            this.header = this.header.set('Authorization', 'Bearer ' + data.get('auth'));
         }
     }
 

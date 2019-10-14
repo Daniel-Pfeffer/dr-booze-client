@@ -18,7 +18,7 @@ export class NeedRegisterGuard implements CanActivate {
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot)
         : Observable<boolean> | Promise<boolean> | boolean {
-        if (!this.data.existsData('auth')) {
+        if (!this.data.exist('auth')) {
             this.router.navigateByUrl('/register');
             return false;
         }
