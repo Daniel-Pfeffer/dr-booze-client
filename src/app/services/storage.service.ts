@@ -15,13 +15,15 @@ export class StorageService {
     // TODO: check on iphone/android if that would work
     private readonly isBrowser: boolean;
 
-    constructor(private p: Platform) {
+    constructor(private p: Platform, private d: DataService) {
         if (p.is('cordova')) {
             console.log('on browser');
             this.isBrowser = true;
         } else {
             this.isBrowser = false;
         }
+        d.observable.subscribe(item => {
+        });
     }
 
     public set(key, value) {
@@ -30,7 +32,17 @@ export class StorageService {
                 console.log('cookie auth set');
                 Cookies.set('auth', value, {sameSite: 'Strict', expires: 7});
             } else {
-                // TODO: Store in localStorage
+                if (typeof value === 'object') {
+                    localStorage.setItem(key, JSON.stringify(value));
+                } else {
+                    localStorage.setItem(key, value);
+                }
+            }
+        } else {
+            if (key === 'auth') {
+                // TODO: Store in ass (ref: RoarFit)
+            } else {
+                // TODO: Store in SQLite DB
             }
         }
     }
@@ -44,9 +56,9 @@ export class StorageService {
             }
         } else {
             if (key === 'auth') {
-                // TODO: Store in ass (ref: RoarFit)
+                // TODO: get from ass (ref: RoarFit)
             } else {
-                // TODO: Store in SQLite DB
+                // TODO: get from SQLite DB
             }
         }
     }
@@ -56,13 +68,13 @@ export class StorageService {
             if (key === 'auth') {
                 Cookies.remove('auth');
             } else {
-                // TODO: get from LS
+                localStorage.removeItem(key);
             }
         } else {
             if (key === 'auth') {
-                // TODO: Store in ass (ref: RoarFit)
+                // TODO: remove from ass (ref: RoarFit)
             } else {
-                // TODO: Store in SQLite DB
+                // TODO: remove from SQLite DB
             }
         }
     }

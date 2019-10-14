@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {StorageService} from './storage.service';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {ToStore} from '../interfaces/toStore';
 
 @Injectable({
@@ -12,13 +12,15 @@ import {ToStore} from '../interfaces/toStore';
  */
 export class DataService {
 
-    subject: Subject<ToStore>;
+    public observable: Observable<ToStore>;
+    private subject: Subject<ToStore>;
+    private data = {};
 
-    constructor(private s: StorageService) {
+    constructor() {
         this.subject = new Subject<ToStore>();
+        this.observable = this.subject.asObservable();
     }
 
-    private data = {};
 
     /**
      * @description sets data into the st-storage
@@ -28,7 +30,7 @@ export class DataService {
     set(key, value) {
         this.data[key] = value;
         if (key === 'auth') {
-            this.s.set(key, value);
+            this.subject.next({row: key, value: value});
         }
     }
 
@@ -40,10 +42,6 @@ export class DataService {
     get(key): any {
         if (this.exist(key)) {
             return this.data[key];
-        } else if (key === 'auth') {
-            const a = this.s.get(key);
-            this.data[key] = a;
-            return a;
         } else {
             throw new Error('Data doesn\'t exist');
         }
@@ -62,9 +60,6 @@ export class DataService {
     remove(key): void {
         if (this.exist(key)) {
             delete this.data[key];
-            if (key === 'auth') {
-                this.s.remove(key);
-            }
         } else {
             throw new Error('Data doesn\'t exist');
         }
