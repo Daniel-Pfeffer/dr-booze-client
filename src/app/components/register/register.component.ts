@@ -4,7 +4,6 @@ import {Router} from '@angular/router';
 import {HttpService} from '../../services/http.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ToastController} from '@ionic/angular';
-import {StorageService} from '../../services/storage.service';
 
 @Component({
     selector: 'app-register',
@@ -40,13 +39,13 @@ export class RegisterComponent {
         }, (error: HttpErrorResponse) => {
             switch (error.status) {
                 case 403:
-                    this.presentToast('The entered username, email or password is invalid');
+                    this.presentToast('The entered username, email or password is invalid.');
                     break;
                 case 409:
-                    this.presentToast('The entered username or email already exists');
+                    this.presentToast('The entered username or email already exists.');
                     break;
                 default:
-                    this.presentToast('An unexpected error occurred. Please try again');
+                    this.presentToast('An unexpected error occurred. Please try again.');
                     console.error(error);
                     break;
             }

@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Platform} from '@ionic/angular';
 import * as Cookies from 'js-cookie';
-import {DataService} from './data.service';
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +15,7 @@ export class StorageService {
     private readonly isBrowser: boolean;
 
     constructor(private p: Platform) {
+        console.log(p.platforms());
         if (p.is('cordova')) {
             console.log('on browser');
             this.isBrowser = true;

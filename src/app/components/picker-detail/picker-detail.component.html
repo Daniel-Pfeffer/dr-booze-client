@@ -1,14 +1,19 @@
 <ion-header>
     <ion-toolbar color="dark">
         <ion-back-button defaultHref="home" slot="start"></ion-back-button>
-        <ion-title>Choose your drink</ion-title>
+        <ion-title>Choose your {{ title }}</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-content>
+    <ion-progress-bar *ngIf="isLoading" type="indeterminate"></ion-progress-bar>
     <ion-list>
-        <ion-list-header>
-            <ion-label>{{ title }}</ion-label>
-        </ion-list-header>
+        <ion-item>
+            <ion-label>Activate drink tracking</ion-label>
+            <ion-button fill="clear" color="dark" (click)="presentHelpAlert()">
+                <ion-icon slot="icon-only" name="help-circle"></ion-icon>
+            </ion-button>
+            <ion-toggle [(ngModel)]="useTracking"></ion-toggle>
+        </ion-item>
         <ion-item *ngFor="let alcohol of alcohols" detail="true" [button]="true" (click)="onSelection(alcohol)">
             <ion-icon *ngIf="title != 'Hard liquor'; else hardLiquor" size="large" class="item-icon"
                       [name]="iconName" [mode]="iconMode">

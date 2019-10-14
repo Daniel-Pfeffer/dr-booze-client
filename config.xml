@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets">
+<widget id="io.ionic.starter" version="0.0.1">
     <name>Dr. Booze</name>
     <description>Dr. Booze alcohol tracking app</description>
     <author email="dr.boozeteam@gmail.com" href="http://ionicframework.com/">Dr. Booze Team

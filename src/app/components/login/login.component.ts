@@ -43,7 +43,7 @@ export class LoginComponent {
                 this.login(loginRes.token);
             }, (error: HttpErrorResponse) => {
                 if (error.status === 401) {
-                    this.presentToast('Username or password is wrong');
+                    this.presentToast('Username or password is wrong.');
                 } else {
                     console.error(error);
                 }
@@ -74,7 +74,7 @@ export class LoginComponent {
                     this.router.navigate(['/profile']);
                     break;
                 default:
-                    this.presentToast('An unexpected error occurred. Please try again');
+                    this.presentToast('An unexpected error occurred. Please try again.');
                     console.error(error);
                     break;
             }

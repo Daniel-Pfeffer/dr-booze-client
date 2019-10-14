@@ -63,7 +63,7 @@ export class ProfileComponent {
                         // TODO: auth token invalid -> logout
                         break;
                     case 403:
-                        this.presentToast('At least one of the given credentials is invalid');
+                        this.presentToast('At least one of the given credentials is invalid.');
                         break;
                     default:
                         console.error(error);
@@ -89,7 +89,7 @@ export class ProfileComponent {
         }
         user.gkw = this.calculateGKW(user);
         this.data.set('user', user);
-        const message = this.isUpdate ? 'Profile updated' : 'Thanks for joining Dr. Booze!';
+        const message = this.isUpdate ? 'Profile updated.' : 'Thanks for joining Dr. Booze!';
         this.presentToast(message).then(() => this.router.navigate(['/home']));
     }
 

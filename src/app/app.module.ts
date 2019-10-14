@@ -12,7 +12,7 @@ import {Dialogs} from '@ionic-native/dialogs/ngx';
 import {DatePicker} from '@ionic-native/date-picker/ngx';
 import {Toast} from '@ionic-native/toast/ngx';
 import {Keyboard} from '@ionic-native/keyboard/ngx';
-
+import {Geolocation} from '@ionic-native/geolocation/ngx';
 
 import {GoogleChartsModule} from 'angular-google-charts';
 
@@ -28,6 +28,7 @@ import {DisplayPermilleComponent} from './components/display-permille/display-pe
 import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
 import {StatisticsComponent} from './components/statistics/statistics.component';
 import {MapComponent} from './components/map/map.component';
+
 
 @NgModule({
     declarations: [
@@ -63,6 +64,7 @@ import {MapComponent} from './components/map/map.component';
         SplashScreen,
         Keyboard,
         Toast,
+        Geolocation,
         SideMenuComponent,
         DashboardComponent,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}

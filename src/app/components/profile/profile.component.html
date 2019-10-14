@@ -79,7 +79,7 @@
         </div>
         <div style="text-align: center">
             <ion-button fill="solid" type="submit" color="primary" [disabled]="!form.valid" class="submit">
-                Submit
+                {{ isUpdate ? 'Change' : 'Submit' }}
             </ion-button>
             <br>
             <ion-button color="light" (click)="onAutoFill()">

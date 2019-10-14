@@ -2,14 +2,15 @@ import {Component} from '@angular/core';
 import {Drink} from '../../entities/drink';
 import {HttpService} from '../../services/http.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ToastController} from '@ionic/angular';
+import {AlertController, ToastController} from '@ionic/angular';
 import {DataService} from '../../services/data.service';
 import {Alcohol, AlcoholType} from '../../entities/alcohol';
 import {HttpErrorResponse} from '@angular/common/http';
 import {PermilleCalculationService} from '../../services/permille-calculation.service';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
 
 /**
- * TODO: Add loading animation
+ * TODO: Add loading animation, save personal useTracking default
  */
 @Component({
     selector: 'app-picker-detail',
@@ -21,14 +22,15 @@ export class PickerDetailComponent {
     title: string;
     iconName: string;
     iconMode: string;
-    alcohols: Array<Alcohol> = new Array<Alcohol>();
 
-    constructor(private http: HttpService,
-                private router: Router,
-                private toastController: ToastController,
-                private data: DataService,
-                route: ActivatedRoute,
-                private permille: PermilleCalculationService) {
+    alcohols = new Array<Alcohol>();
+    useTracking = true;
+
+    isLoading = false;
+
+    constructor(private http: HttpService, private router: Router,
+                private toastController: ToastController, private data: DataService, private geolocation: Geolocation,
+                private permille: PermilleCalculationService, private alert: AlertController, route: ActivatedRoute) {
         this.type = +route.snapshot.paramMap.get('type');
         let typeStr;
         switch (this.type) {
@@ -74,22 +76,34 @@ export class PickerDetailComponent {
     }
 
     onSelection(alcohol: Alcohol) {
+        this.isLoading = true;
         const drink = new Drink();
         drink.alcohol = alcohol;
         drink.drankDate = Date.now();
-        // add location
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                drink.longitude = position.coords.longitude;
-                drink.latitude = position.coords.latitude;
+        // add location if drink tracking is activated
+        if (this.useTracking) {
+            this.geolocation.getCurrentPosition({timeout: 2000}).then(pos => {
+                drink.longitude = pos.coords.longitude;
+                drink.latitude = pos.coords.latitude;
                 this.addDrink(drink);
-            },
-            (error) => {
-                console.error('code: ' + error.code + '\nmessage: ' + error.message + '\n');
-                this.addDrink(drink);
-                this.presentToast('Note: You have to allow location tracking to use the map feature.');
-            }
-        );
+            }, error => {
+                let message;
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        message = 'Please permit location services.';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        message = 'Position unavailable. Please check if your location service is turned on.';
+                        break;
+                    case error.TIMEOUT:
+                        message = 'Timeout. Please check if your location service is turned on.';
+                        break;
+                }
+                this.presentLocationErrorAlert(message, drink);
+            });
+        } else {
+            this.addDrink(drink);
+        }
     }
 
     private addDrink(drink: Drink) {
@@ -100,7 +114,9 @@ export class PickerDetailComponent {
         this.http.addDrink(drink.alcohol.id, drink.drankDate, drink.longitude, drink.latitude)
             .subscribe(_ => {
                 this.router.navigate(['dashboard']);
+                this.isLoading = false;
             }, (error: HttpErrorResponse) => {
+                this.isLoading = false;
                 switch (error.status) {
                     case 401:
                         // TODO: auth token invalid -> logout
@@ -115,7 +131,32 @@ export class PickerDetailComponent {
             });
     }
 
-    private async presentToast(message: string) {
+    async presentHelpAlert() {
+        const alert = await this.alert.create({
+            header: 'Drink tracking',
+            message: 'Save the drink location to later track on the map where you drank.',
+            buttons: ['Very nice']
+        });
+        await alert.present();
+    }
+
+    async presentLocationErrorAlert(message: string, drink: Drink) {
+        const alert = await this.alert.create({
+            header: 'Cannot get location',
+            message: message,
+            buttons: [{
+                text: 'Cancel',
+                role: 'cancel',
+                handler: () => this.isLoading = false
+            }, {
+                text: 'Add anyway',
+                handler: () => this.addDrink(drink)
+            }]
+        });
+        await alert.present();
+    }
+
+    async presentToast(message: string) {
         const toast = await this.toastController.create({
             message: message,
             duration: 2000,
