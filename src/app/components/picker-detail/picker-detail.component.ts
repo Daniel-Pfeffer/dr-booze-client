@@ -1,12 +1,13 @@
 import {Component} from '@angular/core';
-import {Drink} from '../../entities/drink';
+import {Drink} from '../../data/entities/drink';
 import {HttpService} from '../../services/http.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToastController} from '@ionic/angular';
 import {DataService} from '../../services/data.service';
-import {Alcohol, AlcoholType} from '../../entities/alcohol';
+import {Alcohol, AlcoholType} from '../../data/entities/alcohol';
 import {HttpErrorResponse} from '@angular/common/http';
 import {PermilleCalculationService} from '../../services/permille-calculation.service';
+import {StorageType} from '../../data/enums/StorageType';
 
 /**
  * TODO: Add loading animation
@@ -93,9 +94,10 @@ export class PickerDetailComponent {
     }
 
     private addDrink(drink: Drink) {
-        const drinks = this.data.exist('drinks') ? this.data.get('drinks') : new Array<Drink>();
+        const {Drinks} = StorageType;
+        const drinks = this.data.exist(Drinks) ? this.data.get(Drinks) : new Array<Drink>();
         drinks.push(drink);
-        this.data.set('drinks', drinks);
+        this.data.set(Drinks, drinks);
         this.permille.addDrink(drink);
         this.http.addDrink(drink.alcohol.id, drink.drankDate, drink.longitude, drink.latitude)
             .subscribe(_ => {

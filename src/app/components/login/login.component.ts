@@ -5,8 +5,9 @@ import {HttpService} from '../../services/http.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ToastController} from '@ionic/angular';
 import {DataService} from '../../services/data.service';
-import {User} from '../../entities/user';
+import {User} from '../../data/entities/user';
 import {StorageService} from '../../services/storage.service';
+import {StorageType} from '../../data/enums/StorageType';
 
 @Component({
     selector: 'app-login',
@@ -22,7 +23,7 @@ export class LoginComponent {
                 private router: Router, private activatedRoute: ActivatedRoute,
                 private toastController: ToastController, fb: FormBuilder,
                 private s: StorageService) {
-        const authToken = s.get('auth');
+        const authToken = s.get(StorageType.Auth);
         if (!!authToken) {
             this.login(authToken);
         }
@@ -57,17 +58,18 @@ export class LoginComponent {
 
     private login(token) {
         this.http.header = this.http.header.set('Authorization', 'Bearer ' + token);
-        this.data.set('auth', token);
+        const {Auth, Person} = StorageType;
+        this.data.set(Auth, token);
         this.http.getUser().subscribe(user => {
             user.gkw = this.calculateGKW(user);
-            this.data.set('user', user);
+            this.data.set(Person, user);
             this.router.navigate(['/home']);
         }, (error: HttpErrorResponse) => {
             switch (error.status) {
                 case 401:
                     // the authentication token is missing or invalid
-                    this.data.remove('auth');
-                    this.data.remove('user');
+                    this.data.remove(Auth);
+                    this.data.remove(Person);
                     break;
                 case 409:
                     // the details haven't been inserted yet

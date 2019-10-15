@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {DrinkCard} from '../../entities/drink-card';
-import {AlcoholType} from '../../entities/alcohol';
+import {DrinkCard} from '../../data/entities/drink-card';
+import {AlcoholType} from '../../data/enums/AlcoholType';
 
 @Component({
     selector: 'app-dashboard',
@@ -21,6 +21,6 @@ export class DashboardComponent {
     }
 
     onCardClick(type: AlcoholType) {
-        this.router.navigate(['picker-detail', type.toString()]);
+        this.router.navigate(['picker-detail', type.toString(10)]);
     }
 }

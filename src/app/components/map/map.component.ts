@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpService} from '../../services/http.service';
-import {Drink} from '../../entities/drink';
+import {Drink} from '../../data/entities/drink';
 import * as moment from 'moment';
 import {ToastController} from '@ionic/angular';
 
