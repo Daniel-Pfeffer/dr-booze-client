@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {DataService} from '../services/data.service';
+import {StorageType} from '../data/enums/StorageType';
 
 @Injectable({
     providedIn: 'root'
@@ -18,8 +19,8 @@ export class NeedRegisterGuard implements CanActivate {
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot)
         : Observable<boolean> | Promise<boolean> | boolean {
-        if (!this.data.exist('auth')) {
-            this.router.navigateByUrl('/register');
+        if (!this.data.exist(StorageType.Auth)) {
+            this.router.navigateByUrl('/login');
             return false;
         }
         return true;

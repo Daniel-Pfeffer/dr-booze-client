@@ -4,8 +4,9 @@ import {HttpService} from '../../services/http.service';
 import {Router} from '@angular/router';
 import {ToastController} from '@ionic/angular';
 import {DataService} from '../../services/data.service';
-import {User} from '../../entities/user';
+import {User} from '../../data/entities/user';
 import {HttpErrorResponse} from '@angular/common/http';
+import {StorageType} from '../../data/enums/StorageType';
 
 /**
  * TODO: correctly display if insert or update
@@ -38,9 +39,10 @@ export class ProfileComponent {
             ],
             gender: ['', [Validators.required]]
         });
-        if (this.data.exist('user')) {
+        const {Person} = StorageType;
+        if (this.data.exist(Person)) {
             this.isUpdate = true;
-            const user: User = this.data.get('user');
+            const user: User = this.data.get(Person);
             console.log(user);
             const controls = this.form.controls;
             controls.firstName.setValue(user.firstName);
@@ -83,13 +85,14 @@ export class ProfileComponent {
     }
 
     private saveData(user: User) {
+        const {Person} = StorageType;
         console.log(this.isUpdate);
-        if (this.data.exist('user')) {
-            this.data.remove('user');
+        if (this.data.exist(Person)) {
+            this.data.remove(Person);
         }
         user.gkw = this.calculateGKW(user);
-        this.data.set('user', user);
-        const message = this.isUpdate ? 'Profile updated.' : 'Thanks for joining Dr. Booze!';
+        this.data.set(Person, user);
+        const message = this.isUpdate ? 'Profile updated' : 'Thanks for joining Dr. Booze!';
         this.presentToast(message).then(() => this.router.navigate(['/home']));
     }
 

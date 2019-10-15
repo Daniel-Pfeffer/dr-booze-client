@@ -1,41 +1,65 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
-import {Drink} from '../entities/drink';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {Drink} from '../data/entities/drink';
 import {DataService} from './data.service';
-import {User} from '../entities/user';
-import {Alcohol} from '../entities/alcohol';
+import {User} from '../data/entities/user';
+import {Alcohol} from '../data/entities/alcohol';
 import {TimingService} from './timing.service';
-import {StorageService} from './storage.service';
+import {StorageType} from '../data/enums/StorageType';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PermilleCalculationService {
 
-    static perMilleNotifier = new BehaviorSubject<number>(0);
-
-    perMilleObservable = PermilleCalculationService.perMilleNotifier.asObservable();
+    private perMilleNotifier: BehaviorSubject<number>;
+    private statisticNotifier: Subject<number>;
+    public perMilleObservable: Observable<number>;
+    public statisticObservable: Observable<number>;
+    private minuteCounter: number;
+    private hourlyMax: number;
 
     constructor(private data: DataService, private timing: TimingService) {
+        this.perMilleNotifier = new BehaviorSubject<number>(0);
+        this.statisticNotifier = new BehaviorSubject<number>(0);
+        this.perMilleObservable = this.perMilleNotifier.asObservable();
+        this.statisticObservable = this.statisticNotifier.asObservable();
+        this.resetHour();
         timing.start();
-        this.timing.subject.asObservable().subscribe(item => {
-            console.log('5sec passed');
-            let curValue: number = PermilleCalculationService.perMilleNotifier.value;
-            if (curValue > 0) {
-                curValue -= (0.1 / 60);
+        this.timing.observable.subscribe(() => {
+            console.log('5 seconds passed');
+            if (this.perMilleNotifier.value > this.hourlyMax) {
+                this.hourlyMax = this.perMilleNotifier.value;
             }
-            PermilleCalculationService.perMilleNotifier.next(curValue);
+            let curValue: number = this.perMilleNotifier.value;
+            if (curValue > (0.1) / 60) {
+                curValue -= (0.1 / 60);
+            } else {
+                curValue = 0;
+            }
+            this.minuteCounter++;
+            if (this.minuteCounter === 60) {
+                console.log('60 iterations passed');
+                this.statisticNotifier.next(this.hourlyMax);
+                this.resetHour();
+            }
+            this.perMilleNotifier.next(curValue);
         });
     }
 
     public addDrink(drink: Drink) {
-        let curValue: number = PermilleCalculationService.perMilleNotifier.value;
+        let curValue: number = this.perMilleNotifier.value;
         curValue += this.calculateBAC(drink.alcohol);
-        PermilleCalculationService.perMilleNotifier.next(curValue);
+        this.perMilleNotifier.next(curValue);
+    }
+
+    private resetHour() {
+        this.minuteCounter = 0;
+        this.hourlyMax = 0;
     }
 
     private calculateBAC(drink: Alcohol): number {
         const a = (drink.amount * (drink.percentage / 100)) * 0.8;
-        return (0.8 * a) / (1.055 * (<User>this.data.get('user')).gkw);
+        return (0.8 * a) / (1.055 * (<User>this.data.get(StorageType.Person)).gkw);
     }
 }

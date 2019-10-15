@@ -1,15 +1,17 @@
 import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class TimingService {
 
-    subject: Subject<boolean>;
+    private subject: Subject<boolean>;
+    public observable: Observable<boolean>;
 
     constructor() {
         this.subject = new Subject<boolean>();
+        this.observable = this.subject.asObservable();
     }
 
     /* TODO: change from 5.000 timout to 60.000
@@ -20,6 +22,6 @@ export class TimingService {
         setTimeout(() => {
             this.subject.next(true);
             this.start();
-        }, 5000);
+        }, 100);
     }
 }

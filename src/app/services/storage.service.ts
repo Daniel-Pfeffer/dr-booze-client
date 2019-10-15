@@ -1,6 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Platform} from '@ionic/angular';
 import * as Cookies from 'js-cookie';
+import {DataService} from './data.service';
+import {SecureStorage, SecureStorageObject} from '@ionic-native/secure-storage/ngx';
+import {NativeStorage} from '@ionic-native/native-storage/ngx';
+import {StorageCommand} from '../data/enums/StorageCommand';
+import {StorageType} from '../data/enums/StorageType';
 
 @Injectable({
     providedIn: 'root'
@@ -11,59 +16,98 @@ import * as Cookies from 'js-cookie';
  */
 export class StorageService {
 
-    // TODO: check on iphone/android if that would work
     private readonly isBrowser: boolean;
+    private ssInstance: SecureStorageObject;
 
-    constructor(private p: Platform) {
-        console.log(p.platforms());
-        if (p.is('cordova')) {
+    constructor(private p: Platform, private d: DataService, private ss: SecureStorage, private ns: NativeStorage) {
+        const {Remove, Load, Insert} = StorageCommand;
+        if (window.cordova.platformId === 'browser') {
             console.log('on browser');
             this.isBrowser = true;
         } else {
             this.isBrowser = false;
         }
+        ss.create('drBoozeSecure').then(value => {
+            this.ssInstance = value;
+        });
+        d.observable.subscribe(item => {
+            if (item.command === Remove) {
+                this.remove(item.row);
+            } else if (item.command === Load) {
+                // TODO: load into dataService
+            } else if (item.command === Insert) {
+                this.set(item.row, item.value);
+            }
+        });
     }
 
-    public set(key, value) {
+    private set(key: StorageType, value: any) {
+        const {Auth} = StorageType;
         if (this.isBrowser) {
-            if (key === 'auth') {
+            if (key === Auth) {
                 console.log('cookie auth set');
-                Cookies.set('auth', value, {sameSite: 'Strict', expires: 7});
+                Cookies.set(key, value, {sameSite: 'Strict', expires: 7});
             } else {
-                // TODO: Store in localStorage
+                if (typeof value === 'object') {
+                    localStorage.setItem(key, JSON.stringify(value));
+                } else {
+                    localStorage.setItem(key, value);
+                }
+            }
+        } else {
+            if (key === Auth) {
+                this.ssInstance.set(key, value).then(value1 => {
+                    console.log(value1);
+                });
+            } else {
+                this.ns.setItem(key, value);
             }
         }
     }
 
-    public get(key): any {
+    public get(key: StorageType): any {
+        const {Auth} = StorageType;
         if (this.isBrowser) {
-            if (key === 'auth') {
-                return Cookies.get('auth');
+            if (key === Auth) {
+                return Cookies.get(key);
             } else {
-                // TODO: get from LS
+                let returnVal;
+                try {
+                    returnVal = JSON.parse(localStorage.getItem(key));
+                } catch (e) {
+                    returnVal = localStorage.getItem(key);
+                }
+                return returnVal;
             }
         } else {
-            if (key === 'auth') {
-                // TODO: Store in ass (ref: RoarFit)
+            if (key === Auth) {
+                this.ssInstance.get(key);
             } else {
-                // TODO: Store in SQLite DB
+                this.ns.getItem(key);
             }
         }
     }
 
-    public remove(key) {
+    private remove(key: StorageType) {
+        const {Auth} = StorageType;
         if (this.isBrowser) {
-            if (key === 'auth') {
-                Cookies.remove('auth');
+            if (key === Auth) {
+                Cookies.remove(key);
             } else {
-                // TODO: get from LS
+                localStorage.removeItem(key);
             }
         } else {
-            if (key === 'auth') {
-                // TODO: Store in ass (ref: RoarFit)
+            if (key === Auth) {
+                this.ssInstance.remove(key);
             } else {
-                // TODO: Store in SQLite DB
+                this.ns.remove(key);
             }
+        }
+    }
+
+    private load() {
+        if (this.isBrowser) {
+            this.d.set(StorageType.Auth, Cookies.get('auth'));
         }
     }
 }

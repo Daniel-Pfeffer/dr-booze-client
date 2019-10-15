@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpService} from '../../services/http.service';
-import {Drink} from '../../entities/drink';
+import {Drink} from '../../data/entities/drink';
 import * as moment from 'moment';
 import {ToastController} from '@ionic/angular';
 import {Router} from '@angular/router';

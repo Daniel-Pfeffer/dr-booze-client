@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
-import {StorageService} from './storage.service';
-import {Subject} from 'rxjs';
-import {ToStore} from '../interfaces/toStore';
+import {Observable, Subject} from 'rxjs';
+import {ToStore} from '../data/interfaces/toStore';
+import {StorageCommand} from '../data/enums/StorageCommand';
+import {StorageType} from '../data/enums/StorageType';
 
 @Injectable({
     providedIn: 'root'
@@ -12,23 +13,34 @@ import {ToStore} from '../interfaces/toStore';
  */
 export class DataService {
 
-    subject: Subject<ToStore>;
-
-    constructor(private s: StorageService) {
-        this.subject = new Subject<ToStore>();
-    }
-
+    public observable: Observable<ToStore>;
+    private subject: Subject<ToStore>;
     private data = {};
+
+    constructor() {
+        this.subject = new Subject<ToStore>();
+        this.observable = this.subject.asObservable();
+    }
 
     /**
      * @description sets data into the st-storage
      * @param key name of the storage key
      * @param value value of the storage
      */
-    set(key, value) {
-        this.data[key] = value;
-        if (key === 'auth') {
-            this.s.set(key, value);
+    set(key: StorageType, value) {
+        const {Insert} = StorageCommand;
+        if (this.exist(key)) {
+            if (typeof this.get(key) === 'object' && Array.isArray(this.get(key))) {
+                this.data[key] = this.get(key).push(value);
+                this.subject.next({command: Insert, row: key, value: this.get(key).push(value)});
+            } else {
+                this.data[key] = value;
+            }
+        } else {
+            this.data[key] = value;
+        }
+        if (key === StorageType.Auth) {
+            this.subject.next({command: Insert, row: key, value: value});
         }
     }
 
@@ -37,13 +49,9 @@ export class DataService {
      * @param key name of the storage key
      * @return Any
      */
-    get(key): any {
+    get(key: StorageType): any {
         if (this.exist(key)) {
             return this.data[key];
-        } else if (key === 'auth') {
-            const a = this.s.get(key);
-            this.data[key] = a;
-            return a;
         } else {
             throw new Error('Data doesn\'t exist');
         }
@@ -53,20 +61,24 @@ export class DataService {
      * @description Checks if key name exists in st-storage
      * @param key name of the storage key
      */
-    exist = (key): boolean => !!this.data[key];
+    exist = (key: StorageType): boolean => !!this.data[key];
 
     /**
-     * deletes data from the st-storage if the key is auth also delete from lt-storage
+     * deletes data from the st-storage if the key is auth
      * @param key name of the storage key
      */
-    remove(key): void {
+    remove(key: StorageType): void {
+        const {Remove} = StorageCommand;
         if (this.exist(key)) {
             delete this.data[key];
-            if (key === 'auth') {
-                this.s.remove(key);
-            }
+            this.subject.next({command: Remove, row: key});
         } else {
             throw new Error('Data doesn\'t exist');
         }
+    }
+
+    load() {
+        const {Load} = StorageCommand;
+        this.subject.next({command: Load});
     }
 }

@@ -1,17 +1,17 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Login} from '../interfaces/login';
-import {Drink} from '../entities/drink';
-import {Challenge} from '../interfaces/challenge';
-import {User} from '../entities/user';
-import {Alcohol} from '../entities/alcohol';
+import {Login} from '../data/interfaces/login';
+import {Drink} from '../data/entities/drink';
+import {Challenge} from '../data/interfaces/challenge';
+import {User} from '../data/entities/user';
+import {Alcohol} from '../data/entities/alcohol';
 import {DataService} from './data.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class HttpService {
-    private uri = 'http://localhost:8080/booze/';
+    private uri = 'http://172.17.208.22:8080/booze/';
     public header: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient, private data: DataService) {
