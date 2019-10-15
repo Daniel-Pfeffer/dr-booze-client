@@ -13,6 +13,8 @@ import {DatePicker} from '@ionic-native/date-picker/ngx';
 import {Toast} from '@ionic-native/toast/ngx';
 import {Keyboard} from '@ionic-native/keyboard/ngx';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
+import {SecureStorage} from '@ionic-native/secure-storage/ngx';
+import {NativeStorage} from '@ionic-native/native-storage/ngx';
 
 import {GoogleChartsModule} from 'angular-google-charts';
 
@@ -67,6 +69,8 @@ import {MapComponent} from './components/map/map.component';
         Geolocation,
         SideMenuComponent,
         DashboardComponent,
+        SecureStorage,
+        NativeStorage,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
     ],
     bootstrap: [AppComponent]

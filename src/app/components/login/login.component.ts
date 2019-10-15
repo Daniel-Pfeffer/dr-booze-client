@@ -17,8 +17,6 @@ import {StorageType} from '../../data/enums/StorageType';
 export class LoginComponent {
     form: FormGroup;
 
-    // activatedMailResponse: string;
-
     constructor(private http: HttpService, private data: DataService,
                 private router: Router, private activatedRoute: ActivatedRoute,
                 private toastController: ToastController, fb: FormBuilder,

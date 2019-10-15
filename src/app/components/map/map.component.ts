@@ -87,6 +87,10 @@ export class MapComponent implements OnInit {
                     '<b>' + drink.alcohol.name + '</b>\n' +
                     '<span style="font-size: 0.8em">' + drink.alcohol.amount + 'ml '
                     + date.format('DD.MM.YY hh:mm') + '</span>';
+                /*const content =
+                    `<b>${drink.alcohol.name}</b>\n` +
+                    `<span style="font-size: 0.8em">${drink.alcohol.amount}ml` +
+                    `${date.format('DD.MM.YY hh:mm')}</span>`;*/
                 const bubble = new H.ui.InfoBubble({lng: drink.longitude, lat: drink.latitude}, {content: content});
                 this.bubbles.push(bubble);
                 this.ui.addBubble(bubble);

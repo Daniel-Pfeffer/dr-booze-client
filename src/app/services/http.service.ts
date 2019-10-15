@@ -6,17 +6,18 @@ import {Challenge} from '../data/interfaces/challenge';
 import {User} from '../data/entities/user';
 import {Alcohol} from '../data/entities/alcohol';
 import {DataService} from './data.service';
+import {StorageType} from '../data/enums/StorageType';
 
 @Injectable({
     providedIn: 'root'
 })
 export class HttpService {
-    private uri = 'http://172.17.208.22:8080/booze/';
+    private uri = 'http://localhost:8080/booze/';
     public header: HttpHeaders = new HttpHeaders();
 
     constructor(private http: HttpClient, private data: DataService) {
-        if (data.exist('auth')) {
-            this.header = this.header.set('Authorization', 'Bearer ' + data.get('auth'));
+        if (data.exist(StorageType.Auth)) {
+            this.header = this.header.set('Authorization', 'Bearer ' + data.get(StorageType.Auth));
         }
     }
 

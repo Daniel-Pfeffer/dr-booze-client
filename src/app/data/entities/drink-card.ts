@@ -1,4 +1,4 @@
-import {AlcoholType} from './alcohol';
+import {AlcoholType} from '../enums/AlcoholType';
 
 export class DrinkCard {
     constructor(public type: AlcoholType,

@@ -21,15 +21,19 @@ export class StorageService {
 
     constructor(private p: Platform, private d: DataService, private ss: SecureStorage, private ns: NativeStorage) {
         const {Remove, Load, Insert} = StorageCommand;
-        if (window.cordova.platformId === 'browser') {
-            console.log('on browser');
-            this.isBrowser = true;
+        if (window.cordova) {
+            if (window.cordova.platformId === 'browser') {
+                console.log('on browser');
+                this.isBrowser = true;
+            } else {
+                this.isBrowser = false;
+            }
+            ss.create('drBoozeSecure').then(value => {
+                this.ssInstance = value;
+            });
         } else {
-            this.isBrowser = false;
+            this.isBrowser = true;
         }
-        ss.create('drBoozeSecure').then(value => {
-            this.ssInstance = value;
-        });
         d.observable.subscribe(item => {
             if (item.command === Remove) {
                 this.remove(item.row);
