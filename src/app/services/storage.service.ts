@@ -57,9 +57,9 @@ export class StorageService {
             }
         } else {
             if (key === Auth) {
-                this.ss.create('drBoozeSecure').then(value1 => {
-                    value1.set(key, value).then(value2 => {
-                        console.log(value2);
+                this.ss.create('drBoozeSecure').then(ssInstance => {
+                    ssInstance.set(key, value).then(() => {
+                        console.log('Set secure');
                     });
                 });
             } else {
@@ -84,9 +84,9 @@ export class StorageService {
             }
         } else {
             if (key === Auth) {
-                this.ss.create('drBoozeSecure').then(value => {
-                    value.get(key).then(value1 => {
-                        console.log(value1);
+                this.ss.create('drBoozeSecure').then(ssInstance => {
+                    ssInstance.get(key).then(authToken => {
+                        return authToken;
                     });
                 });
             } else {
