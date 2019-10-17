@@ -18,7 +18,6 @@ import {logger} from 'codelyzer/util/logger';
 export class StorageService {
 
     private readonly isBrowser: boolean;
-    private ssInstance: SecureStorageObject;
 
     constructor(private p: Platform, private d: DataService, private ss: SecureStorage, private ns: NativeStorage) {
         const {Remove, Load, Insert} = StorageCommand;
@@ -28,9 +27,6 @@ export class StorageService {
                 this.isBrowser = true;
             } else {
                 this.isBrowser = false;
-                ss.create('drBoozeSecure').then(value => {
-                    this.ssInstance = value;
-                });
             }
         } else {
             this.isBrowser = true;
@@ -61,8 +57,10 @@ export class StorageService {
             }
         } else {
             if (key === Auth) {
-                this.ssInstance.set(key, value).then(value1 => {
-                    console.log(value1);
+                this.ss.create('drBoozeSecure').then(value1 => {
+                    value1.set(key, value).then(value2 => {
+                        console.log(value2);
+                    });
                 });
             } else {
                 this.ns.setItem(key, value);
@@ -86,9 +84,11 @@ export class StorageService {
             }
         } else {
             if (key === Auth) {
-                this.ssInstance.get(key).then(value => {
-                    console.log(value);
-                }).catch(reason => console.log(reason));
+                this.ss.create('drBoozeSecure').then(value => {
+                    value.get(key).then(value1 => {
+                        console.log(value1);
+                    });
+                });
             } else {
                 this.ns.getItem(key);
             }
@@ -105,7 +105,11 @@ export class StorageService {
             }
         } else {
             if (key === Auth) {
-                this.ssInstance.remove(key);
+                this.ss.create('drBoozeSecure').then(value => {
+                    value.remove(key).then(value1 => {
+                        console.log('removed ' + key);
+                    });
+                });
             } else {
                 this.ns.remove(key);
             }
