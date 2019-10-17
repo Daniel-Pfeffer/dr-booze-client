@@ -6,6 +6,7 @@ import {SecureStorage, SecureStorageObject} from '@ionic-native/secure-storage/n
 import {NativeStorage} from '@ionic-native/native-storage/ngx';
 import {StorageCommand} from '../data/enums/StorageCommand';
 import {StorageType} from '../data/enums/StorageType';
+import {logger} from 'codelyzer/util/logger';
 
 @Injectable({
     providedIn: 'root'
@@ -27,10 +28,10 @@ export class StorageService {
                 this.isBrowser = true;
             } else {
                 this.isBrowser = false;
+                ss.create('drBoozeSecure').then(value => {
+                    this.ssInstance = value;
+                });
             }
-            ss.create('drBoozeSecure').then(value => {
-                this.ssInstance = value;
-            });
         } else {
             this.isBrowser = true;
         }
@@ -85,7 +86,9 @@ export class StorageService {
             }
         } else {
             if (key === Auth) {
-                this.ssInstance.get(key);
+                this.ssInstance.get(key).then(value => {
+                    console.log(value);
+                }).catch(reason => console.log(reason));
             } else {
                 this.ns.getItem(key);
             }

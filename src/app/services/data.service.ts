@@ -30,12 +30,7 @@ export class DataService {
     set(key: StorageType, value) {
         const {Insert} = StorageCommand;
         if (this.exist(key)) {
-            if (typeof this.get(key) === 'object' && Array.isArray(this.get(key))) {
-                this.data[key] = this.get(key).push(value);
-                this.subject.next({command: Insert, row: key, value: this.get(key).push(value)});
-            } else {
-                this.data[key] = value;
-            }
+            this.data[key] = value;
         } else {
             this.data[key] = value;
         }

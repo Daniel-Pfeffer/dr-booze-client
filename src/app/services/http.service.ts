@@ -40,7 +40,7 @@ export class HttpService {
         }, {observe: 'response'});
     }
 
-        getUser() {
+    getUser() {
         return this.http.get<User>(this.uri + 'manage/user', {headers: this.header});
     }
 

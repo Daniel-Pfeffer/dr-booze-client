@@ -22,6 +22,7 @@ export class LoginComponent {
                 private toastController: ToastController, fb: FormBuilder,
                 private s: StorageService) {
         const authToken = s.get(StorageType.Auth);
+        console.log('Auth: ' + authToken);
         if (!!authToken) {
             this.login(authToken);
         }

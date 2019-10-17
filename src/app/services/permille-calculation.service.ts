@@ -36,6 +36,7 @@ export class PermilleCalculationService {
                 curValue -= (0.1 / 60);
             } else {
                 curValue = 0;
+                this.timing.stop();
             }
             this.minuteCounter++;
             if (this.minuteCounter === 60) {
@@ -51,6 +52,9 @@ export class PermilleCalculationService {
         let curValue: number = this.perMilleNotifier.value;
         curValue += this.calculateBAC(drink.alcohol);
         this.perMilleNotifier.next(curValue);
+        if (!this.timing.isRunning) {
+            this.timing.start();
+        }
     }
 
     private resetHour() {
