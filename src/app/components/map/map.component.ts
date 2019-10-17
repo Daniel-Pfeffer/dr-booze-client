@@ -2,9 +2,9 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpService} from '../../services/http.service';
 import {Drink} from '../../data/entities/drink';
-import * as moment from 'moment';
 import {ToastController} from '@ionic/angular';
 import {Router} from '@angular/router';
+import {AlcoholType} from '../../data/enums/AlcoholType';
 
 declare var H: any;
 
@@ -19,7 +19,7 @@ export class MapComponent implements OnInit {
     private platform: any;
     private map: any;
     private ui: any;
-    private bubbles = [];
+    private icons = new Map();
 
     constructor(private httpService: HttpService,
                 private geolocation: Geolocation,
@@ -29,25 +29,31 @@ export class MapComponent implements OnInit {
             'app_id': 'eCKtfpvWUNdCfoHaG80Y',
             'app_code': 'O2bbtXOLoawp3qbewzXChQ'
         });
+        const config = {
+            size: {w: 35, h: 35}
+        };
+        this.icons.set(AlcoholType.BEER, new H.map.Icon('../../../assets/beer.svg', config));
+        this.icons.set(AlcoholType.WINE, new H.map.Icon('../../../assets/wine.svg', config));
+        this.icons.set(AlcoholType.COCKTAIL, new H.map.Icon('../../../assets/cocktail.svg', config));
+        this.icons.set(AlcoholType.LIQUOR, new H.map.Icon('../../../assets/whiskey.svg', config));
     }
 
     ngOnInit(): void {
+        // map setup
         const defaultLayers = this.platform.createDefaultLayers();
         const lng = 14.252778;
         const lat = 48.279167;
         const config = {
             zoom: 12,
-            center: {
-                lng: lng,
-                lat: lat
-            }
+            center: {lng: lng, lat: lat}
         };
         this.map = new H.Map(this.mapElement.nativeElement, defaultLayers.normal.map, config);
         this.ui = H.ui.UI.createDefault(this.map, defaultLayers);
         this.ui.getControl('zoom').setAlignment('right-middle');
         this.ui.getControl('scalebar').setAlignment('top-right');
         this.ui.removeControl('mapsettings');
-        const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
+        // tslint:disable-next-line:no-unused-expression
+        new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
         this.setLocation();
         this.displayDrinks();
     }
@@ -75,26 +81,34 @@ export class MapComponent implements OnInit {
     }
 
     displayDrinks() {
-        // remove old bubbles
-        for (const bubble of this.bubbles) {
-            this.ui.removeBubble(bubble);
-        }
         // add drinks to map
         this.httpService.getDrinks().subscribe((drinks: Array<Drink>) => {
-            for (const drink of drinks) {
-                const date = moment(drink.drankDate);
-                const content =
-                    '<b>' + drink.alcohol.name + '</b>\n' +
-                    '<span style="font-size: 0.8em">' + drink.alcohol.amount + 'ml '
-                    + date.format('DD.MM.YY hh:mm') + '</span>';
-                /*const content =
-                    `<b>${drink.alcohol.name}</b>\n` +
-                    `<span style="font-size: 0.8em">${drink.alcohol.amount}ml` +
-                    `${date.format('DD.MM.YY hh:mm')}</span>`;*/
-                const bubble = new H.ui.InfoBubble({lng: drink.longitude, lat: drink.latitude}, {content: content});
-                this.bubbles.push(bubble);
-                this.ui.addBubble(bubble);
-            }
+            // group the drinks that are within a 22m radius
+            const drinkGroups = Array<Array<Drink>>();
+            drinks.forEach((value1, index1, array1) => {
+                const group = [value1];
+                const point1 = new H.math.Point(value1.longitude, value1.latitude);
+                array1.forEach((value2, index2, array2) => {
+                    if (value1 !== value2) {
+                        const point2 = new H.math.Point(value2.longitude, value2.latitude);
+                        const distance = point1.distance(point2);
+                        if (distance <= 0.0002) {
+                            group.push(value2);
+                            array2.splice(index2, 1);
+                        }
+                    }
+                });
+                drinkGroups.push(group);
+            });
+            // display the drink groups on the map
+            drinkGroups.forEach(value => {
+                const drink: Drink = value[0];
+                const icon = this.icons.get(AlcoholType[drink.alcohol.type]);
+                this.map.addObject(new H.map.Marker(
+                    {lng: drink.longitude, lat: drink.latitude},
+                    {icon: icon}
+                ));
+            });
         });
     }
 

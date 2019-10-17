@@ -21,6 +21,6 @@ export class DashboardComponent {
     }
 
     onCardClick(type: AlcoholType) {
-        this.router.navigate(['picker-detail', type.toString(10)]);
+        this.router.navigate(['picker-detail', type]);
     }
 }

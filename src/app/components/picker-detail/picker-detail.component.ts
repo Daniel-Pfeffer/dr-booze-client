@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Drink} from '../../data/entities/drink';
 import {HttpService} from '../../services/http.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -19,7 +19,7 @@ import {AlcoholType} from '../../data/enums/AlcoholType';
     templateUrl: './picker-detail.component.html',
     styleUrls: ['./picker-detail.component.scss']
 })
-export class PickerDetailComponent {
+export class PickerDetailComponent implements OnInit {
     type: AlcoholType;
     title: string;
     iconName: string;
@@ -34,33 +34,31 @@ export class PickerDetailComponent {
                 private toastController: ToastController, private data: DataService, private geolocation: Geolocation,
                 private permille: PermilleCalculationService, private alert: AlertController, route: ActivatedRoute) {
         this.type = +route.snapshot.paramMap.get('type');
-        let typeStr;
         switch (this.type) {
             case AlcoholType.BEER:
                 this.title = 'Beer';
                 this.iconName = 'beer';
-                typeStr = 'beer';
                 break;
             case AlcoholType.WINE:
                 this.title = 'Wine';
                 this.iconName = 'wine';
                 this.iconMode = 'ios';
-                typeStr = 'wine';
                 break;
             case AlcoholType.COCKTAIL:
                 this.title = 'Cocktails';
                 this.iconName = 'wine';
                 this.iconMode = 'md';
-                typeStr = 'cocktail';
                 break;
             case AlcoholType.LIQUOR:
                 this.title = 'Hard liquor';
                 this.iconName = null;
                 this.iconMode = null;
-                typeStr = 'liquor';
                 break;
         }
-        http.getAlcohols(typeStr).subscribe(alcohols => {
+    }
+
+    ngOnInit(): void {
+        this.http.getAlcohols(AlcoholType[this.type]).subscribe(alcohols => {
             this.alcohols = alcohols;
         }, (error: HttpErrorResponse) => {
             switch (error.status) {
@@ -88,6 +86,7 @@ export class PickerDetailComponent {
                 drink.longitude = pos.coords.longitude;
                 drink.latitude = pos.coords.latitude;
                 this.addDrink(drink);
+                console.log(`Added ${drink.alcohol.name} on location lng: ${drink.longitude} lat: ${drink.latitude}`);
             }, error => {
                 let message;
                 switch (error.code) {
