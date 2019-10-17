@@ -29,7 +29,11 @@ export class DataService {
      */
     set(key: StorageType, value) {
         const {Insert} = StorageCommand;
-        this.data[key] = value;
+        if (this.exist(key)) {
+            this.data[key] = value;
+        } else {
+            this.data[key] = value;
+        }
         if (key === StorageType.Auth) {
             this.subject.next({command: Insert, row: key, value: value});
         }
