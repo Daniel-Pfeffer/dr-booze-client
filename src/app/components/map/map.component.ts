@@ -2,10 +2,11 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpService} from '../../services/http.service';
 import {Drink} from '../../data/entities/drink';
-import {AlertController, ToastController} from '@ionic/angular';
+import {AlertController, ModalController, ToastController} from '@ionic/angular';
 import {Router} from '@angular/router';
 import {AlcoholType} from '../../data/enums/AlcoholType';
 import * as moment from 'moment';
+import {ModalDrinkListComponent} from './modal-drink-list/modal-drink-list.component';
 
 declare var H: any;
 
@@ -26,7 +27,8 @@ export class MapComponent implements OnInit {
                 private geolocation: Geolocation,
                 private toastController: ToastController,
                 private router: Router,
-                private alert: AlertController) {
+                private alert: AlertController,
+                private modalController: ModalController) {
         this.platform = new H.service.Platform({
             'app_id': 'eCKtfpvWUNdCfoHaG80Y',
             'app_code': 'O2bbtXOLoawp3qbewzXChQ'
@@ -34,7 +36,7 @@ export class MapComponent implements OnInit {
         const config = {
             size: {w: 50, h: 50}
         };
-        // alcohol specific alcohol icons
+        // specific alcohol icons
         this.icons.set(AlcoholType.BEER, new H.map.Icon('../../../assets/map/beer.svg', config));
         this.icons.set(AlcoholType.WINE, new H.map.Icon('../../../assets/map/wine.svg', config));
         this.icons.set(AlcoholType.COCKTAIL, new H.map.Icon('../../../assets/map/cocktail.svg', config));
@@ -95,6 +97,8 @@ export class MapComponent implements OnInit {
         }
         // add drinks to map
         this.http.getDrinks().subscribe((drinks: Array<Drink>) => {
+            // remove the drinks that have no location
+            drinks = drinks.filter(drink => drink.longitude !== undefined && drink.latitude !== undefined);
             // here be dragons
             // group the drinks that are within a 22m radius
             const drinkGroups = Array<Array<Drink>>();
@@ -125,25 +129,56 @@ export class MapComponent implements OnInit {
                     {lng: drink.longitude, lat: drink.latitude},
                     {icon: icon, data: value}
                 );
-                marker.addEventListener('tap', (ev) => {
-                    this.presentDrinkAlert(ev.target.getData());
-                });
+                marker.addEventListener('tap', (ev) => this.presentDrinkAlert(ev.target.getData()));
                 this.map.addObject(marker);
             });
         });
     }
 
     async presentDrinkAlert(drinks: Drink[]) {
-        let message = '';
-        drinks.forEach((drink) => {
-            message += `<b>${drink.alcohol.name}</b> ${moment(drink.drankDate).format('DD.MM.YY HH:mm')}<br>`;
+        // sort the drinks by drank date
+        drinks.sort((a, b) => {
+            if (a.drankDate > b.drankDate) {
+                return 1;
+            } else if (a.drankDate < b.drankDate) {
+                return -1;
+            }
+            return 0;
         });
+        // display a maximum of 3 drinks in the alert
+        const length = drinks.length < 3 ? drinks.length : 3;
+        let message = '';
+        for (let i = 0; i < length; ++i) {
+            const drink = drinks[i];
+            message += `<b>${drink.alcohol.name}</b> ${moment(drink.drankDate).format('DD.MM.YY HH:mm')}<br>`;
+        }
+        // show the 'show all'-button when some drinks cannot be shown on the alert
+        const remaining = drinks.length - length;
+        const buttons = [];
+        if (remaining > 0) {
+            message += `<${remaining} earlier ones>`;
+            buttons.push({
+                text: 'Show all',
+                handler: () => this.presentModal(drinks)
+            });
+        }
+        buttons.push({text: 'Understood'});
         const alert = await this.alert.create({
             header: 'Drinks',
             message: message,
-            buttons: ['Understood']
+            buttons: buttons
         });
         await alert.present();
+    }
+
+    async presentModal(drinks: Drink[]) {
+        const modal = await this.modalController.create({
+            component: ModalDrinkListComponent,
+            componentProps: {
+                'drinks': drinks
+            }
+        });
+        return await modal.present();
     }
 
     async presentToast(message: string) {

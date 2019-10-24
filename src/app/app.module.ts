@@ -30,7 +30,7 @@ import {DisplayPermilleComponent} from './components/display-permille/display-pe
 import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
 import {StatisticsComponent} from './components/statistics/statistics.component';
 import {MapComponent} from './components/map/map.component';
-
+import {ModalDrinkListComponent} from './components/map/modal-drink-list/modal-drink-list.component';
 
 @NgModule({
     declarations: [
@@ -44,9 +44,12 @@ import {MapComponent} from './components/map/map.component';
         SideMenuComponent,
         DisplayPermilleComponent,
         RequestPasswordChangeComponent,
-        MapComponent
+        MapComponent,
+        ModalDrinkListComponent
     ],
-    entryComponents: [],
+    entryComponents: [
+        ModalDrinkListComponent
+    ],
     imports: [
         ReactiveFormsModule,
         FormsModule,
