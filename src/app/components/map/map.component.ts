@@ -2,9 +2,10 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpService} from '../../services/http.service';
 import {Drink} from '../../data/entities/drink';
-import {ToastController} from '@ionic/angular';
+import {AlertController, ToastController} from '@ionic/angular';
 import {Router} from '@angular/router';
 import {AlcoholType} from '../../data/enums/AlcoholType';
+import * as moment from 'moment';
 
 declare var H: any;
 
@@ -19,23 +20,27 @@ export class MapComponent implements OnInit {
     private platform: any;
     private map: any;
     private ui: any;
-    private icons = new Map();
+    private icons = new Map<number, any>();
 
-    constructor(private httpService: HttpService,
+    constructor(private http: HttpService,
                 private geolocation: Geolocation,
                 private toastController: ToastController,
-                private router: Router) {
+                private router: Router,
+                private alert: AlertController) {
         this.platform = new H.service.Platform({
             'app_id': 'eCKtfpvWUNdCfoHaG80Y',
             'app_code': 'O2bbtXOLoawp3qbewzXChQ'
         });
         const config = {
-            size: {w: 35, h: 35}
+            size: {w: 50, h: 50}
         };
-        this.icons.set(AlcoholType.BEER, new H.map.Icon('../../../assets/beer.svg', config));
-        this.icons.set(AlcoholType.WINE, new H.map.Icon('../../../assets/wine.svg', config));
-        this.icons.set(AlcoholType.COCKTAIL, new H.map.Icon('../../../assets/cocktail.svg', config));
-        this.icons.set(AlcoholType.LIQUOR, new H.map.Icon('../../../assets/whiskey.svg', config));
+        // alcohol specific alcohol icons
+        this.icons.set(AlcoholType.BEER, new H.map.Icon('../../../assets/map/beer.svg', config));
+        this.icons.set(AlcoholType.WINE, new H.map.Icon('../../../assets/map/wine.svg', config));
+        this.icons.set(AlcoholType.COCKTAIL, new H.map.Icon('../../../assets/map/cocktail.svg', config));
+        this.icons.set(AlcoholType.LIQUOR, new H.map.Icon('../../../assets/map/whiskey.svg', config));
+        // group icon
+        this.icons.set(4, new H.map.Icon('../../../assets/map/group.svg', config));
     }
 
     ngOnInit(): void {
@@ -81,35 +86,64 @@ export class MapComponent implements OnInit {
     }
 
     displayDrinks() {
+        // remove previous markers
+        const mapObjects: any[] = this.map.getObjects();
+        for (const obj of mapObjects) {
+            if (obj instanceof H.map.Marker) {
+                this.map.removeObject(obj);
+            }
+        }
         // add drinks to map
-        this.httpService.getDrinks().subscribe((drinks: Array<Drink>) => {
+        this.http.getDrinks().subscribe((drinks: Array<Drink>) => {
+            // here be dragons
             // group the drinks that are within a 22m radius
             const drinkGroups = Array<Array<Drink>>();
             drinks.forEach((value1, index1, array1) => {
-                const group = [value1];
-                const point1 = new H.math.Point(value1.longitude, value1.latitude);
-                array1.forEach((value2, index2, array2) => {
-                    if (value1 !== value2) {
-                        const point2 = new H.math.Point(value2.longitude, value2.latitude);
-                        const distance = point1.distance(point2);
-                        if (distance <= 0.0002) {
-                            group.push(value2);
-                            array2.splice(index2, 1);
+                if (value1 != null) {
+                    const group = [value1];
+                    const point1 = new H.math.Point(value1.longitude, value1.latitude);
+                    array1.forEach((value2, index2, array2) => {
+                        if (value1 !== value2 && value2 != null) {
+                            const point2 = new H.math.Point(value2.longitude, value2.latitude);
+                            const distance = point1.distance(point2);
+                            if (distance <= 0.0002) {
+                                group.push(value2);
+                                array2[index2] = null;
+                            }
                         }
-                    }
-                });
-                drinkGroups.push(group);
+                    });
+                    array1[index1] = null;
+                    drinkGroups.push(group);
+                }
             });
             // display the drink groups on the map
             drinkGroups.forEach(value => {
                 const drink: Drink = value[0];
-                const icon = this.icons.get(AlcoholType[drink.alcohol.type]);
-                this.map.addObject(new H.map.Marker(
+                // get the group icon or the alcohol specific alcohol icon
+                const icon = this.icons.get(value.length > 1 ? 4 : +AlcoholType[drink.alcohol.type]);
+                const marker = new H.map.Marker(
                     {lng: drink.longitude, lat: drink.latitude},
-                    {icon: icon}
-                ));
+                    {icon: icon, data: value}
+                );
+                marker.addEventListener('tap', (ev) => {
+                    this.presentDrinkAlert(ev.target.getData());
+                });
+                this.map.addObject(marker);
             });
         });
+    }
+
+    async presentDrinkAlert(drinks: Drink[]) {
+        let message = '';
+        drinks.forEach((drink) => {
+            message += `<b>${drink.alcohol.name}</b> ${moment(drink.drankDate).format('DD.MM.YY HH:mm')}<br>`;
+        });
+        const alert = await this.alert.create({
+            header: 'Drinks',
+            message: message,
+            buttons: ['Understood']
+        });
+        await alert.present();
     }
 
     async presentToast(message: string) {
