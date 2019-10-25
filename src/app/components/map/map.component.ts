@@ -156,7 +156,7 @@ export class MapComponent implements OnInit {
         const remaining = drinks.length - length;
         const buttons = [];
         if (remaining > 0) {
-            message += `<${remaining} earlier ones>`;
+            message += `(${remaining} earlier drinks)`;
             buttons.push({
                 text: 'Show all',
                 handler: () => this.presentModal(drinks)
