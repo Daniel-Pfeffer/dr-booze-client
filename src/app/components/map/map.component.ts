@@ -7,6 +7,7 @@ import {Router} from '@angular/router';
 import {AlcoholType} from '../../data/enums/AlcoholType';
 import * as moment from 'moment';
 import {ModalDrinkListComponent} from './modal-drink-list/modal-drink-list.component';
+import {HttpErrorResponse} from '@angular/common/http';
 
 declare var H: any;
 
@@ -132,15 +133,26 @@ export class MapComponent implements OnInit {
                 marker.addEventListener('tap', (ev) => this.presentDrinkAlert(ev.target.getData()));
                 this.map.addObject(marker);
             });
+        }, (error: HttpErrorResponse) => {
+            switch (error.status) {
+                case 401:
+                    // the authentication token is missing or invalid
+                    // TODO: auth token invalid -> logout
+                    break;
+                default:
+                    this.presentToast('An unexpected error occurred.');
+                    console.error(error);
+                    break;
+            }
         });
     }
 
     async presentDrinkAlert(drinks: Drink[]) {
         // sort the drinks by drank date
         drinks.sort((a, b) => {
-            if (a.drankDate > b.drankDate) {
+            if (a.drankDate < b.drankDate) {
                 return 1;
-            } else if (a.drankDate < b.drankDate) {
+            } else if (a.drankDate > b.drankDate) {
                 return -1;
             }
             return 0;
@@ -154,19 +166,23 @@ export class MapComponent implements OnInit {
         }
         // show the 'show all'-button when some drinks cannot be shown on the alert
         const remaining = drinks.length - length;
-        const buttons = [];
         if (remaining > 0) {
             message += `(${remaining} earlier drinks)`;
-            buttons.push({
-                text: 'Show all',
-                handler: () => this.presentModal(drinks)
-            });
         }
-        buttons.push({text: 'Understood'});
         const alert = await this.alert.create({
             header: 'Drinks',
             message: message,
-            buttons: buttons
+            buttons: [
+                {
+                    text: 'Close',
+                    role: 'cancel'
+                },
+                {
+                    text: 'Details',
+                    handler: () => this.presentModal(drinks)
+                }
+            ]
+
         });
         await alert.present();
     }

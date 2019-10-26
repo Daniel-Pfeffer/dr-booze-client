@@ -60,6 +60,18 @@ export class HttpService {
         return this.http.get<Array<Alcohol>>(this.uri + `manage/alcohols/${type}`, {headers: this.header});
     }
 
+    getFavourites(type: string) {
+        return this.http.get<Array<Alcohol>>(this.uri + `manage/favourites/${type}`, {headers: this.header});
+    }
+
+    addFavourite(alcoholId: number) {
+        return this.http.post(this.uri + `manage/favourites/${alcoholId}`, null, {headers: this.header});
+    }
+
+    removeFavourite(alcoholId: number) {
+        return this.http.delete(this.uri + `manage/favourites/${alcoholId}`, {headers: this.header});
+    }
+
     getDrinks() {
         return this.http.get<Array<Drink>>(this.uri + 'manage/drinks', {headers: this.header});
     }

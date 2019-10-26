@@ -35,7 +35,7 @@ export class RegisterComponent {
     onSubmit() {
         const val = this.form.value;
         this.http.register(val.username, val.email, val.password).subscribe(() => {
-            this.presentToast('Registration completed').then(() => this.router.navigate(['login']));
+            this.presentToast('Registration completed.').then(() => this.router.navigate(['login']));
         }, (error: HttpErrorResponse) => {
             switch (error.status) {
                 case 403:

@@ -6,4 +6,5 @@ export class Alcohol {
     name: String;
     percentage: number;
     amount: number;
+    category: string;
 }

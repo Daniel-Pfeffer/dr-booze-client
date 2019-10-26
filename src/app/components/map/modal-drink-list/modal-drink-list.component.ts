@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Drink} from '../../../data/entities/drink';
 import {ModalController} from '@ionic/angular';
 
@@ -7,14 +7,10 @@ import {ModalController} from '@ionic/angular';
     templateUrl: './modal-drink-list.component.html',
     styleUrls: ['./modal-drink-list.component.scss']
 })
-export class ModalDrinkListComponent implements OnInit {
-
+export class ModalDrinkListComponent {
     @Input() drinks: Drink[];
 
     constructor(private modalController: ModalController) {
-    }
-
-    ngOnInit() {
     }
 
     dismiss() {
