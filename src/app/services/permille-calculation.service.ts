@@ -57,6 +57,15 @@ export class PermilleCalculationService {
         }
     }
 
+    public removeDrink(drink: Drink) {
+        let curValue: number = this.perMilleNotifier.value;
+        curValue -= this.calculateBAC(drink.alcohol);
+        if (curValue < 0) {
+            curValue = 0;
+        }
+        this.perMilleNotifier.next(curValue);
+    }
+
     private resetHour() {
         this.minuteCounter = 0;
         this.hourlyMax = 0;

@@ -5,7 +5,6 @@ import {SecureStorage} from '@ionic-native/secure-storage/ngx';
 import {NativeStorage} from '@ionic-native/native-storage/ngx';
 import {StorageCommand} from '../data/enums/StorageCommand';
 import {StorageType} from '../data/enums/StorageType';
-import {logger} from 'codelyzer/util/logger';
 
 @Injectable({
     providedIn: 'root'
