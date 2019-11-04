@@ -2,6 +2,6 @@ export enum StorageType {
     Auth = 'auth',
     Person = 'person',
     Drinks = 'drinks',
-    DrinkHistory = 'drinkHistory',
+    Alcohol = 'alcohol',
     PerMille = 'permille'
 }

@@ -24,7 +24,9 @@ export class LoginComponent {
         const authToken = s.get(StorageType.Auth);
         console.log('Auth: ' + authToken);
         if (!!authToken) {
-            this.login(authToken);
+            this.s.load().then(() => {
+                this.login(authToken);
+            });
         }
         this.form = fb.group({
             username:

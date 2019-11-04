@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {PermilleCalculationService} from '../../services/permille-calculation.service';
+import {StorageService} from '../../services/storage.service';
 
 @Component({
     selector: 'app-header',
@@ -10,9 +11,14 @@ export class DisplayPermilleComponent {
 
     currentPerMille: number;
 
-    constructor(data: PermilleCalculationService) {
+    constructor(data: PermilleCalculationService, private ss: StorageService) {
         data.perMilleObservable.subscribe(item => {
             this.currentPerMille = Math.floor(item * 100) / 100;
         });
+    }
+
+    // MARK: REMOVE
+    public log() {
+        this.ss.getNs();
     }
 }

@@ -28,8 +28,9 @@ export class PickerDetailComponent implements OnInit {
     isLoading = false;
 
     constructor(private http: HttpService, private router: Router,
-                private toastController: ToastController, private data: DataService, private geolocation: Geolocation,
-                private permille: PermilleCalculationService, private alert: AlertController, route: ActivatedRoute) {
+                private toastController: ToastController, private data: DataService,
+                private geolocation: Geolocation, private permille: PermilleCalculationService,
+                private alert: AlertController, route: ActivatedRoute) {
         this.type = +route.snapshot.paramMap.get('type');
         this.title = AlcoholType[this.type].toLowerCase();
     }

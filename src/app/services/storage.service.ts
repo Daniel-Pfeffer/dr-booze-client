@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Platform} from '@ionic/angular';
 import * as Cookies from 'js-cookie';
 import {DataService} from './data.service';
-import {SecureStorage, SecureStorageObject} from '@ionic-native/secure-storage/ngx';
+import {SecureStorage} from '@ionic-native/secure-storage/ngx';
 import {NativeStorage} from '@ionic-native/native-storage/ngx';
 import {StorageCommand} from '../data/enums/StorageCommand';
 import {StorageType} from '../data/enums/StorageType';
@@ -18,8 +17,12 @@ import {logger} from 'codelyzer/util/logger';
 export class StorageService {
 
     private readonly isBrowser: boolean;
-
-    constructor(private p: Platform, private d: DataService, private ss: SecureStorage, private ns: NativeStorage) {
+    // MARK: Constructor
+    constructor(
+        private d: DataService,
+        private ss: SecureStorage,
+        private ns: NativeStorage
+    ) {
         const {Remove, Load, Insert} = StorageCommand;
         if (window.cordova) {
             if (window.cordova.platformId === 'browser') {
@@ -35,7 +38,6 @@ export class StorageService {
             if (item.command === Remove) {
                 this.remove(item.row);
             } else if (item.command === Load) {
-                // TODO: load into dataService
             } else if (item.command === Insert) {
                 this.set(item.row, item.value);
             }
@@ -63,7 +65,9 @@ export class StorageService {
                     });
                 });
             } else {
-                this.ns.setItem(key, value);
+                this.ns.setItem(key, value).then(() => {
+                    console.log(`Set nonsecure value ${key}`);
+                });
             }
         }
     }
@@ -90,7 +94,9 @@ export class StorageService {
                     });
                 });
             } else {
-                this.ns.getItem(key);
+                this.ns.getItem(key).then(value => {
+                    return value;
+                });
             }
         }
     }
@@ -105,20 +111,53 @@ export class StorageService {
             }
         } else {
             if (key === Auth) {
-                this.ss.create('drBoozeSecure').then(value => {
-                    value.remove(key).then(value1 => {
-                        console.log('removed ' + key);
+                this.ss.create('drBoozeSecure').then(ssInstance => {
+                    ssInstance.remove(key).then(removed => {
+                        console.log(`removed ${key}`);
                     });
                 });
             } else {
-                this.ns.remove(key);
+                this.ns.remove(key).then(removed => {
+                    console.log(`removed ${key}`);
+                });
             }
         }
     }
 
-    private load() {
-        if (this.isBrowser) {
-            this.d.set(StorageType.Auth, Cookies.get('auth'));
+    public load(): Promise<boolean> {
+        return new Promise<boolean>(resolve => {
+            if (this.isBrowser) {
+                this.d.set(StorageType.Auth, Cookies.get('auth'));
+                Object.entries(localStorage).forEach(value => {
+                    this.d.set(StorageType[value[0]], value[1]);
+                });
+            } else {
+                this.ss.create('drBoozeSecure').then(ssInstance => {
+                    ssInstance.get(StorageType.Auth).then(value => {
+                        this.d.set(StorageType.Auth, value);
+                    });
+                });
+                this.ns.keys().then(value => {
+                    // tslint:disable-next-line:forin
+                    for (const key in value) {
+                        this.ns.getItem(key).then(value1 => {
+                            this.d.set(StorageType[key], value);
+                        });
+                    }
+                });
+            }
+            resolve(true);
+        });
+    }
+
+    public getNs() {
+        if (!this.isBrowser) {
+            console.log('access ns');
+            this.ns.keys().then(value => {
+                console.log(value);
+            });
+        } else {
+            console.log('access ls');
         }
     }
 }

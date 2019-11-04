@@ -56,6 +56,7 @@ export class HttpService {
         }, {headers: this.header});
     }
 
+    // DRINK PICKER
     getAlcohols(type: string) {
         return this.http.get<Array<Alcohol>>(this.uri + `manage/alcohols/${type}`, {headers: this.header});
     }

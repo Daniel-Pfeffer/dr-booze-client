@@ -16,9 +16,8 @@ export class TimingService {
         this.isRunning = false;
     }
 
-    /* TODO: change from 5.000 timout to 60.000
-              Performance increase by stopping the timeout and continuing it when the user adds a drink (!Maybe!)
-                Discuss
+    /*
+     * TODO: change from 5.000 timout to 60.000
      */
     public start(): void {
         if (!this.isRunning) {

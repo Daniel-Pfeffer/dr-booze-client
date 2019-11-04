@@ -26,15 +26,12 @@ export class DataService {
      * @description sets data into the st-storage
      * @param key name of the storage key
      * @param value value of the storage
+     * @param isLoad when loaded from the ns
      */
-    set(key: StorageType, value) {
+    set(key: StorageType, value: any, isLoad?: boolean) {
         const {Insert} = StorageCommand;
-        if (this.exist(key)) {
-            this.data[key] = value;
-        } else {
-            this.data[key] = value;
-        }
-        if (key === StorageType.Auth) {
+        this.data[key] = value;
+        if (key === StorageType.Auth || isLoad) {
             this.subject.next({command: Insert, row: key, value: value});
         }
     }
@@ -70,10 +67,5 @@ export class DataService {
         } else {
             throw new Error('Data doesn\'t exist');
         }
-    }
-
-    load() {
-        const {Load} = StorageCommand;
-        this.subject.next({command: Load});
     }
 }
