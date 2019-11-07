@@ -20,6 +20,7 @@ import {AlcoholType} from '../../data/enums/AlcoholType';
     styleUrls: ['./picker-detail.component.scss']
 })
 export class PickerDetailComponent implements OnInit {
+
     type: AlcoholType;
     title: string;
     categories = new Map<string, Array<Alcohol>>();
@@ -61,6 +62,9 @@ export class PickerDetailComponent implements OnInit {
             }
             console.log(alcohols);
             alcohols.forEach(alcohol => {
+                if (alcohol.category === undefined) {
+                    alcohol.category = 'Regular';
+                }
                 if (this.categories.has(alcohol.category)) {
                     this.categories.get(alcohol.category).push(alcohol);
                 } else {
@@ -181,7 +185,7 @@ export class PickerDetailComponent implements OnInit {
                         // TODO: auth token invalid -> logout
                         break;
                     case 404:
-                        this.presentToast('No alcohol has been found with the given alcoholId');
+                        this.presentToast('No alcohol has been found with the given alcoholId.');
                         break;
                     default:
                         this.presentToast('An unexpected error occurred.');
