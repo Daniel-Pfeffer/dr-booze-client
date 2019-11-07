@@ -48,7 +48,7 @@
         <ion-item-group *ngFor="let category of categories | keyvalue">
             <ion-item-divider color="light">
                 <ion-label>
-                    {{ category.key !== undefined ? (category.key | titlecase) : 'Regular' }}
+                    {{ (category.key | titlecase) }}
                 </ion-label>
             </ion-item-divider>
             <ion-item-sliding *ngFor="let alcohol of category.value" #slider>

@@ -31,6 +31,7 @@ import {RequestPasswordChangeComponent} from './components/request-password-chan
 import {StatisticsComponent} from './components/statistics/statistics.component';
 import {MapComponent} from './components/map/map.component';
 import {ModalDrinkListComponent} from './components/map/modal-drink-list/modal-drink-list.component';
+import {HistoryComponent} from './components/history/history.component';
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import {ModalDrinkListComponent} from './components/map/modal-drink-list/modal-d
         DisplayPermilleComponent,
         RequestPasswordChangeComponent,
         MapComponent,
-        ModalDrinkListComponent
+        ModalDrinkListComponent,
+        HistoryComponent
     ],
     entryComponents: [
         ModalDrinkListComponent

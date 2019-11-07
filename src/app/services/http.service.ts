@@ -56,7 +56,7 @@ export class HttpService {
         }, {headers: this.header});
     }
 
-    // DRINK PICKER
+    // Drink Picker
     getAlcohols(type: string) {
         return this.http.get<Array<Alcohol>>(this.uri + `manage/alcohols/${type}`, {headers: this.header});
     }
@@ -75,6 +75,10 @@ export class HttpService {
 
     getDrinks() {
         return this.http.get<Array<Drink>>(this.uri + 'manage/drinks', {headers: this.header});
+    }
+
+    removeDrink(drinkId: number) {
+        return this.http.delete(this.uri + `manage/drinks/${drinkId}`, {headers: this.header});
     }
 
     addDrink(alcoholId: number, drankDate: number, longitude: number, latitude: number) {
