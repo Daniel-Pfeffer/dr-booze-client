@@ -31,6 +31,9 @@ import {RequestPasswordChangeComponent} from './components/request-password-chan
 import {StatisticsComponent} from './components/statistics/statistics.component';
 import {MapComponent} from './components/map/map.component';
 import {ModalDrinkListComponent} from './components/map/modal-drink-list/modal-drink-list.component';
+import {Network} from '@ionic-native/network/ngx';
+import {BackgroundMode} from '@ionic-native/background-mode/ngx';
+import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
 
 @NgModule({
     declarations: [
@@ -74,6 +77,9 @@ import {ModalDrinkListComponent} from './components/map/modal-drink-list/modal-d
         DashboardComponent,
         SecureStorage,
         NativeStorage,
+        Network,
+        BackgroundMode,
+        LocalNotifications,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
     ],
     bootstrap: [AppComponent]

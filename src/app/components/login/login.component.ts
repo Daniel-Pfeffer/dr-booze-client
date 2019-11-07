@@ -8,6 +8,9 @@ import {DataService} from '../../services/data.service';
 import {User} from '../../data/entities/user';
 import {StorageService} from '../../services/storage.service';
 import {StorageType} from '../../data/enums/StorageType';
+import {cordova} from '@ionic-native/core';
+import {BackgroundMode} from '@ionic-native/background-mode/ngx';
+import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
 
 @Component({
     selector: 'app-login',
@@ -20,8 +23,9 @@ export class LoginComponent {
     constructor(private http: HttpService, private data: DataService,
                 private router: Router, private activatedRoute: ActivatedRoute,
                 private toastController: ToastController, fb: FormBuilder,
-                private s: StorageService) {
-        const authToken = s.get(StorageType.Auth);
+                private s: StorageService, private backgroundMode: BackgroundMode,
+                private notification: LocalNotifications) {
+        const authToken = s.get(StorageType.AUTH);
         console.log('Auth: ' + authToken);
         if (!!authToken) {
             this.s.load().then(() => {
@@ -59,18 +63,20 @@ export class LoginComponent {
 
     private login(token) {
         this.http.header = this.http.header.set('Authorization', 'Bearer ' + token);
-        const {Auth, Person} = StorageType;
-        this.data.set(Auth, token);
+        const {AUTH, PERSON} = StorageType;
+        this.data.set(AUTH, token);
+        this.notification.requestPermission();
+        this.backgroundMode.enable();
         this.http.getUser().subscribe(user => {
             user.gkw = this.calculateGKW(user);
-            this.data.set(Person, user);
+            this.data.set(PERSON, user);
             this.router.navigate(['/home']);
         }, (error: HttpErrorResponse) => {
             switch (error.status) {
                 case 401:
                     // the authentication token is missing or invalid
-                    this.data.remove(Auth);
-                    this.data.remove(Person);
+                    this.data.remove(AUTH);
+                    this.data.remove(PERSON);
                     break;
                 case 409:
                     // the details haven't been inserted yet

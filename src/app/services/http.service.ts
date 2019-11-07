@@ -7,6 +7,8 @@ import {User} from '../data/entities/user';
 import {Alcohol} from '../data/entities/alcohol';
 import {DataService} from './data.service';
 import {StorageType} from '../data/enums/StorageType';
+import {Network} from '@ionic-native/network/ngx';
+import {Observable} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -14,11 +16,20 @@ import {StorageType} from '../data/enums/StorageType';
 export class HttpService {
     private uri = 'http://localhost:8080/booze/';
     public header: HttpHeaders = new HttpHeaders();
+    private hasConnection;
 
-    constructor(private http: HttpClient, private data: DataService) {
-        if (data.exist(StorageType.Auth)) {
-            this.header = this.header.set('Authorization', 'Bearer ' + data.get(StorageType.Auth));
+    constructor(private http: HttpClient, private data: DataService, private network: Network) {
+        this.hasConnection = !(
+            this.network.type === network.Connection.NONE
+            || this.network.type === network.Connection.CELL
+            || this.network.type === network.Connection.CELL_2G
+        );
+        if (data.exist(StorageType.AUTH)) {
+            this.header = this.header.set('Authorization', 'Bearer ' + data.get(StorageType.AUTH));
         }
+        this.network.onChange().subscribe(item => {
+            this.hasConnection = item.type === 'online';
+        });
     }
 
     register(username: string, email: string, password: string) {
@@ -58,7 +69,14 @@ export class HttpService {
 
     // DRINK PICKER
     getAlcohols(type: string) {
-        return this.http.get<Array<Alcohol>>(this.uri + `manage/alcohols/${type}`, {headers: this.header});
+        console.log('%c ACCESS NEW GETALCOHOL', 'color:cyan');
+        if (this.hasConnection) {
+            return this.http.get<Array<Alcohol>>(this.uri + `manage/alcohols/${type}`, {headers: this.header});
+        } else {
+            return new Observable<Array<Alcohol>>(subscriber => {
+                return subscriber.next(this.data.get(StorageType[type]));
+            });
+        }
     }
 
     getFavourites(type: string) {

@@ -13,6 +13,7 @@ import {StorageType} from '../data/enums/StorageType';
  */
 export class DataService {
 
+
     public observable: Observable<ToStore>;
     private subject: Subject<ToStore>;
     private data = {};
@@ -31,7 +32,7 @@ export class DataService {
     set(key: StorageType, value: any, isLoad?: boolean) {
         const {Insert} = StorageCommand;
         this.data[key] = value;
-        if (key === StorageType.Auth || isLoad) {
+        if (!isLoad) {
             this.subject.next({command: Insert, row: key, value: value});
         }
     }

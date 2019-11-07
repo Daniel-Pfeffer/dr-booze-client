@@ -54,6 +54,12 @@ export class PickerDetailComponent implements OnInit {
             }
         });
         this.http.getAlcohols(type).subscribe(alcohols => {
+            console.log('access data: ' + StorageType[type]);
+            console.log('alcohol exists: ' + this.data.exist(StorageType[type]));
+            if (!this.data.exist(StorageType[type])) {
+                this.data.set(StorageType[type], alcohols);
+            }
+            console.log(alcohols);
             alcohols.forEach(alcohol => {
                 if (this.categories.has(alcohol.category)) {
                     this.categories.get(alcohol.category).push(alcohol);
@@ -109,10 +115,10 @@ export class PickerDetailComponent implements OnInit {
     }
 
     addDrink(drink: Drink) {
-        const {Drinks} = StorageType;
-        const drinks = this.data.exist(Drinks) ? this.data.get(Drinks) : new Array<Drink>();
+        const {DRINKS} = StorageType;
+        const drinks = this.data.exist(DRINKS) ? this.data.get(DRINKS) : new Array<Drink>();
         drinks.push(drink);
-        this.data.set(Drinks, drinks);
+        this.data.set(DRINKS, drinks);
         this.permille.addDrink(drink);
         this.http.addDrink(drink.alcohol.id, drink.drankDate, drink.longitude, drink.latitude)
             .subscribe(_ => {

@@ -6,6 +6,8 @@ import {User} from '../data/entities/user';
 import {Alcohol} from '../data/entities/alcohol';
 import {TimingService} from './timing.service';
 import {StorageType} from '../data/enums/StorageType';
+import {BackgroundMode} from '@ionic-native/background-mode/ngx';
+import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +21,11 @@ export class PermilleCalculationService {
     private minuteCounter: number;
     private hourlyMax: number;
 
-    constructor(private data: DataService, private timing: TimingService) {
+    constructor(private data: DataService,
+                private timing: TimingService,
+                private background: BackgroundMode,
+                private notifications: LocalNotifications
+    ) {
         this.perMilleNotifier = new BehaviorSubject<number>(0);
         this.statisticNotifier = new BehaviorSubject<number>(0);
         this.perMilleObservable = this.perMilleNotifier.asObservable();
@@ -37,6 +43,19 @@ export class PermilleCalculationService {
             } else {
                 curValue = 0;
                 this.timing.stop();
+                if (this.background.isActive()) {
+                    this.notifications.hasPermission().then(value => {
+                        if (value) {
+                            this.notifications.schedule({
+                                title: 'You are sober!',
+                                text: 'Your blood alcohol level has reached 0‰',
+                                foreground: true
+                            });
+                        }
+                    });
+
+
+                }
             }
             this.minuteCounter++;
             if (this.minuteCounter === 60) {
@@ -73,6 +92,6 @@ export class PermilleCalculationService {
 
     private calculateBAC(drink: Alcohol): number {
         const a = (drink.amount * (drink.percentage / 100)) * 0.8;
-        return (0.8 * a) / (1.055 * (<User>this.data.get(StorageType.Person)).gkw);
+        return (0.8 * a) / (1.055 * (<User>this.data.get(StorageType.PERSON)).gkw);
     }
 }

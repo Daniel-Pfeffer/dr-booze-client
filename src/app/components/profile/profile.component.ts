@@ -39,10 +39,10 @@ export class ProfileComponent {
             ],
             gender: ['', [Validators.required]]
         });
-        const {Person} = StorageType;
-        if (this.data.exist(Person)) {
+        const {PERSON} = StorageType;
+        if (this.data.exist(PERSON)) {
             this.isUpdate = true;
-            const user: User = this.data.get(Person);
+            const user: User = this.data.get(PERSON);
             console.log(user);
             const controls = this.form.controls;
             controls.firstName.setValue(user.firstName);
@@ -85,13 +85,13 @@ export class ProfileComponent {
     }
 
     private saveData(user: User) {
-        const {Person} = StorageType;
+        const {PERSON} = StorageType;
         console.log(this.isUpdate);
-        if (this.data.exist(Person)) {
-            this.data.remove(Person);
+        if (this.data.exist(PERSON)) {
+            this.data.remove(PERSON);
         }
         user.gkw = this.calculateGKW(user);
-        this.data.set(Person, user);
+        this.data.set(PERSON, user);
         const message = this.isUpdate ? 'Profile updated' : 'Thanks for joining Dr. Booze!';
         this.presentToast(message).then(() => this.router.navigate(['/home']));
     }

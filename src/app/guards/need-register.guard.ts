@@ -19,7 +19,7 @@ export class NeedRegisterGuard implements CanActivate {
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot)
         : Observable<boolean> | Promise<boolean> | boolean {
-        if (!this.data.exist(StorageType.Auth)) {
+        if (!this.data.exist(StorageType.AUTH)) {
             this.router.navigateByUrl('/login');
             return false;
         }

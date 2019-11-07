@@ -16,6 +16,7 @@ import {StorageType} from '../data/enums/StorageType';
 export class StorageService {
 
     private readonly isBrowser: boolean;
+
     // MARK: Constructor
     constructor(
         private d: DataService,
@@ -44,27 +45,27 @@ export class StorageService {
     }
 
     private set(key: StorageType, value: any) {
-        const {Auth} = StorageType;
+        const {AUTH} = StorageType;
         if (this.isBrowser) {
-            if (key === Auth) {
+            if (key === AUTH) {
                 console.log('cookie auth set');
                 Cookies.set(key, value, {sameSite: 'Strict', expires: 7});
             } else {
                 if (typeof value === 'object') {
-                    localStorage.setItem(key, JSON.stringify(value));
+                    localStorage.setItem(key.toString(), JSON.stringify(value));
                 } else {
-                    localStorage.setItem(key, value);
+                    localStorage.setItem(key.toString(), value);
                 }
             }
         } else {
-            if (key === Auth) {
+            if (key === AUTH) {
                 this.ss.create('drBoozeSecure').then(ssInstance => {
                     ssInstance.set(key, value).then(() => {
                         console.log('Set secure');
                     });
                 });
             } else {
-                this.ns.setItem(key, value).then(() => {
+                this.ns.setItem(key.toString(), value).then(() => {
                     console.log(`Set nonsecure value ${key}`);
                 });
             }
@@ -72,28 +73,28 @@ export class StorageService {
     }
 
     public get(key: StorageType): any {
-        const {Auth} = StorageType;
+        const {AUTH} = StorageType;
         if (this.isBrowser) {
-            if (key === Auth) {
+            if (key === AUTH) {
                 return Cookies.get(key);
             } else {
                 let returnVal;
                 try {
-                    returnVal = JSON.parse(localStorage.getItem(key));
+                    returnVal = JSON.parse(localStorage.getItem(key.toString()));
                 } catch (e) {
-                    returnVal = localStorage.getItem(key);
+                    returnVal = localStorage.getItem(key.toString());
                 }
                 return returnVal;
             }
         } else {
-            if (key === Auth) {
+            if (key === AUTH) {
                 this.ss.create('drBoozeSecure').then(ssInstance => {
                     ssInstance.get(key).then(authToken => {
                         return authToken;
                     });
                 });
             } else {
-                this.ns.getItem(key).then(value => {
+                this.ns.getItem(key.toString()).then(value => {
                     return value;
                 });
             }
@@ -101,22 +102,22 @@ export class StorageService {
     }
 
     private remove(key: StorageType) {
-        const {Auth} = StorageType;
+        const {AUTH} = StorageType;
         if (this.isBrowser) {
-            if (key === Auth) {
+            if (key === AUTH) {
                 Cookies.remove(key);
             } else {
-                localStorage.removeItem(key);
+                localStorage.removeItem(key.toString());
             }
         } else {
-            if (key === Auth) {
+            if (key === AUTH) {
                 this.ss.create('drBoozeSecure').then(ssInstance => {
                     ssInstance.remove(key).then(removed => {
                         console.log(`removed ${key}`);
                     });
                 });
             } else {
-                this.ns.remove(key).then(removed => {
+                this.ns.remove(key.toString()).then(removed => {
                     console.log(`removed ${key}`);
                 });
             }
@@ -126,21 +127,25 @@ export class StorageService {
     public load(): Promise<boolean> {
         return new Promise<boolean>(resolve => {
             if (this.isBrowser) {
-                this.d.set(StorageType.Auth, Cookies.get('auth'));
+                this.d.set(StorageType.AUTH, Cookies.get('auth'));
                 Object.entries(localStorage).forEach(value => {
-                    this.d.set(StorageType[value[0]], value[1]);
+                    try {
+                        this.d.set(StorageType[value[0].toUpperCase()], JSON.parse(value[1]), true);
+                    } catch (e) {
+                        this.d.set(StorageType[value[0].toUpperCase()], value[1], true);
+                    }
                 });
             } else {
                 this.ss.create('drBoozeSecure').then(ssInstance => {
-                    ssInstance.get(StorageType.Auth).then(value => {
-                        this.d.set(StorageType.Auth, value);
+                    ssInstance.get(StorageType.AUTH).then(value => {
+                        this.d.set(StorageType.AUTH, value, true);
                     });
                 });
                 this.ns.keys().then(value => {
                     // tslint:disable-next-line:forin
                     for (const key in value) {
                         this.ns.getItem(key).then(value1 => {
-                            this.d.set(StorageType[key], value);
+                            this.d.set(StorageType[key], value, true);
                         });
                     }
                 });
@@ -157,6 +162,7 @@ export class StorageService {
             });
         } else {
             console.log('access ls');
+            console.log(this.d.get(StorageType.BEER));
         }
     }
 }
