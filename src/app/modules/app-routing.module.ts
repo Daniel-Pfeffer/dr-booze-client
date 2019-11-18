@@ -11,9 +11,10 @@ import {PickerDetailComponent} from '../components/picker-detail/picker-detail.c
 import {StatisticsComponent} from '../components/statistics/statistics.component';
 import {MapComponent} from '../components/map/map.component';
 import {HistoryComponent} from '../components/history/history.component';
+import {WaitingComponent} from '../components/waiting/waiting.component';
 
 const routes: Routes = [
-    {path: '', component: LoginComponent, canActivate: [RegisteredGuard]},
+    {path: '', component: WaitingComponent, canActivate: [RegisteredGuard]},
     {path: 'login', component: LoginComponent, canActivate: [RegisteredGuard]},
     {path: 'register', component: RegisterComponent, canActivate: [RegisteredGuard]},
     {path: 'home', component: DashboardComponent, canActivate: [NeedRegisterGuard]},

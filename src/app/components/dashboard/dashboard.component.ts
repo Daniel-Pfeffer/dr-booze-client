@@ -10,7 +10,8 @@ import {AlcoholType} from '../../data/enums/AlcoholType';
 })
 
 export class DashboardComponent {
-    cards: DrinkCard[] = [
+
+    cards: Array<DrinkCard> = [
         new DrinkCard(AlcoholType.BEER, 'Beer', 'beer', null),
         new DrinkCard(AlcoholType.WINE, 'Wine', 'wine', 'ios'),
         new DrinkCard(AlcoholType.COCKTAIL, 'Cocktails', 'wine', 'md'),

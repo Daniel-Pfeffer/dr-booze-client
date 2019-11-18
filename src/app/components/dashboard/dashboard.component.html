@@ -4,27 +4,24 @@
         <ion-title>Dashboard</ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content scrollY="false" id="dashboardContent">
-    <div class="background">
-        <br>
-        <app-header></app-header>
-        <ion-grid>
-            <ion-row>
-                <ion-col size="6" *ngFor="let card of cards">
-                    <ion-card (click)="onCardClick(card.type)" class="card">
-                        <ion-card-content class="card-content">
-                            <ion-icon *ngIf="card.title != 'Hard liquor'; else hardLiquorIcon" class="card-icon"
-                                      size="large" [name]="card.iconName" [mode]="card.iconMode"></ion-icon>
-                            <ng-template #hardLiquorIcon>
-                                <ion-icon class="card-icon" size="large" src="../../../assets/whiskey.svg"></ion-icon>
-                            </ng-template>
-                            <h1 style="text-align: center">{{ card.title }}</h1>
-                        </ion-card-content>
-                    </ion-card>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-    </div>
+<ion-content scrollY="false" id="dashboardContent" class="background">
+    <app-header></app-header>
+    <ion-grid>
+        <ion-row>
+            <ion-col size="6" *ngFor="let card of cards">
+                <ion-card (click)="onCardClick(card.type)" class="card" mode="ios">
+                    <ion-card-content class="card-content">
+                        <ion-icon *ngIf="card.title != 'Hard liquor'; else hardLiquorIcon" class="card-icon"
+                                  size="large" [name]="card.iconName" [mode]="card.iconMode"></ion-icon>
+                        <ng-template #hardLiquorIcon>
+                            <ion-icon class="card-icon" size="large" src="../../../assets/whiskey.svg"></ion-icon>
+                        </ng-template>
+                        <h1 style="text-align: center">{{card.title}}</h1>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>
 <app-profile contentId="dashboardContent"></app-profile>
 <ion-footer>
