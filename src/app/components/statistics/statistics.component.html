@@ -1,46 +1,43 @@
-<ion-header>
-    <ion-toolbar color="dark">
-        <ion-back-button defaultHref="home" slot="start"></ion-back-button>
-        <ion-title>Statistics</ion-title>
-    </ion-toolbar>
+<ion-header color="dark">
+
 </ion-header>
+    <ion-toolbar color="dark">
+        <ion-back-button defaultHref="stats" slot="start"></ion-back-button>
+        <ion-title>Statistic</ion-title>
+    </ion-toolbar>
+
+
 <ion-content class="background" [scrollY]="false">
-    <google-chart *ngIf="hasDayData; else noDataFound" type="LineChart" [data]="data" [options]="options"
-                  style="width:100%; position: center;">
+
+    <ion-tabs>
+        <ion-tab-bar slot="bottom" color="dark">
+            <ion-tab-button (click)="changeColor('Day')">
+                <ion-label [color]="daycolor" style="font-size: 2em">Day</ion-label>
+            </ion-tab-button>
+            <ion-tab-button (click)="changeColor('Week')">
+                <ion-label [color]="weekcolor" style="font-size: 2em">Week</ion-label>
+            </ion-tab-button>
+            <ion-tab-button (click)="changeColor('Month')">
+                <ion-label [color]="monthcolor" style="font-size: 2em">Month</ion-label>
+            </ion-tab-button>
+        </ion-tab-bar>
+    </ion-tabs>
+
+    <div *ngIf="this.statsHere; else placeholder" style="height:100%;">
+        <google-chart type="ColumnChart" [data]="data" [options]="barOptions"
+                      style="width:100%;height:40%; position: center;">
+        </google-chart>
+
+        <google-chart type="PieChart" [data]="distribution" [options]="pieOptions"
+                      style="width:100%;height:30%; position: center;margin-top:0; ">
     </google-chart>
-    <ng-template #noDataFound>
-        <ion-card color="light" style="text-align: center">
-            <ion-card-content>
-                No data can be evaluated because you have not drank something yet.
-            </ion-card-content>
-        </ion-card>
+    </div>
+    <ng-template #placeholder>
+        <ion-content>
+            <ion-item>
+                No drinks to evaluate your stats
+            </ion-item>
+        </ion-content>
     </ng-template>
-    <ion-item *ngIf="hasDayData">
-        <ion-range min="1" [max]="maxValue + 1" color="danger" [value]="value" (ionChange)="forceRedraw($event)"
-                   [pin]="true">
-            <ion-label slot="start">Min. Points showed: 1</ion-label>
-            <ion-label slot="end" *ngIf="value <= 1">{{maxValue + 1}}</ion-label>
-        </ion-range>
-    </ion-item>
-    <br>
-    <ion-card color="light" *ngIf="hasDayData">
-        <ion-card-content>
-            <ion-text>Average of the displayed Values: {{focusAvg}}<br>
-                Average of all Values: {{overallAvg}}<br>
-                Highest Value: {{maxEntry.permille}} at {{maxEntry.time}}
-            </ion-text>
-        </ion-card-content>
-    </ion-card>
-    <ion-card color="light" *ngIf="hasDayData">
-        <ion-card-content>
-            <ion-text>{{sampleText}}
-            </ion-text>
-        </ion-card-content>
-    </ion-card>
-    <br>
-    <ion-button *ngIf="hasDayData" (click)="suspendMax()" expand="block" style="--color: white;">Remove Highest
-        Value
-    </ion-button>
-    <ion-button *ngIf="hasDayData" (click)="returnToNormal()" expand="block" style="--color: white;">Undo
-    </ion-button>
+
 </ion-content>
