@@ -1,3 +1,5 @@
+import {AlcoholType} from './AlcoholType';
+
 export enum StorageType {
     AUTH = 'auth',
     PERSON = 'person',
@@ -6,8 +8,12 @@ export enum StorageType {
     WINE = 'wine',
     COCKTAIL = 'cocktail',
     LIQUOR = 'liquor',
-    PerMille = 'permille',
+    PERMILLE = 'permille',
     DAY = 'daydata',
     WEEK = 'weekdata',
-    MONTH = 'monthdata'
+    MONTH = 'monthdata',
+    FAVOURITEBEER = 'favouriteBeer',
+    FAVOURITEWINE = 'favouriteWine',
+    FAVOURITECOCKTAIL = 'favouriteCocktail',
+    FAVOURITELIQUOR = 'favouriteLiquor'
 }

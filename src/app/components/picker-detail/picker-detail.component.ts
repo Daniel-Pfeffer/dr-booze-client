@@ -39,6 +39,8 @@ export class PickerDetailComponent implements OnInit {
     ngOnInit(): void {
         const type = AlcoholType[this.type];
         this.http.getFavourites(type).subscribe(favourites => {
+            this.data.set(StorageType['FAVOURITE' + type], favourites);
+            console.log('Got favs');
             this.favouriteAlcohols = favourites;
         }, (error: HttpErrorResponse) => {
             switch (error.status) {
@@ -85,6 +87,7 @@ export class PickerDetailComponent implements OnInit {
                     break;
             }
         });
+        console.log('finished onInit');
     }
 
     onSelection(alcohol: Alcohol) {
@@ -119,30 +122,25 @@ export class PickerDetailComponent implements OnInit {
     }
 
     addDrink(drink: Drink) {
-        const {DRINKS} = StorageType;
-        const drinks = this.data.exist(DRINKS) ? this.data.get(DRINKS) : new Array<Drink>();
-        drinks.push(drink);
-        this.data.set(DRINKS, drinks);
-        this.permille.addDrink(drink);
-        this.http.addDrink(drink.alcohol.id, drink.drankDate, drink.longitude, drink.latitude)
-            .subscribe(_ => {
-                this.router.navigate(['dashboard']);
-                this.isLoading = false;
-            }, (error: HttpErrorResponse) => {
-                this.isLoading = false;
-                switch (error.status) {
-                    case 401:
-                        // TODO: auth token invalid -> logout
-                        break;
-                    case 404:
-                        this.presentToast('No alcohol has been found with the given alcoholId');
-                        break;
-                    default:
-                        this.presentToast('An unexpected error occurred.');
-                        console.error(error);
-                        break;
-                }
-            });
+        this.http.addDrink(drink).subscribe(_ => {
+            this.permille.addDrink(drink);
+            this.router.navigate(['dashboard']);
+            this.isLoading = false;
+        }, (error: HttpErrorResponse) => {
+            this.isLoading = false;
+            switch (error.status) {
+                case 401:
+                    // TODO: auth token invalid -> logout
+                    break;
+                case 404:
+                    this.presentToast('No alcohol has been found with the given alcoholId');
+                    break;
+                default:
+                    this.presentToast('An unexpected error occurred.');
+                    console.error(error);
+                    break;
+            }
+        });
     }
 
     addFavourite(alcohol: Alcohol, slider: any) {

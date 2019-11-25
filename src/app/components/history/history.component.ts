@@ -4,6 +4,8 @@ import {HttpService} from '../../services/http.service';
 import {AlertController, ToastController} from '@ionic/angular';
 import {PermilleCalculationService} from '../../services/permille-calculation.service';
 import {HttpErrorResponse} from '@angular/common/http';
+import {DataService} from '../../services/data.service';
+import {StorageType} from '../../data/enums/StorageType';
 
 @Component({
     selector: 'app-history',
@@ -15,11 +17,12 @@ export class HistoryComponent implements OnInit {
     drinks = Array<Drink>();
 
     constructor(private http: HttpService, private alert: AlertController,
-                private pcs: PermilleCalculationService, private toastController: ToastController) {
+                private pcs: PermilleCalculationService, private toastController: ToastController, private data: DataService) {
     }
 
     ngOnInit() {
         this.http.getDrinks().subscribe((drinks: Array<Drink>) => {
+            this.data.set(StorageType.DRINKS, drinks);
             // sort the drinks by drank date
             drinks.sort((a, b) => {
                 if (a.drankDate < b.drankDate) {
@@ -45,23 +48,23 @@ export class HistoryComponent implements OnInit {
                     // TODO: auth token invalid -> logout
                     break;
                 case 404:
-                    this.presentToast('No drink has been found with the given drinkId.');
+                    this.presentToast('No drink has been found with the given drinkId');
                     break;
                 default:
-                    this.presentToast('An unexpected error occurred.');
+                    this.presentToast('An unexpected error occurred');
                     console.error(error);
                     break;
             }
         });
         this.drinks.splice(index, 1);
         this.pcs.removeDrink(drink);
-        this.presentToast('Removed drink from history.');
+        this.presentToast('Removed drink from history');
     }
 
     async presentInfoAlert() {
         const alert = await this.alert.create({
             header: 'Drink removing',
-            message: 'Slide an entry to the right to remove the drink.<br>A drink cannot be removed if it is older than 5 minutes.',
+            message: 'Slide an entry to the right to remove the drink.<br>A drink cannot be removed if it is older than 5 minutes',
             buttons: ['Understood']
         });
         await alert.present();

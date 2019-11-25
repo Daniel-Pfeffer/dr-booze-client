@@ -125,10 +125,12 @@ export class StorageService {
     }
 
     public load(): Promise<boolean> {
+        console.log('called log');
         return new Promise<boolean>(resolve => {
             if (this.isBrowser) {
                 this.d.set(StorageType.AUTH, Cookies.get('auth'));
                 Object.entries(localStorage).forEach(value => {
+                    console.log('key: ' + value);
                     try {
                         this.d.set(StorageType[value[0].toUpperCase()], JSON.parse(value[1]), true);
                     } catch (e) {
@@ -144,9 +146,7 @@ export class StorageService {
                 this.ns.keys().then(value => {
                     // tslint:disable-next-line:forin
                     for (const key in value) {
-                        this.ns.getItem(key).then(value1 => {
-                            this.d.set(StorageType[key], value, true);
-                        });
+                        this.d.set(StorageType[key], value, true);
                     }
                 });
             }
@@ -162,7 +162,6 @@ export class StorageService {
             });
         } else {
             console.log('access ls');
-            console.log(this.d.get(StorageType.BEER));
         }
     }
 }

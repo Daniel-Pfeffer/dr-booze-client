@@ -28,6 +28,7 @@ export class LoginComponent {
         const authToken = s.get(StorageType.AUTH);
         console.log('Auth: ' + authToken);
         if (!!authToken) {
+            console.log('Should call load');
             this.s.load().then(() => {
                 this.login(authToken);
             });

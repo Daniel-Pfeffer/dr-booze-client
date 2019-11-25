@@ -17,7 +17,7 @@ export class TimingService {
     }
 
     /*
-     * TODO: change from 5.000 timout to 60.000
+     * TODO: change from 0.100 timout to 60.000
      */
     public start(): void {
         if (!this.isRunning) {

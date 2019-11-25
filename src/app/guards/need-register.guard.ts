@@ -3,6 +3,7 @@ import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '
 import {Observable} from 'rxjs';
 import {DataService} from '../services/data.service';
 import {StorageType} from '../data/enums/StorageType';
+import {Platform} from '@ionic/angular';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,8 @@ When the user isn't logged in yet he is automatically send to the register page 
 export class NeedRegisterGuard implements CanActivate {
 
     constructor(private router: Router,
-                private data: DataService) {
+                private data: DataService,
+                private platform: Platform) {
     }
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot)
