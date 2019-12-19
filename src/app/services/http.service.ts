@@ -32,6 +32,7 @@ export class HttpService {
         this.network.onChange().subscribe(item => {
             this.hasConnection = item.type === 'online';
         });
+        console.log(this.hasConnection);
     }
 
     /**
@@ -274,6 +275,25 @@ export class HttpService {
                 return subscriber.next();
             });
         }
+    }
+
+    getPersonalAlcohols(type: string) {
+        // TODO: add offline support
+        return this.http.get<Array<Alcohol>>(this.uri + `manage/personal-alcohols/${type}`, {headers: this.header});
+    }
+
+    addPersonalAlcohol(type: string, name: string, category: string, percentage: number, amount: number) {
+        return this.http.post<Alcohol>(this.uri + `manage/personal-alcohols`, {
+            type,
+            name,
+            category,
+            percentage,
+            amount
+        }, {headers: this.header});
+    }
+
+    removePersonalAlcohol(alcoholId: number) {
+        return this.http.delete(this.uri + `manage/personal-alcohols/${alcoholId}`, {headers: this.header});
     }
 
     /**
