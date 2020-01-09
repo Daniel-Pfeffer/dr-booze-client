@@ -35,7 +35,7 @@ import {HistoryComponent} from './components/history/history.component';
 import {Network} from '@ionic-native/network/ngx';
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
 import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
-import { WaitingComponent } from './components/waiting/waiting.component';
+import {WaitingComponent} from './components/waiting/waiting.component';
 
 @NgModule({
     declarations: [
