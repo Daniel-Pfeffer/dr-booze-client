@@ -85,6 +85,10 @@ export class PickerDetailComponent implements OnInit {
         if (foundAlcohol === undefined) {
             this.http.addFavourite(alcohol.id).subscribe(_ => {
                 this.loadFavourites();
+                // also reload the personal alcohols because this functions sets the isPersonal attribute of the favourites
+                if (alcohol.isPersonal) {
+                    this.loadPersonalAlcohols();
+                }
                 this.presentToast('Added alcohol to favourites');
             }, error => {
                 switch (error.status) {
