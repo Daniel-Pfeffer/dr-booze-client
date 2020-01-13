@@ -23,7 +23,7 @@
         </ion-tab-bar>
     </ion-tabs>
 
-    <div *ngIf="this.statsHere; else placeholder" style="height:100%;">
+    <div *ngIf="this.data!=[]; else placeholder" style="height:100%;">
         <google-chart type="ColumnChart" [data]="data" [options]="barOptions"
                       style="width:100%;height:40%; position: center;">
         </google-chart>
