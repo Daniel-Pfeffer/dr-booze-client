@@ -8,21 +8,22 @@ import {User} from '../../data/entities/user';
 import {HttpErrorResponse} from '@angular/common/http';
 import {StorageType} from '../../data/enums/StorageType';
 
-/**
- * TODO: correctly display if insert or update
- */
 @Component({
     selector: 'app-information',
     templateUrl: './profile.component.html',
     styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent {
+
     form: FormGroup;
-    isUpdate: boolean;
+    isUpdate = false;
     date = new Date();
 
-    constructor(private http: HttpService, private data: DataService,
-                private router: Router, private toast: ToastController, fb: FormBuilder) {
+    constructor(private http: HttpService,
+                private data: DataService,
+                private router: Router,
+                private toast: ToastController,
+                fb: FormBuilder) {
         this.form = fb.group({
             firstName: ['', [Validators.minLength(1), Validators.maxLength(100),
                 Validators.pattern(/^[a-zA-z]*$/)]
@@ -39,11 +40,17 @@ export class ProfileComponent {
             ],
             gender: ['', [Validators.required]]
         });
+    }
+
+    /**
+     * This function is called from ionic when the view becomes visible to the user.
+     * It is not unused.
+     */
+    ionViewWillEnter() {
         const {PERSON} = StorageType;
         if (this.data.exist(PERSON)) {
             this.isUpdate = true;
             const user: User = this.data.get(PERSON);
-            console.log(user);
             const controls = this.form.controls;
             controls.firstName.setValue(user.firstName);
             controls.lastName.setValue(user.lastName);
@@ -86,7 +93,6 @@ export class ProfileComponent {
 
     private saveData(user: User) {
         const {PERSON} = StorageType;
-        console.log(this.isUpdate);
         if (this.data.exist(PERSON)) {
             this.data.remove(PERSON);
         }
@@ -97,7 +103,6 @@ export class ProfileComponent {
     }
 
     private calculateGKW(user: User): number {
-        console.log(user);
         const age = new Date().getFullYear() - new Date(user.birthday).getFullYear();
         switch (user.gender.toUpperCase()) {
             case 'M':

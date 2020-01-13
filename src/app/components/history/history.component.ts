@@ -17,7 +17,8 @@ export class HistoryComponent implements OnInit {
     drinks = Array<Drink>();
 
     constructor(private http: HttpService, private alert: AlertController,
-                private pcs: PermilleCalculationService, private toastController: ToastController, private data: DataService) {
+                private pcs: PermilleCalculationService, private toastController: ToastController,
+                private data: DataService) {
     }
 
     ngOnInit() {
@@ -48,23 +49,23 @@ export class HistoryComponent implements OnInit {
                     // TODO: auth token invalid -> logout
                     break;
                 case 404:
-                    this.presentToast('No drink has been found with the given drinkId');
+                    this.presentToast('No drink has been found with the given drinkId.');
                     break;
                 default:
-                    this.presentToast('An unexpected error occurred');
+                    this.presentToast('An unexpected error occurred.');
                     console.error(error);
                     break;
             }
         });
         this.drinks.splice(index, 1);
         this.pcs.removeDrink(drink);
-        this.presentToast('Removed drink from history');
+        this.presentToast('Removed drink from history.');
     }
 
     async presentInfoAlert() {
         const alert = await this.alert.create({
             header: 'Drink removing',
-            message: 'Slide an entry to the right to remove the drink.<br>A drink cannot be removed if it is older than 5 minutes',
+            message: 'Slide an entry to the right to remove the drink.<br>A drink cannot be removed if it is older than 5 minutes.',
             buttons: ['Understood']
         });
         await alert.present();

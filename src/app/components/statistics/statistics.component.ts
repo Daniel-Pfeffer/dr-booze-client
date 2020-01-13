@@ -16,6 +16,7 @@ export class StatisticsComponent {
     daydata = [];
     weekdata = [];
     monthdata = [];
+    drinks = [];
     daycolor = 'primary';
     weekcolor = 'light';
     monthcolor = 'light';
@@ -53,45 +54,29 @@ export class StatisticsComponent {
 
     constructor(private permilleCalculationService: PermilleCalculationService, private router: Router, private dataservice: DataService) {
 
-        if (this.dataservice.exist(StorageType.DAY)) {
-            this.daydata = dataservice.get(StorageType.DAY);
-        }
-        if (this.dataservice.exist(StorageType.WEEK)) {
-            this.weekdata = this.dataservice.get(StorageType.WEEK);
-        }
-        if (this.dataservice.exist(StorageType.MONTH)) {
-            this.monthdata = this.dataservice.get(StorageType.MONTH);
-        }
-        if (this.dataservice.exist(StorageType.BEER)) {
-            this.beerCount = this.dataservice.get(StorageType.BEER).length;
-        }
-        if (this.dataservice.exist(StorageType.WINE)) {
-            this.wineCount = this.dataservice.get(StorageType.WINE).length;
-        }
-        if (this.dataservice.exist(StorageType.LIQUOR)) {
-            this.liquorCount = this.dataservice.get(StorageType.LIQUOR).length;
-        }
-        if (this.dataservice.exist(StorageType.COCKTAIL)) {
-            this.cocktailCount = this.dataservice.get(StorageType.COCKTAIL).length;
-        }
 
+        // updates counts for ex. beercount
+        this.getDist();
 
+        // changes the distribution to the updated counts
         this.distribution[0][1] = this.beerCount;
         this.distribution[1][1] = this.wineCount;
         this.distribution[2][1] = this.liquorCount;
         this.distribution[3][1] = this.cocktailCount;
 
+
         this.permilleCalculationService.statisticObservable.subscribe(item => {
+
+            this.forceRedraw();
 
             if (item !== null) {
                 this.item = item;
-
+                // adds te first elements so that the data-array is not empty
                 if (this.daydata.length === 0) {
                     this.daydata[0] = [new Date().getSeconds() + '-' + (new Date().getSeconds() + 1), item];
                 } else {
                     this.calcDay(item);
                 }
-
                 if (this.weekdata.length === 0) {
                     this.weekdata[0] = [new Date().getMinutes() + '-' + (new Date().getMinutes() + 1), item];
                 } else {
@@ -106,13 +91,13 @@ export class StatisticsComponent {
             }
         });
 
-
+        // changes to display the day statistics for default
         this.changeToDay();
 
 
     }
 
-
+    // chages focused color of the tabs and recalculates the selected datas
     changeColor(format: String) {
 
         switch (format) {
@@ -123,6 +108,7 @@ export class StatisticsComponent {
                 this.calcWeek(this.item);
                 this.calcMonth(this.item);
                 this.changeToDay();
+
 
                 break;
 
@@ -145,6 +131,8 @@ export class StatisticsComponent {
         // this.forceRedraw();
     }
 
+    // displays the last days
+    // TODO change to real days
     changeToDay() {
         if (this.daydata.length > 7) {
             this.temp = this.daydata.slice(this.daydata.length - 7);
@@ -156,6 +144,8 @@ export class StatisticsComponent {
         this.dataservice.set(StorageType.DAY, this.daydata);
     }
 
+    // displays the last weeks
+    // TODO change to real weeks
     changeToWeek() {
         if (this.weekdata.length > 7) {
             this.temp = this.weekdata.slice(this.weekdata.length - 7);
@@ -170,6 +160,8 @@ export class StatisticsComponent {
         this.dataservice.set(StorageType.WEEK, this.weekdata);
     }
 
+    // displays the last month
+    // TODO change to real month
     changeToMonth() {
         this.data = this.monthdata;
         this.dataservice.set(StorageType.MONTH, this.monthdata);
@@ -177,9 +169,11 @@ export class StatisticsComponent {
 
     forceRedraw() {
         Object.assign(this.data, []);
+        Object.assign(this.distribution, []);
+
     }
 
-
+    // checks if the value is valid
     private calcDay(item: number) {
 
         const lastEntry = this.daydata[this.daydata.length - 1];
@@ -209,7 +203,7 @@ export class StatisticsComponent {
 
     }
 
-
+    // checks if the value is valid
     private calcWeek(item: number) {
 
         const lastEntry = this.weekdata[this.weekdata.length - 1];
@@ -237,10 +231,9 @@ export class StatisticsComponent {
         }
     }
 
+    // checks if the value is valid
     private calcMonth(item: number) {
-
-
-        const lastEntry = this.weekdata[this.weekdata.length - 1];
+        const lastEntry = this.monthdata[this.monthdata.length - 1];
         const timestamp = new Date().getHours();
 
         if (lastEntry === undefined) {
@@ -266,5 +259,28 @@ export class StatisticsComponent {
         this.statsHere = true;
     }
 
-
+    // iterates the drinks to update the counts for the piechart
+    private getDist() {
+        this.wineCount = 0;
+        this.beerCount = 0;
+        this.liquorCount = 0;
+        this.cocktailCount = 0;
+        this.drinks = this.dataservice.get(StorageType.DRINKS);
+        for (const drink of this.drinks) {
+            switch (drink.alcohol.type) {
+                case 'BEER':
+                    this.beerCount++;
+                    break;
+                case 'COCKTAIL':
+                    this.cocktailCount++;
+                    break;
+                case 'LIQUOR':
+                    this.liquorCount++;
+                    break;
+                case 'WINE':
+                    this.wineCount++;
+                    break;
+            }
+        }
+    }
 }

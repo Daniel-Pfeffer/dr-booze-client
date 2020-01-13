@@ -11,9 +11,11 @@ import {ToastController} from '@ionic/angular';
     styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
+
     form: FormGroup;
 
-    constructor(private http: HttpService, private router: Router,
+    constructor(private http: HttpService,
+                private router: Router,
                 private toastController: ToastController,
                 fb: FormBuilder) {
         this.form = fb.group({
