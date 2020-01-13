@@ -15,7 +15,7 @@ import {Observable} from 'rxjs';
 })
 export class HttpService {
 
-    private uri = 'http://localhost:8080/booze/';
+    private uri = 'http://172.17.208.22:8080/booze/';
     public header: HttpHeaders = new HttpHeaders();
     private hasConnection;
 
@@ -115,14 +115,8 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     getAlcohols(type: string) {
-        console.log('%c ACCESS NEW GETALCOHOL', 'color:cyan');
-        if (this.hasConnection) {
-            return this.http.get<Array<Alcohol>>(this.uri + `manage/alcohols/${type}`, {headers: this.header});
-        } else {
-            return new Observable<Array<Alcohol>>(subscriber => {
-                return subscriber.next(this.data.get(StorageType[type]));
-            });
-        }
+        return this.http.get<Array<Alcohol>>(this.uri + `manage/alcohols/${type}`, {headers: this.header});
+
     }
 
     /**
@@ -131,17 +125,8 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     getFavourites(type: string) {
-        if (this.hasConnection) {
-            return this.http.get<Array<Alcohol>>(this.uri + `manage/favourites/${type}`, {headers: this.header});
-        } else {
-            return new Observable<Array<Alcohol>>(subscriber => {
-                let favs = <Array<Alcohol>>this.data.get(StorageType['FAVOURITE' + type]);
-                if (!favs) {
-                    favs = new Array<Alcohol>();
-                }
-                return subscriber.next(favs);
-            });
-        }
+        return this.http.get<Array<Alcohol>>(this.uri + `manage/favourites/${type}`, {headers: this.header});
+
     }
 
     /**
@@ -150,31 +135,7 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     addFavourite(alcoholId: number) {
-        if (this.hasConnection) {
-            return this.http.post(this.uri + `manage/favourites/${alcoholId}`, null, {headers: this.header});
-        } else {
-            return new Observable(subscriber => {
-                const allAlcohol = <Array<Alcohol>>[
-                    ...this.data.get(StorageType.BEER),
-                    ...this.data.get(StorageType.WINE),
-                    ...this.data.get(StorageType.COCKTAIL),
-                    ...this.data.get(StorageType.LIQUOR)
-                ];
-                const foundAlcohol = allAlcohol.find(alcohol => {
-                    return (alcohol.id === alcoholId);
-                });
-                if (foundAlcohol) {
-                    const favs = <Array<Alcohol>>this.data.get(StorageType['FAVOURITE' + foundAlcohol.type]) || new Array<Alcohol>();
-                    console.log('fav before push', favs);
-                    favs.push(foundAlcohol);
-                    console.log('favs: ', favs);
-                    this.data.set(StorageType['FAVOURITE' + foundAlcohol.type], favs);
-                    return subscriber.next();
-                } else {
-                    subscriber.error(new HttpErrorResponse({status: 404}));
-                }
-            });
-        }
+        return this.http.post(this.uri + `manage/favourites/${alcoholId}`, null, {headers: this.header});
     }
 
     /**
@@ -183,29 +144,8 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     removeFavourite(alcoholId: number) {
-        if (this.hasConnection) {
-            return this.http.delete(this.uri + `manage/favourites/${alcoholId}`, {headers: this.header});
-        } else {
-            return new Observable(subscriber => {
-                const allAlcohol = <Array<Alcohol>>[...this.data.get(StorageType.BEER), ...this.data.get(StorageType.WINE), ...this.data.get(StorageType.COCKTAIL), ...this.data.get(StorageType.LIQUOR)];
-                const foundAlcohol = allAlcohol.find(alcohol => {
-                    return (alcohol.id === alcoholId);
-                });
-                const allFavForType = <Array<Alcohol>>this.data.get(StorageType['FAVOURITE' + foundAlcohol.type]);
-                // TODO: filter allFavForType != alcoholID
-                const newAllFavForType = allFavForType.filter(value => {
-                    if (value.id !== alcoholId) {
-                        return value;
-                    }
-                });
-                if (allFavForType.length === newAllFavForType.length) {
-                    subscriber.error(new HttpErrorResponse({status: 404}));
-                } else {
-                    this.data.set(StorageType['FAVOURITE' + foundAlcohol.type], newAllFavForType);
-                }
-                return subscriber.next();
-            });
-        }
+        return this.http.delete(this.uri + `manage/favourites/${alcoholId}`, {headers: this.header});
+
     }
 
     /**
@@ -213,13 +153,8 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     getDrinks() {
-        if (this.hasConnection) {
-            return this.http.get<Array<Drink>>(this.uri + 'manage/drinks', {headers: this.header});
-        } else {
-            return new Observable<Array<Drink>>(subscriber => {
-                return subscriber.next(this.data.get(StorageType.DRINKS));
-            });
-        }
+        return this.http.get<Array<Drink>>(this.uri + 'manage/drinks', {headers: this.header});
+
     }
 
     /**
@@ -228,26 +163,8 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     removeDrink(drinkId: number) {
-        if (this.hasConnection) {
-            return this.http.delete(this.uri + `manage/drinks/${drinkId}`, {headers: this.header});
-        } else {
-            return new Observable(subscriber => {
-                let newDrinks: Array<Drink>;
-                let error: HttpErrorResponse;
-                const drinks = <Array<Drink>>this.data.get(StorageType.DRINKS);
-                newDrinks = drinks.filter(drink => {
-                    if (drink.id !== drinkId) {
-                        return drink;
-                    }
-                });
-                if (drinks.length === newDrinks.length) {
-                    error = new HttpErrorResponse({status: 404});
-                    subscriber.error(error);
-                }
-                this.data.set(StorageType.DRINKS, newDrinks);
-                return subscriber.next();
-            });
-        }
+        return this.http.delete(this.uri + `manage/drinks/${drinkId}`, {headers: this.header});
+
     }
 
     /**
@@ -260,21 +177,14 @@ export class HttpService {
         const drinks = this.data.exist(DRINKS) ? this.data.get(DRINKS) : new Array<Drink>();
         drinks.push(drink);
         this.data.set(DRINKS, drinks);
-        if (this.hasConnection) {
-            const {drankDate, latitude, longitude} = drink;
-            const alcoholId = drink.alcohol.id;
-            return this.http.post(this.uri + 'manage/drinks', {
-                alcoholId,
-                drankDate,
-                longitude,
-                latitude
-            }, {headers: this.header});
-        } else {
-            // return observer
-            return new Observable(subscriber => {
-                return subscriber.next();
-            });
-        }
+        const {drankDate, latitude, longitude} = drink;
+        const alcoholId = drink.alcohol.id;
+        return this.http.post(this.uri + 'manage/drinks', {
+            alcoholId,
+            drankDate,
+            longitude,
+            latitude
+        }, {headers: this.header});
     }
 
     getPersonalAlcohols(type: string) {

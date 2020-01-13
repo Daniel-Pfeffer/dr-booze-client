@@ -1,11 +1,9 @@
-<ion-header color="dark">
-
-</ion-header>
+<ion-header>
     <ion-toolbar color="dark">
         <ion-back-button defaultHref="stats" slot="start"></ion-back-button>
         <ion-title>Statistic</ion-title>
     </ion-toolbar>
-
+</ion-header>
 
 <ion-content class="background" [scrollY]="false">
 
@@ -30,7 +28,7 @@
 
         <google-chart type="PieChart" [data]="distribution" [options]="pieOptions"
                       style="width:100%;height:30%; position: center;margin-top:0; ">
-    </google-chart>
+        </google-chart>
     </div>
     <ng-template #placeholder>
         <ion-content>
