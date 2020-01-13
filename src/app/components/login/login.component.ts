@@ -11,6 +11,7 @@ import {StorageType} from '../../data/enums/StorageType';
 import {cordova} from '@ionic-native/core';
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
 import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
+import {imageSourceToPath} from 'cordova-res/dist/platform';
 
 @Component({
     selector: 'app-login',
@@ -69,6 +70,7 @@ export class LoginComponent {
         this.notification.requestPermission();
         this.backgroundMode.enable();
         this.http.getUser().subscribe(user => {
+            console.log('user:', user);
             user.gkw = this.calculateGKW(user);
             this.data.set(PERSON, user);
             this.router.navigate(['/home']);
