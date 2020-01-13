@@ -7,4 +7,5 @@ export class Alcohol {
     percentage: number;
     amount: number;
     category: string;
+    isPersonal: boolean;
 }
