@@ -17,5 +17,4 @@ export class WaitingComponent implements OnInit {
             this.router.navigateByUrl('/login');
         });
     }
-
 }

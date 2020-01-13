@@ -198,6 +198,15 @@ export class PickerDetailComponent implements OnInit {
         await alert.present();
     }
 
+    async presentHelpAlert() {
+        const alert = await this.alert.create({
+            header: 'Drink tracking',
+            message: 'Save the location to later see on the map where you drank beverages.',
+            buttons: ['Very nice']
+        });
+        await alert.present();
+    }
+
     private loadFavourites() {
         this.http.getFavourites(this.typeStr).subscribe(favourites => {
             this.data.set(StorageType['FAVOURITE' + this.typeStr], favourites);
@@ -322,15 +331,6 @@ export class PickerDetailComponent implements OnInit {
         } else {
             this.categories.set(alcohol.category, new Array<Alcohol>(alcohol));
         }
-    }
-
-    private async presentHelpAlert() {
-        const alert = await this.alert.create({
-            header: 'Drink tracking',
-            message: 'Save the location to later see on the map where you drank beverages.',
-            buttons: ['Very nice']
-        });
-        await alert.present();
     }
 
     private async presentLocationErrorAlert(message: string, drink: Drink) {
