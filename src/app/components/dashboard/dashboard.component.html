@@ -6,6 +6,22 @@
 </ion-header>
 <ion-content scrollY="false" id="dashboardContent" class="background">
     <app-header></app-header>
+    <ion-tabs>
+        <ion-tab-bar color="dark" slot="bottom" mode="md">
+            <ion-tab-button [routerLink]="['/stats']">
+                <ion-icon name="stats"></ion-icon>
+                <ion-label>Statistics</ion-label>
+            </ion-tab-button>
+            <ion-tab-button [routerLink]="['/history']">
+                <ion-icon name="time"></ion-icon>
+                <ion-label>History</ion-label>
+            </ion-tab-button>
+            <ion-tab-button [routerLink]="['/map']">
+                <ion-icon name="map"></ion-icon>
+                <ion-label>Map</ion-label>
+            </ion-tab-button>
+        </ion-tab-bar>
+    </ion-tabs>
     <ion-grid>
         <ion-row>
             <ion-col size="6" *ngFor="let card of cards">
@@ -16,7 +32,7 @@
                         <ng-template #hardLiquorIcon>
                             <ion-icon class="card-icon" size="large" src="../../../assets/whiskey.svg"></ion-icon>
                         </ng-template>
-                        <h1 style="text-align: center">{{card.title}}</h1>
+                        <ion-text style="text-align: center">{{card.title}}</ion-text>
                     </ion-card-content>
                 </ion-card>
             </ion-col>
@@ -24,23 +40,3 @@
     </ion-grid>
 </ion-content>
 <app-profile contentId="dashboardContent"></app-profile>
-<ion-footer>
-    <ion-toolbar>
-        <ion-tabs>
-            <ion-tab-bar color="dark" slot="bottom">
-                <ion-tab-button [routerLink]="['/stats']">
-                    <ion-icon name="stats"></ion-icon>
-                    <ion-label>Statistics</ion-label>
-                </ion-tab-button>
-                <ion-tab-button [routerLink]="['/history']">
-                    <ion-icon name="time"></ion-icon>
-                    <ion-label>History</ion-label>
-                </ion-tab-button>
-                <ion-tab-button [routerLink]="['/map']">
-                    <ion-icon name="map"></ion-icon>
-                    <ion-label>Map</ion-label>
-                </ion-tab-button>
-            </ion-tab-bar>
-        </ion-tabs>
-    </ion-toolbar>
-</ion-footer>

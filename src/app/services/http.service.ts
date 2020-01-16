@@ -15,7 +15,7 @@ import {Observable} from 'rxjs';
 })
 export class HttpService {
 
-    private uri = 'http://172.17.208.22:8080/booze/';
+    private uri = 'http://vm102.htl-leonding.ac.at:8080/booze/';
     public header: HttpHeaders = new HttpHeaders();
     private hasConnection;
 

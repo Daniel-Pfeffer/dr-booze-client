@@ -16,9 +16,6 @@ export class TimingService {
         this.isRunning = false;
     }
 
-    /*
-     * TODO: change from 0.100 timout to 60.000
-     */
     public start(): void {
         if (!this.isRunning) {
             this.isRunning = true;
@@ -28,7 +25,7 @@ export class TimingService {
             if (this.isRunning) {
                 this.start();
             }
-        }, 100);
+        }, 60000);
     }
 
     public stop(): void {

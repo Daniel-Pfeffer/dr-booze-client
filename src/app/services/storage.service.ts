@@ -3,7 +3,6 @@ import * as Cookies from 'js-cookie';
 import {DataService} from './data.service';
 import {StorageCommand} from '../data/enums/StorageCommand';
 import {StorageType} from '../data/enums/StorageType';
-import Dexie from 'dexie';
 
 @Injectable({
     providedIn: 'root'
