@@ -6,12 +6,9 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {ToastController} from '@ionic/angular';
 import {DataService} from '../../services/data.service';
 import {User} from '../../data/entities/user';
-import {StorageService} from '../../services/storage.service';
 import {StorageType} from '../../data/enums/StorageType';
-import {cordova} from '@ionic-native/core';
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
 import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
-import {imageSourceToPath} from 'cordova-res/dist/platform';
 
 @Component({
     selector: 'app-login',
@@ -19,21 +16,17 @@ import {imageSourceToPath} from 'cordova-res/dist/platform';
     styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+
     form: FormGroup;
 
-    constructor(private http: HttpService, private data: DataService,
-                private router: Router, private activatedRoute: ActivatedRoute,
-                private toastController: ToastController, fb: FormBuilder,
-                private s: StorageService, private backgroundMode: BackgroundMode,
-                private notification: LocalNotifications) {
-        const authToken = s.get(StorageType.AUTH);
-        console.log('Auth: ' + authToken);
-        if (!!authToken) {
-            console.log('Should call load');
-            this.s.load().then(() => {
-                this.login(authToken);
-            });
-        }
+    constructor(private http: HttpService,
+                private data: DataService,
+                private router: Router,
+                private activatedRoute: ActivatedRoute,
+                private toastController: ToastController,
+                private backgroundMode: BackgroundMode,
+                private notification: LocalNotifications,
+                fb: FormBuilder) {
         this.form = fb.group({
             username:
                 ['', [Validators.required]],

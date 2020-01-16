@@ -1,5 +1,6 @@
 <ion-header>
     <ion-toolbar color="dark">
+        <ion-back-button defaultHref="" slot="start"></ion-back-button>
         <ion-title>
             Register
         </ion-title>
@@ -61,7 +62,7 @@
                 Register
             </ion-button>
             <br>
-            <ion-button [routerLink]="['/login']" color="dark">
+            <ion-button [routerLink]="['']" color="dark">
                 I already have an account
             </ion-button>
             <ion-button color="medium" (click)="onAutoFill()">

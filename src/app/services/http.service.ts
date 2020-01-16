@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Login} from '../data/interfaces/login';
 import {Drink} from '../data/entities/drink';
 import {Challenge} from '../data/interfaces/challenge';
@@ -8,7 +8,6 @@ import {Alcohol} from '../data/entities/alcohol';
 import {DataService} from './data.service';
 import {StorageType} from '../data/enums/StorageType';
 import {Network} from '@ionic-native/network/ngx';
-import {Observable} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -72,7 +71,7 @@ export class HttpService {
      * NO OFFLINE SUPPORT
      */
     changePassword(pin: number, password: string) {
-        return this.http.post(this.uri + 'auth/change-password', {
+        return this.http.put(this.uri + 'auth/change-password', {
             pin,
             password
         }, {observe: 'response'});
