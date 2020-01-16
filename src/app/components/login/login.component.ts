@@ -56,6 +56,11 @@ export class LoginComponent {
         this.form.setValue({username: 'Boozeman', password: 'v3rySafePassw0rd'});
     }
 
+    ionViewDidEnter() {
+        document.addEventListener('backbutton', e => {
+        }, false);
+    }
+
     private login(token) {
         this.http.header = this.http.header.set('Authorization', 'Bearer ' + token);
         const {AUTH, PERSON} = StorageType;
