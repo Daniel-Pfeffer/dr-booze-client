@@ -55,7 +55,7 @@ export class RequestPasswordChangeComponent {
         const val = this.formUpdate.value;
         this.httpService.changePassword(val.pin, val.password).subscribe(() => {
             this.presentToast('Your password has been successfully updated');
-            this.router.navigate(['']);
+            this.router.navigate(['login']);
         }, (err: HttpErrorResponse) => {
             let errorMsg: string;
             if (err.status === 404) {
