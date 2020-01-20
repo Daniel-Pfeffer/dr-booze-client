@@ -17,6 +17,7 @@ declare var H: any;
     styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit {
+
     @ViewChild('map')
     public mapElement: ElementRef;
     private platform: any;
@@ -134,15 +135,11 @@ export class MapComponent implements OnInit {
                 this.map.addObject(marker);
             });
         }, (error: HttpErrorResponse) => {
-            switch (error.status) {
-                case 401:
-                    // the authentication token is missing or invalid
-                    // TODO: auth token invalid -> logout
-                    break;
-                default:
-                    this.presentToast('An unexpected error occurred.');
-                    console.error(error);
-                    break;
+            if (error.status === 401) {
+                // TODO: auth token invalid -> logout
+            } else {
+                this.presentToast('An unexpected error occurred.');
+                console.error(error);
             }
         });
     }

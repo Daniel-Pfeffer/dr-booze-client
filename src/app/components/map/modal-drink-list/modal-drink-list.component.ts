@@ -14,8 +14,6 @@ export class ModalDrinkListComponent {
     }
 
     dismiss() {
-        // using the injected ModalController this page
-        // can "dismiss" itself and optionally pass back data
         this.modalController.dismiss({
             'dismissed': true
         });
