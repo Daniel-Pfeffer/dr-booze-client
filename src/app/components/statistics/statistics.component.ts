@@ -3,6 +3,10 @@ import {PermilleCalculationService} from '../../services/permille-calculation.se
 import {Router} from '@angular/router';
 import {DataService} from '../../services/data.service';
 import {StorageType} from '../../data/enums/StorageType';
+import {HttpService} from '../../services/http.service';
+import {AlcoholType} from '../../data/enums/AlcoholType';
+import {StatisticType} from '../../data/enums/StatisticType';
+import {AlertController} from '@ionic/angular';
 
 
 @Component({
@@ -20,20 +24,8 @@ export class StatisticsComponent {
     daycolor = 'primary';
     weekcolor = 'light';
     monthcolor = 'light';
-
-    private cocktailCount = 0;
-    private liquorCount = 0;
-    private wineCount = 0;
-    private beerCount = 0;
-
     statsHere = false;
-
-    distribution = [
-        ['Beer', 1],
-        ['Wine', 1],
-        ['Liquor', 1],
-        ['Cocktail', 1]
-    ];
+    distribution = [];
 
     barOptions = {
         legend: {'position': 'none'},
@@ -42,88 +34,95 @@ export class StatisticsComponent {
         hAxis: {textStyle: {fontSize: 11, bold: true}},
         colors: ['ed6f71'],
     };
-
     pieOptions = {
         pieSliceText: 'none',
         height: 350,
         width: 500
     };
+    private cocktailCount;
+    private liquorCount;
+    private wineCount;
+    private beerCount;
     private item: number;
     private temp: any;
+    private statistic = StatisticType.DAY;
 
 
-    constructor(private permilleCalculationService: PermilleCalculationService, private router: Router, private dataservice: DataService) {
+    constructor(
+        private permilleCalculationService: PermilleCalculationService,
+        private router: Router,
+        private dataservice: DataService,
+        private http: HttpService,
+        private alert: AlertController) {
 
-
+        if (this.dataservice.exist(StorageType.DAY)) {
+            this.daydata = this.dataservice.get(StorageType.DAY);
+        }
+        if (this.dataservice.exist(StorageType.WEEK)) {
+            this.weekdata = this.dataservice.get(StorageType.WEEK);
+        }
+        if (this.dataservice.exist(StorageType.MONTH)) {
+            this.monthdata = this.dataservice.get(StorageType.MONTH);
+        }
+        if (this.dataservice.exist((StorageType.DIST))) {
+            this.distribution = this.dataservice.get(StorageType.DIST);
+        }
         // updates counts for ex. beercount
-        this.getDist();
-
         // changes the distribution to the updated counts
-        this.distribution[0][1] = this.beerCount;
-        this.distribution[1][1] = this.wineCount;
-        this.distribution[2][1] = this.liquorCount;
-        this.distribution[3][1] = this.cocktailCount;
-
 
         this.permilleCalculationService.statisticObservable.subscribe(item => {
-
             this.forceRedraw();
-
+            const timestamp = new Date();
             if (item !== null) {
                 this.item = item;
                 // adds te first elements so that the data-array is not empty
                 if (this.daydata.length === 0) {
-                    this.daydata[0] = [new Date().getSeconds() + '-' + (new Date().getSeconds() + 1), item];
-                } else {
-                    this.calcDay(item);
+                    this.daydata[0] = [ timestamp.getHours() + '-' + (timestamp.getHours() + 1), item];
                 }
                 if (this.weekdata.length === 0) {
-                    this.weekdata[0] = [new Date().getMinutes() + '-' + (new Date().getMinutes() + 1), item];
-                } else {
-                    this.calcWeek(item);
+                    this.weekdata[0] = [ timestamp.getDay().toString(), item];
                 }
                 if (this.monthdata.length === 0) {
-                    this.monthdata[0] = [new Date().getHours() + '-' + (new Date().getHours() + 1), item];
-                } else {
-                    this.calcMonth(item);
+                    this.monthdata[0] = [ (timestamp.getMonth()).toString() , item];
                 }
-
+                this.getDist();
+                this.calc(item, this.statistic);
             }
         });
 
         // changes to display the day statistics for default
-        this.changeToDay();
+        this.changeTo(StatisticType.DAY);
 
 
     }
 
-    // chages focused color of the tabs and recalculates the selected datas
-    changeColor(format: String) {
+    // changes focused color of the tabs and recalculates the selected datas
+    changeColor(statType: StatisticType) {
+        this.statistic = statType;
+        switch (statType) {
 
-        switch (format) {
-            case 'Day':
+            case StatisticType.DAY:
                 this.daycolor = 'primary';
                 this.weekcolor = 'light';
                 this.monthcolor = 'light';
-                this.calcWeek(this.item);
-                this.calcMonth(this.item);
-                this.changeToDay();
+                this.calc(this.item, statType);
+                this.forceRedraw();
 
 
                 break;
 
-            case 'Week':
+            case StatisticType.WEEK:
                 this.daycolor = 'light';
                 this.weekcolor = 'primary';
                 this.monthcolor = 'light';
-                this.changeToWeek();
+                this.calc(this.item, statType);
                 break;
 
-            case 'Month':
+            case StatisticType.MONTH:
                 this.daycolor = 'light';
                 this.weekcolor = 'light';
                 this.monthcolor = 'primary';
-                this.changeToMonth();
+                this.calc(this.item, statType);
                 break;
 
         }
@@ -133,131 +132,120 @@ export class StatisticsComponent {
 
     // displays the last days
     // TODO change to real days
-    changeToDay() {
-        if (this.daydata.length > 7) {
-            this.temp = this.daydata.slice(this.daydata.length - 7);
-            this.data = this.temp;
-            this.temp = [];
-        } else {
-            this.data = this.daydata;
+    changeTo(statType: StatisticType) {
+        let temp = [];
+        this.data = [];
+        switch (statType) {
+            case StatisticType.DAY:
+                if (this.daydata.length > 7) {
+                    temp = this.daydata.slice(this.daydata.length - 7);
+                } else {
+                    temp = this.daydata;
+                }
+                for (let i = 0; i < temp.length; i++) {
+                    const oneTemp: string = temp[i][0];
+                    if (!oneTemp.endsWith('h')) {
+                        temp[i][0] += 'h';
+
+                    }
+                }
+                break;
+            case StatisticType.WEEK:
+                if (this.weekdata.length > 7) {
+                    temp = this.weekdata.slice(this.weekdata.length - 7);
+                } else {
+                   temp = this.weekdata;
+                }
+
+        for (let i = 0; i < temp.length; i++) {
+            switch (temp[i][0]) {
+                case '1':
+                    temp[i][0] = 'Mon';
+                    break;
+                case '2':
+                    temp[i][0] = 'Tue';
+                    break;
+                case '3':
+                    temp[i][0] = 'Wed';
+                    break;
+                case '4':
+                    temp[i][0] = 'Thu';
+                    break;
+                case '5' :
+                    temp[i][0] = 'Fri';
+                    break;
+                case '6' :
+                    temp[i][0] = 'Sat';
+                    break;
+                case '7':
+                    temp[i][0] = 'Sun';
+                    break;
+                }
+            }
+            break;
+            case StatisticType.MONTH:
+                if (this.monthdata.length > 12) {
+                    temp = this.monthdata.slice(this.monthdata.length - 7);
+
+                } else {
+                    temp = this.monthdata;
+                }
+                for (let i = 0; i < temp.length; i++) {
+                    switch (temp[i][0]) {
+                        case '0':
+                            temp[i][0] = 'Jan';
+                            break;
+                        case '1':
+                            temp[i][0] = 'Feb';
+                            break;
+                        case '2':
+                            temp[i][0] = 'Mar';
+                            break;
+                        case '3':
+                            temp[i][0] = 'Apr';
+                            break;
+                        case '4':
+                            temp[i][0] = 'May';
+                            break;
+                        case '5' :
+                            temp[i][0] = 'Jun';
+                            break;
+                        case '6' :
+                            temp[i][0] = 'Jul';
+                            break;
+                        case '7':
+                            temp[i][0] = 'Aug';
+                            break;
+                        case '8':
+                            temp[i][0] = 'Sep';
+                            break;
+                        case '9':
+                            temp[i][0] = 'Oct';
+                            break;
+                        case '10':
+                            temp[i][0] = 'Nov';
+                            break;
+                        case '11':
+                            temp[i][0] = 'Dec';
+                            break;
+                    }
+                }
+                break;
         }
+
+        Object.assign(this.data, temp);
         this.dataservice.set(StorageType.DAY, this.daydata);
-    }
-
-    // displays the last weeks
-    // TODO change to real weeks
-    changeToWeek() {
-        if (this.weekdata.length > 7) {
-            this.temp = this.weekdata.slice(this.weekdata.length - 7);
-
-            this.data = this.temp;
-
-
-            this.temp = [];
-        } else {
-            this.data = this.weekdata;
-        }
         this.dataservice.set(StorageType.WEEK, this.weekdata);
-    }
-
-    // displays the last month
-    // TODO change to real month
-    changeToMonth() {
-        this.data = this.monthdata;
         this.dataservice.set(StorageType.MONTH, this.monthdata);
     }
 
+
     forceRedraw() {
         Object.assign(this.data, []);
-        Object.assign(this.distribution, []);
+        Object.assign(this.distribution, this.distribution);
 
     }
 
-    // checks if the value is valid
-    private calcDay(item: number) {
-
-        const lastEntry = this.daydata[this.daydata.length - 1];
-        const timestamp = new Date().getSeconds();
-
-        if (lastEntry === undefined) {
-            this.statsHere = false;
-        } else {
-            if (lastEntry[0] === timestamp + '-' + (timestamp + 1)) {
-                if (lastEntry[1] < item) {
-
-                    this.daydata[this.daydata.length - 1] = ([lastEntry[0], item]);
-                }
-            } else {
-
-                if (timestamp !== 59) {
-                    console.log(timestamp + '-' + (timestamp + 1), item);
-                    this.daydata.push([timestamp + '-' + (timestamp + 1), item]);
-                } else {
-                    this.daydata.push([timestamp + '- 0', item]);
-                }
-            }
-            this.statsHere = true;
-        }
-        // this.forceRedraw();
-
-
-    }
-
-    // checks if the value is valid
-    private calcWeek(item: number) {
-
-        const lastEntry = this.weekdata[this.weekdata.length - 1];
-        const timestamp = new Date().getMinutes();
-
-        if (lastEntry === undefined) {
-            this.statsHere = false;
-        } else {
-            if (lastEntry[0] === timestamp + '-' + (timestamp + 1)) {
-                if (lastEntry[1] < item) {
-
-                    this.weekdata[this.weekdata.length - 1] = ([lastEntry[0], item]);
-                }
-            } else {
-
-                if (timestamp !== 59) {
-                    console.log(timestamp + '-' + (timestamp + 1), item);
-                    this.weekdata.push([timestamp + '-' + (timestamp + 1), item]);
-                } else {
-                    this.weekdata.push([timestamp + '- 0', item]);
-                }
-            }
-
-            this.statsHere = true;
-        }
-    }
-
-    // checks if the value is valid
-    private calcMonth(item: number) {
-        const lastEntry = this.monthdata[this.monthdata.length - 1];
-        const timestamp = new Date().getHours();
-
-        if (lastEntry === undefined) {
-            this.statsHere = false;
-        } else {
-            if (lastEntry[0] === timestamp + '-' + (timestamp + 1)) {
-                if (lastEntry[1] < item) {
-
-                    this.monthdata[this.monthdata.length - 1] = ([lastEntry[0], item]);
-                }
-            } else {
-
-                if (timestamp !== 23) {
-                    console.log(timestamp + '-' + (timestamp + 1), item);
-                    this.monthdata.push([timestamp + '-' + (timestamp + 1), item]);
-                } else {
-                    this.monthdata.push([timestamp + '- 0', item]);
-                }
-            }
-            // this.forceRedraw();
-
-        }
-        this.statsHere = true;
-    }
 
     // iterates the drinks to update the counts for the piechart
     private getDist() {
@@ -265,22 +253,127 @@ export class StatisticsComponent {
         this.beerCount = 0;
         this.liquorCount = 0;
         this.cocktailCount = 0;
-        this.drinks = this.dataservice.get(StorageType.DRINKS);
-        for (const drink of this.drinks) {
-            switch (drink.alcohol.type) {
-                case 'BEER':
-                    this.beerCount++;
-                    break;
-                case 'COCKTAIL':
-                    this.cocktailCount++;
-                    break;
-                case 'LIQUOR':
-                    this.liquorCount++;
-                    break;
-                case 'WINE':
-                    this.wineCount++;
-                    break;
+        this.http.getDrinks().subscribe(drinks => {
+            console.log(drinks);
+            for (const drink of drinks) {
+                const type = AlcoholType[drink.alcohol.type];
+                switch (type.toString()) {
+                 case '0':
+                     this.beerCount++;
+                     break;
+                 case '1':
+                     this.wineCount++;
+                     break;
+                 case '2':
+                     this.cocktailCount++;
+                     break;
+                    case '3' :
+                     this.liquorCount++;
+                     break;
+             }
             }
+            this.distribution[0] = ['Beer', this.beerCount];
+            this.distribution[1] = ['Wine', this.wineCount];
+            this.distribution[2] = ['Liquor', this.liquorCount];
+            this.distribution[3] = ['Cocktail', this.cocktailCount];
+
+            this.dataservice.set(StorageType.DIST, this.distribution);
+
+        });
+
+
+
+    }
+
+    private calc(item: number, statType: StatisticType) {
+        console.log(statType);
+        let isNew = '';
+        let timeSpan = '';
+        let timestamp;
+
+        switch (statType) {
+
+            case StatisticType.DAY:
+                timestamp = new Date().getHours();
+                const lastDayEntry = this.daydata[this.daydata.length - 1];
+                if (timestamp > lastDayEntry[0].split('-', 1)[0]) {
+                    isNew = 'push';
+                }
+                if (timestamp.toString() === lastDayEntry[0].split('-', 1)[0] && item > lastDayEntry[1]) {
+                    isNew = 'replace';
+                }
+                if (timestamp === 23 ) {
+                    timeSpan = timestamp + '-0';
+                } else {
+                    timeSpan = timestamp + '-' + (timestamp + 1);
+                }
+                if (isNew === 'push') {
+                    this.daydata.push([timeSpan, item]);
+                }
+                if (isNew === 'replace') {
+                    this.daydata[this.daydata.length - 1] = [timeSpan, item];
+                }
+
+                break;
+
+            case StatisticType.WEEK:
+                 timestamp = new Date().getDay();
+                const lastWeekEntry = this.weekdata[this.weekdata.length - 1];
+                if (timestamp > lastWeekEntry[0]) {
+                    isNew = 'push';
+                }
+                if (timestamp === lastWeekEntry[0] && item > lastWeekEntry[1]) {
+                    isNew = 'replace';
+                }
+
+                if (isNew === 'push') {
+                    this.weekdata.push([timestamp.toString(), item]);
+                }
+                if (isNew === 'replace') {
+                    this.weekdata[this.weekdata.length - 1] = [timestamp.toString(), item];
+                }
+                break;
+
+            case StatisticType.MONTH:
+                const time = new Date();
+                timestamp = time.getMonth();
+
+                const lastMonthEntry = this.monthdata[this.monthdata.length - 1];
+
+                if (timestamp > lastMonthEntry[0]) {
+                isNew = 'push';
+                }
+
+                if (timestamp === lastMonthEntry[0] && item > lastMonthEntry[1]) {
+                    isNew = 'replace';
+                }
+
+                if (isNew === 'push') {
+                    this.monthdata.push([timestamp.toString(), item]);
+                }
+                if (isNew === 'replace') {
+                    this.monthdata[this.monthdata.length - 1] = [timestamp.toString(), item];
+                }
+                break;
         }
+        this.changeTo(statType);
+    }
+
+    async refresh(event) {
+        this.calc(this.item, this.statistic);
+        this.getDist();
+                setTimeout(
+            () => {
+                event.target.complete();
+        }, 2000);
+    }
+    async presentHelpAlert() {
+
+        const alert = await this.alert.create({
+            header: 'Statistics',
+            message: 'Bar-Chart:<br> shows the highest permille-level you had in 7 hours, 7 days or in the last year.<br>Pie-Chart: <br> Shows the distribution of the different drink types since the first drink. ',
+            buttons: ['Got it!']
+        });
+        await alert.present();
     }
 }

@@ -12,6 +12,7 @@ export enum StorageType {
     DAY = 'daydata',
     WEEK = 'weekdata',
     MONTH = 'monthdata',
+    DIST = 'distribution',
     FAVOURITEBEER = 'favouriteBeer',
     FAVOURITEWINE = 'favouriteWine',
     FAVOURITECOCKTAIL = 'favouriteCocktail',

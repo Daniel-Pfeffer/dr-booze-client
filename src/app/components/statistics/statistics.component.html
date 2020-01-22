@@ -1,34 +1,44 @@
 <ion-header>
     <ion-toolbar color="dark">
         <ion-back-button defaultHref="stats" slot="start"></ion-back-button>
-        <ion-title>Statistic</ion-title>
+        <ion-title>Statistics</ion-title>
+        <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="presentHelpAlert()">
+                <ion-icon slot="icon-only" name="information-circle-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
-<ion-content class="background" [scrollY]="false">
-
-    <ion-tabs>
+<ion-content class="background" [scrollY]="false" >
+    <ion-tabs >
         <ion-tab-bar slot="bottom" color="dark">
-            <ion-tab-button (click)="changeColor('Day')">
-                <ion-label [color]="daycolor" style="font-size: 2em">Day</ion-label>
+            <ion-tab-button id = "dayButton" (click)="changeColor(0)">
+                <ion-label [color]="daycolor" style="font-size: 1.8em">Day</ion-label>
             </ion-tab-button>
-            <ion-tab-button (click)="changeColor('Week')">
-                <ion-label [color]="weekcolor" style="font-size: 2em">Week</ion-label>
+            <ion-tab-button (click)="changeColor(1)">
+                <ion-label [color]="weekcolor" style="font-size: 1.8em">Week</ion-label>
             </ion-tab-button>
-            <ion-tab-button (click)="changeColor('Month')">
-                <ion-label [color]="monthcolor" style="font-size: 2em">Month</ion-label>
+            <ion-tab-button (click)="changeColor(2)">
+                <ion-label [color]="monthcolor" style="font-size: 1.8em">Month</ion-label>
             </ion-tab-button>
         </ion-tab-bar>
     </ion-tabs>
 
-    <div *ngIf="this.data!=[]; else placeholder" style="height:100%;">
-        <google-chart type="ColumnChart" [data]="data" [options]="barOptions"
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+        <ion-refresher-content>
+            <ion-label style="margin-bottom: 1vh;">After drinking you may have to wait a minute...</ion-label>
+        </ion-refresher-content>
+    </ion-refresher>
+    <div *ngIf="this.data!=[]; else placeholder" style="height:100%;" >
+        <google-chart id="barChart" type="ColumnChart" [data]="data" [options]="barOptions"
                       style="width:100%;height:40%; position: center;">
         </google-chart>
 
         <google-chart type="PieChart" [data]="distribution" [options]="pieOptions"
                       style="width:100%;height:30%; position: center;margin-top:0; ">
         </google-chart>
+
     </div>
     <ng-template #placeholder>
         <ion-content>

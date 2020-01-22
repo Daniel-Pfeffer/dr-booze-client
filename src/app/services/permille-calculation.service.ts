@@ -58,7 +58,7 @@ export class PermilleCalculationService {
                 }
             }
             this.minuteCounter++;
-            if (this.minuteCounter === 60) {
+            if (this.minuteCounter === 1) {
                 console.log('60 iterations passed');
                 this.statisticNotifier.next(this.hourlyMax);
                 this.resetHour();
