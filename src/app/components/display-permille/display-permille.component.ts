@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {PermilleCalculationService} from '../../services/permille-calculation.service';
 import {StorageService} from '../../services/storage.service';
 import {DataService} from '../../services/data.service';
-import {strings} from '@angular-devkit/core';
 
 @Component({
     selector: 'app-header',

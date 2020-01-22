@@ -11,11 +11,15 @@ import {AlcoholType} from '../../data/enums/AlcoholType';
 
 export class DashboardComponent {
 
-    cards: Array<DrinkCard> = [
-        new DrinkCard(AlcoholType.BEER, 'Beer', 'beer', null),
-        new DrinkCard(AlcoholType.WINE, 'Wine', 'wine', 'ios'),
-        new DrinkCard(AlcoholType.COCKTAIL, 'Cocktails', 'wine', 'md'),
-        new DrinkCard(AlcoholType.LIQUOR, 'Hard liquor', null, null)
+    rows = [
+        new Array<DrinkCard>(
+            new DrinkCard(AlcoholType.BEER, 'Beer', 'beer', null),
+            new DrinkCard(AlcoholType.WINE, 'Wine', 'wine', 'ios')
+        ),
+        new Array<DrinkCard>(
+            new DrinkCard(AlcoholType.COCKTAIL, 'Cocktails', 'wine', 'md'),
+            new DrinkCard(AlcoholType.LIQUOR, 'Hard liquor', null, null)
+        )
     ];
 
     constructor(private router: Router) {
