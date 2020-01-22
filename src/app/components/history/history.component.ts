@@ -19,22 +19,32 @@ export class HistoryComponent implements OnInit {
     constructor(private http: HttpService, private alert: AlertController,
                 private pcs: PermilleCalculationService, private toastController: ToastController,
                 private data: DataService) {
+
+    }
+
+    sort(drinks) {
+        drinks.sort((a, b) => {
+            if (a.drankDate < b.drankDate) {
+                return 1;
+            } else if (a.drankDate > b.drankDate) {
+                return -1;
+            }
+            return 0;
+        });
+        this.drinks = drinks;
     }
 
     ngOnInit() {
-        this.http.getDrinks().subscribe((drinks: Array<Drink>) => {
-            this.data.set(StorageType.DRINKS, drinks);
-            // sort the drinks by drank date
-            drinks.sort((a, b) => {
-                if (a.drankDate < b.drankDate) {
-                    return 1;
-                } else if (a.drankDate > b.drankDate) {
-                    return -1;
-                }
-                return 0;
+        if (!this.data.exist(StorageType.DRINKS)) {
+            this.http.getDrinks().subscribe((drinks: Array<Drink>) => {
+                console.log('constructor history');
+                this.data.set(StorageType.DRINKS, drinks);
+                // sort the drinks by drank date
+                this.sort(drinks);
             });
-            this.drinks = drinks;
-        });
+        } else {
+            this.sort(this.data.get(StorageType.DRINKS));
+        }
     }
 
     canRemove(drankDate: number): boolean {
