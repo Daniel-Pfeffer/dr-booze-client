@@ -25,6 +25,8 @@ export class MapComponent implements OnInit {
     private ui: any;
     private icons = new Map<number, any>();
 
+    isLoadingLocation = false;
+
     constructor(private http: HttpService,
                 private geolocation: Geolocation,
                 private toastController: ToastController,
@@ -68,7 +70,8 @@ export class MapComponent implements OnInit {
     }
 
     setLocation() {
-        this.geolocation.getCurrentPosition({timeout: 2000}).then(pos => {
+        this.isLoadingLocation = true;
+        this.geolocation.getCurrentPosition({timeout: 4000}).then(pos => {
             const lng = pos.coords.longitude;
             const lat = pos.coords.latitude;
             this.map.setCenter({lng: lng, lat: lat});
@@ -86,7 +89,7 @@ export class MapComponent implements OnInit {
                     this.presentToast('Timeout. Please check if your location service is turned on.');
                     break;
             }
-        });
+        }).finally(() => this.isLoadingLocation = false);
     }
 
     displayDrinks() {
