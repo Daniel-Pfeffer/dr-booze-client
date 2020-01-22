@@ -53,8 +53,6 @@ export class PermilleCalculationService {
                             });
                         }
                     });
-
-
                 }
             }
             this.minuteCounter++;
@@ -65,6 +63,7 @@ export class PermilleCalculationService {
             }
             this.perMilleNotifier.next(curValue);
         });
+        this.background.enable();
     }
 
     public addDrink(drink: Drink) {

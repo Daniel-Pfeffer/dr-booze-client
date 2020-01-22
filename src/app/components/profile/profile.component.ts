@@ -9,7 +9,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {StorageType} from '../../data/enums/StorageType';
 
 @Component({
-    selector: 'app-information',
+    selector: 'app-profile',
     templateUrl: './profile.component.html',
     styleUrls: ['./profile.component.scss']
 })
