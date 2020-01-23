@@ -10,6 +10,7 @@ import {StorageType} from '../../data/enums/StorageType';
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
 import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import {Drink} from '../../data/entities/drink';
+import {StorageService} from '../../services/storage.service';
 
 @Component({
     selector: 'app-login',
@@ -19,7 +20,6 @@ import {Drink} from '../../data/entities/drink';
 export class LoginComponent {
 
     form: FormGroup;
-    isLoading = false;
 
     constructor(private http: HttpService,
                 private data: DataService,
@@ -28,7 +28,14 @@ export class LoginComponent {
                 private toastController: ToastController,
                 private backgroundMode: BackgroundMode,
                 private notification: LocalNotifications,
+                private s: StorageService,
                 fb: FormBuilder) {
+        const authToken = s.get(StorageType.AUTH);
+        if (!!authToken) {
+            this.s.load().then(() => {
+                this.login(authToken);
+            });
+        }
         this.form = fb.group({
             username:
                 ['', [Validators.required]],
@@ -41,12 +48,10 @@ export class LoginComponent {
     }
 
     onSubmit() {
-        this.isLoading = true;
         const val = this.form.value;
         this.http.login(val.username, val.password).subscribe(loginRes => {
                 this.login(loginRes.token);
             }, (error: HttpErrorResponse) => {
-            this.isLoading = false;
                 if (error.status === 401) {
                     this.presentToast('Username or password is wrong.');
                 } else {
@@ -76,7 +81,6 @@ export class LoginComponent {
                 this.data.set(StorageType.DRINKS, drinks);
                 // sort the drinks by drank date
             });
-            this.isLoading = false;
             this.router.navigate(['/home']);
         }, (error: HttpErrorResponse) => {
             switch (error.status) {
