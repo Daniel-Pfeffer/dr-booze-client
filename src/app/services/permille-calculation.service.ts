@@ -8,6 +8,8 @@ import {TimingService} from './timing.service';
 import {StorageType} from '../data/enums/StorageType';
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
 import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
+import {Platform} from '@ionic/angular';
+import {Storage} from '@ionic/storage';
 
 @Injectable({
     providedIn: 'root'
@@ -24,7 +26,9 @@ export class PermilleCalculationService {
     constructor(private data: DataService,
                 private timing: TimingService,
                 private background: BackgroundMode,
-                private notifications: LocalNotifications
+                private notifications: LocalNotifications,
+                private platform: Platform,
+                private storage: Storage
     ) {
         this.perMilleNotifier = new BehaviorSubject<number>(0);
         this.statisticNotifier = new BehaviorSubject<number>(0);
@@ -32,8 +36,23 @@ export class PermilleCalculationService {
         this.statisticObservable = this.statisticNotifier.asObservable();
         this.resetHour();
         timing.start();
+        if (this.perMilleNotifier.value === 0) {
+            storage.get('promille').then(permille => {
+                if (permille !== 0) {
+                    storage.get('promilleTime').then(time => {
+                        // @ts-ignore
+                        const timeSince = (new Date() - Date.parse(time));
+                        console.log('hours: time ' + time);
+                        console.log('hours: typeoftime ' + typeof time);
+                        console.log('hours: timesince ' + timeSince);
+                        const hours = timeSince / 1000 / 60 / 60;
+                        console.log('hours: ' + hours);
+                        this.perMilleNotifier.next((permille - (hours * 0.1)));
+                    });
+                }
+            });
+        }
         this.timing.observable.subscribe(() => {
-            console.log('5 seconds passed');
             if (this.perMilleNotifier.value > this.hourlyMax) {
                 this.hourlyMax = this.perMilleNotifier.value;
             }
@@ -62,14 +81,33 @@ export class PermilleCalculationService {
                 this.resetHour();
             }
             this.perMilleNotifier.next(curValue);
+            this.setToStorage();
         });
         this.background.enable();
+        this.platform.pause.subscribe( _ => {
+            console.log('exit: Hi');
+            this.setToStorage();
+        });
+    }
+
+    private setToStorage(): void {
+        this.storage.set('promille', this.perMilleNotifier.value).then(value => {
+            console.log('exit: set promille: ' + value);
+        }).catch(reason => {
+            console.log('exit: error: ' + reason);
+        });
+        this.storage.set('promilleTime', new Date()).then(value => {
+            console.log('exit: set promilletime: ' + value);
+        }).catch(reason => {
+            console.log('exit: error: ' + reason);
+        });
     }
 
     public addDrink(drink: Drink) {
         let curValue: number = this.perMilleNotifier.value;
         curValue += this.calculateBAC(drink.alcohol);
         this.perMilleNotifier.next(curValue);
+        this.setToStorage();
         if (!this.timing.isRunning) {
             this.timing.start();
         }
