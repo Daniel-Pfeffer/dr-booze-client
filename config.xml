@@ -108,4 +108,5 @@
     <plugin name="cordova-plugin-network-information" spec="^2.0.2" />
     <engine name="browser" spec="5.0.4" />
     <engine name="android" spec="7.1.4" />
+    <plugin name="cordova-sqlite-storage" spec="^4.0.0"/>
 </widget>

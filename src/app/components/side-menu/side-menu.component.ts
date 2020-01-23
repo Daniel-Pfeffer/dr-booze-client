@@ -6,7 +6,7 @@ import {ChallengeDisplay} from '../../data/interfaces/challenge-display';
 import {DataService} from '../../services/data.service';
 import {User} from '../../data/entities/user';
 import {StorageType} from '../../data/enums/StorageType';
-import {ToastController} from '@ionic/angular';
+import {MenuController, ToastController} from '@ionic/angular';
 
 @Component({
     selector: 'app-side-menu',
@@ -24,7 +24,8 @@ export class SideMenuComponent {
     constructor(private http: HttpService,
                 private data: DataService,
                 private router: Router,
-                private toastController: ToastController) {
+                private toastController: ToastController,
+                private menuController: MenuController) {
         this.challenges = new Array<Challenge>();
         this.user = this.data.get(StorageType.PERSON);
         http.getChallenges().subscribe(challenges => {
@@ -37,8 +38,9 @@ export class SideMenuComponent {
         });
     }
 
-    onModifyData() {
+    onEdit() {
         this.router.navigate(['/profile']);
+        this.menuController.close('side-menu');
     }
 
     onLogout() {

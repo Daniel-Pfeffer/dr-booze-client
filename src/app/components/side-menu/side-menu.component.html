@@ -1,4 +1,4 @@
-<ion-menu type="overlay" side="start" menuId="profile" [contentId]="contentId">
+<ion-menu type="overlay" side="start" menuId="side-menu" [contentId]="contentId">
     <ion-toolbar>
         <ion-title color="secondary">
             Dr. Booze
@@ -24,7 +24,7 @@
         <ion-list>
             <ion-list-header>
                 <ion-label>Profile</ion-label>
-                <ion-button class="editButton" (click)="onModifyData()" size="small" color="primary" fill="outline">
+                <ion-button class="editButton" (click)="onEdit()" size="small" color="primary" fill="outline">
                     Edit
                 </ion-button>
             </ion-list-header>

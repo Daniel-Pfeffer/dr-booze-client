@@ -13,7 +13,8 @@
                 <ion-button fill="clear" color="dark" (click)="presentHelpAlert()">
                     <ion-icon slot="icon-only" name="help-circle"></ion-icon>
                 </ion-button>
-                <ion-toggle [(ngModel)]="useTracking"></ion-toggle>
+                <ion-toggle *ngIf="!isToggleLoading" [(ngModel)]="useTracking"
+                            (ngModelChange)="onTrackingToggleChange()"></ion-toggle>
             </ion-item>
         </ion-item-group>
         <ion-item-group *ngIf="favouriteAlcohols.length > 0">

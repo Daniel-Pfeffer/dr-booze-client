@@ -19,6 +19,7 @@ import {Drink} from '../../data/entities/drink';
 export class LoginComponent {
 
     form: FormGroup;
+    isLoading = false;
 
     constructor(private http: HttpService,
                 private data: DataService,
@@ -40,10 +41,12 @@ export class LoginComponent {
     }
 
     onSubmit() {
+        this.isLoading = true;
         const val = this.form.value;
         this.http.login(val.username, val.password).subscribe(loginRes => {
                 this.login(loginRes.token);
             }, (error: HttpErrorResponse) => {
+            this.isLoading = false;
                 if (error.status === 401) {
                     this.presentToast('Username or password is wrong.');
                 } else {
@@ -73,7 +76,7 @@ export class LoginComponent {
                 this.data.set(StorageType.DRINKS, drinks);
                 // sort the drinks by drank date
             });
-
+            this.isLoading = false;
             this.router.navigate(['/home']);
         }, (error: HttpErrorResponse) => {
             switch (error.status) {

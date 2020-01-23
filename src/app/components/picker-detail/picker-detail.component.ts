@@ -10,6 +10,7 @@ import {PermilleCalculationService} from '../../services/permille-calculation.se
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {StorageType} from '../../data/enums/StorageType';
 import {AlcoholType} from '../../data/enums/AlcoholType';
+import {Storage} from '@ionic/storage';
 
 /*
  * TODO: save personal useTracking default
@@ -28,6 +29,7 @@ export class PickerDetailComponent implements OnInit {
     favouriteAlcohols = new Array<Alcohol>();
     useTracking = true;
     isLoading = false;
+    isToggleLoading = false;
 
     constructor(private http: HttpService,
                 private router: Router,
@@ -36,9 +38,18 @@ export class PickerDetailComponent implements OnInit {
                 private geolocation: Geolocation,
                 private permille: PermilleCalculationService,
                 private alert: AlertController,
+                private storage: Storage,
                 route: ActivatedRoute) {
         this.type = +route.snapshot.paramMap.get('type');
         this.typeStr = AlcoholType[this.type];
+
+        this.isToggleLoading = true;
+        this.storage.get('use-picker-tracking').then((val) => {
+            if (val !== null) {
+                this.useTracking = val;
+            }
+            this.isToggleLoading = false;
+        });
     }
 
     ngOnInit(): void {
@@ -153,6 +164,10 @@ export class PickerDetailComponent implements OnInit {
                     break;
             }
         });
+    }
+
+    onTrackingToggleChange() {
+        this.storage.set('use-picker-tracking', this.useTracking);
     }
 
     async presentNewDrinkAlert() {
