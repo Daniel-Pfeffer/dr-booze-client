@@ -36,8 +36,10 @@ export class StatisticsComponent {
     };
     pieOptions = {
         pieSliceText: 'none',
-        height: 350,
-        width: 500
+        chartArea: { width: '100%', height: '80%'},
+        height: 400,
+        legend: 'none'
+
     };
     private cocktailCount;
     private liquorCount;
