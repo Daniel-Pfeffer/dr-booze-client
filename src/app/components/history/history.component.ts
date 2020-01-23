@@ -16,10 +16,11 @@ export class HistoryComponent implements OnInit {
 
     drinks = Array<Drink>();
 
-    constructor(private http: HttpService, private alert: AlertController,
-                private pcs: PermilleCalculationService, private toastController: ToastController,
+    constructor(private http: HttpService,
+                private alert: AlertController,
+                private pcs: PermilleCalculationService,
+                private toastController: ToastController,
                 private data: DataService) {
-
     }
 
     sort(drinks) {
@@ -53,6 +54,7 @@ export class HistoryComponent implements OnInit {
 
     removeDrink(drink: Drink, index: number) {
         this.http.removeDrink(drink.id).subscribe(_ => {
+            this.presentToast('Removed drink from history.');
         }, (error: HttpErrorResponse) => {
             switch (error.status) {
                 case 401:
@@ -69,7 +71,6 @@ export class HistoryComponent implements OnInit {
         });
         this.drinks.splice(index, 1);
         this.pcs.removeDrink(drink);
-        this.presentToast('Removed drink from history.');
     }
 
     async presentInfoAlert() {
