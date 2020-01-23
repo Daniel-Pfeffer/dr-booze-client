@@ -48,7 +48,11 @@ export class PermilleCalculationService {
                             console.log('hours: timesince ' + timeSince);
                             const hours = timeSince / 1000 / 60 / 60;
                             console.log('hours: ' + hours);
-                            this.perMilleNotifier.next((permille - (hours * 0.1)));
+                            let next = (permille - (hours * 0.1));
+                            if (next < 0) {
+                                next = 0;
+                            }
+                            this.perMilleNotifier.next(next);
                         } else {
                             this.perMilleNotifier.next(0);
                         }
