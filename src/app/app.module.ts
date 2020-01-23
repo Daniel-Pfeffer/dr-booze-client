@@ -34,6 +34,7 @@ import {Network} from '@ionic-native/network/ngx';
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
 import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import {WaitingComponent} from './components/waiting/waiting.component';
+import {IonicStorageModule} from '@ionic/storage';
 
 @NgModule({
     declarations: [
@@ -64,6 +65,7 @@ import {WaitingComponent} from './components/waiting/waiting.component';
             scrollPadding: true,
             scrollAssist: false,
         }),
+        IonicStorageModule.forRoot(),
         AppRoutingModule,
         GoogleChartsModule.forRoot()
     ],

@@ -7,7 +7,7 @@
 <ion-content id="dashboardContent" class="background">
     <app-header></app-header>
     <ion-grid class="grid">
-        <ion-row *ngFor="let row of rows" align-items-center>
+        <ion-row *ngFor="let row of rows" class="align-items-center">
             <ion-col *ngFor="let card of row" style="height: 100%">
                 <ion-card (click)="onCardClick(card.type)" button="true" mode="ios" class="card">
                     <ion-card-content class="card-content">

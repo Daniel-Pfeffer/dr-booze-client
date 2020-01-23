@@ -9,6 +9,8 @@ import {User} from '../../data/entities/user';
 import {StorageType} from '../../data/enums/StorageType';
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
 import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
+import {Drink} from '../../data/entities/drink';
+import {StorageService} from '../../services/storage.service';
 
 @Component({
     selector: 'app-login',
@@ -26,7 +28,14 @@ export class LoginComponent {
                 private toastController: ToastController,
                 private backgroundMode: BackgroundMode,
                 private notification: LocalNotifications,
+                private s: StorageService,
                 fb: FormBuilder) {
+        const authToken = s.get(StorageType.AUTH);
+        if (!!authToken) {
+            this.s.load().then(() => {
+                this.login(authToken);
+            });
+        }
         this.form = fb.group({
             username:
                 ['', [Validators.required]],
@@ -66,6 +75,12 @@ export class LoginComponent {
             console.log('user:', user);
             user.gkw = this.calculateGKW(user);
             this.data.set(PERSON, user);
+            // QUICKFIX: Preload history
+            this.http.getDrinks().subscribe((drinks: Array<Drink>) => {
+                console.log('constructor history');
+                this.data.set(StorageType.DRINKS, drinks);
+                // sort the drinks by drank date
+            });
             this.router.navigate(['/home']);
         }, (error: HttpErrorResponse) => {
             switch (error.status) {
