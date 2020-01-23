@@ -40,14 +40,19 @@ export class PermilleCalculationService {
             storage.get('promille').then(permille => {
                 if (permille !== 0) {
                     storage.get('promilleTime').then(time => {
-                        // @ts-ignore
-                        const timeSince = (new Date() - Date.parse(time));
-                        console.log('hours: time ' + time);
-                        console.log('hours: typeoftime ' + typeof time);
-                        console.log('hours: timesince ' + timeSince);
-                        const hours = timeSince / 1000 / 60 / 60;
-                        console.log('hours: ' + hours);
-                        this.perMilleNotifier.next((permille - (hours * 0.1)));
+                        if (time) {
+                            // @ts-ignore
+                            const timeSince = (new Date() - Date.parse(time));
+                            console.log('hours: time ' + time);
+                            console.log('hours: typeoftime ' + typeof time);
+                            console.log('hours: timesince ' + timeSince);
+                            const hours = timeSince / 1000 / 60 / 60;
+                            console.log('hours: ' + hours);
+                            this.perMilleNotifier.next((permille - (hours * 0.1)));
+                        } else {
+                            this.perMilleNotifier.next(0);
+                        }
+
                     });
                 }
             });
@@ -84,7 +89,7 @@ export class PermilleCalculationService {
             this.setToStorage();
         });
         this.background.enable();
-        this.platform.pause.subscribe( _ => {
+        this.platform.pause.subscribe(_ => {
             console.log('exit: Hi');
             this.setToStorage();
         });
