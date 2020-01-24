@@ -33,11 +33,12 @@ export class StatisticsComponent {
         vAxis: {textStyle: {fontSize: 11, bold: true}},
         hAxis: {textStyle: {fontSize: 11, bold: true}},
         colors: ['ed6f71'],
+
     };
     pieOptions = {
         pieSliceText: 'none',
-        chartArea: { width: '100%', height: '80%'},
-        height: 400,
+        chartArea: { width: '85%', height: '60%'},
+        height: 450,
         legend: 'none'
 
     };
