@@ -43,11 +43,7 @@ export class PermilleCalculationService {
                         if (time) {
                             // @ts-ignore
                             const timeSince = (new Date() - Date.parse(time));
-                            console.log('hours: time ' + time);
-                            console.log('hours: typeoftime ' + typeof time);
-                            console.log('hours: timesince ' + timeSince);
                             const hours = timeSince / 1000 / 60 / 60;
-                            console.log('hours: ' + hours);
                             let next = (permille - (hours * 0.1));
                             if (next < 0) {
                                 next = 0;
@@ -84,6 +80,7 @@ export class PermilleCalculationService {
                 }
             }
             this.minuteCounter++;
+            // TODO: reset 15
             if (this.minuteCounter === 1) {
                 console.log('60 iterations passed');
                 this.statisticNotifier.next(this.hourlyMax);
