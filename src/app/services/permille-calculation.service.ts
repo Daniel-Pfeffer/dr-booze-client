@@ -35,7 +35,6 @@ export class PermilleCalculationService {
         this.perMilleObservable = this.perMilleNotifier.asObservable();
         this.statisticObservable = this.statisticNotifier.asObservable();
         this.resetHour();
-        timing.start();
         if (this.perMilleNotifier.value === 0) {
             storage.get('promille').then(permille => {
                 if (permille !== 0) {
@@ -43,23 +42,21 @@ export class PermilleCalculationService {
                         if (time) {
                             // @ts-ignore
                             const timeSince = (new Date() - Date.parse(time));
-                            console.log('hours: time ' + time);
-                            console.log('hours: typeoftime ' + typeof time);
-                            console.log('hours: timesince ' + timeSince);
                             const hours = timeSince / 1000 / 60 / 60;
-                            console.log('hours: ' + hours);
                             let next = (permille - (hours * 0.1));
                             if (next < 0) {
                                 next = 0;
                             }
                             this.perMilleNotifier.next(next);
+                            timing.start();
                         } else {
                             this.perMilleNotifier.next(0);
                         }
-
                     });
                 }
             });
+        } else {
+            timing.start();
         }
         this.timing.observable.subscribe(() => {
             if (this.perMilleNotifier.value > this.hourlyMax) {
@@ -84,8 +81,8 @@ export class PermilleCalculationService {
                 }
             }
             this.minuteCounter++;
+            // TODO: reset 15
             if (this.minuteCounter === 1) {
-                console.log('60 iterations passed');
                 this.statisticNotifier.next(this.hourlyMax);
                 this.resetHour();
             }
@@ -94,22 +91,13 @@ export class PermilleCalculationService {
         });
         this.background.enable();
         this.platform.pause.subscribe(_ => {
-            console.log('exit: Hi');
             this.setToStorage();
         });
     }
 
     private setToStorage(): void {
-        this.storage.set('promille', this.perMilleNotifier.value).then(value => {
-            console.log('exit: set promille: ' + value);
-        }).catch(reason => {
-            console.log('exit: error: ' + reason);
-        });
-        this.storage.set('promilleTime', new Date()).then(value => {
-            console.log('exit: set promilletime: ' + value);
-        }).catch(reason => {
-            console.log('exit: error: ' + reason);
-        });
+        this.storage.set('promille', this.perMilleNotifier.value);
+        this.storage.set('promilleTime', new Date());
     }
 
     public addDrink(drink: Drink) {

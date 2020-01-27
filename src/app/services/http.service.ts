@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Login} from '../data/interfaces/login';
 import {Drink} from '../data/entities/drink';
 import {Challenge} from '../data/interfaces/challenge';
@@ -8,6 +8,11 @@ import {Alcohol} from '../data/entities/alcohol';
 import {DataService} from './data.service';
 import {StorageType} from '../data/enums/StorageType';
 import {Network} from '@ionic-native/network/ngx';
+import {Storage} from '@ionic/storage';
+import {Router} from '@angular/router';
+import {catchError} from 'rxjs/operators';
+import {ToastController} from '@ionic/angular';
+import {throwError} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -18,8 +23,14 @@ export class HttpService {
     public header: HttpHeaders = new HttpHeaders();
     private hasConnection;
 
-    constructor(private http: HttpClient, private data: DataService, private network: Network) {
-        console.log('network: ', this.network);
+    constructor(
+        private http: HttpClient,
+        private data: DataService,
+        private network: Network,
+        private router: Router,
+        private toastController: ToastController,
+        private s: Storage
+    ) {
         this.hasConnection = !(
             this.network.type === network.Connection.NONE
             || this.network.type === network.Connection.CELL
@@ -31,7 +42,6 @@ export class HttpService {
         this.network.onChange().subscribe(item => {
             this.hasConnection = item.type === 'online';
         });
-        console.log(this.hasConnection);
     }
 
     /**
@@ -42,7 +52,11 @@ export class HttpService {
      * NO OFFLINE SUPPORT
      */
     register(username: string, email: string, password: string) {
-        return this.http.post(this.uri + 'auth/register', {email, password, username});
+        return this.http.post(this.uri + 'auth/register', {
+            email,
+            password,
+            username
+        }).pipe(catchError(this.handleError));
     }
 
     /**
@@ -52,7 +66,7 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     login(username: string, password: string) {
-        return this.http.post<Login>(this.uri + 'auth/login', {username, password});
+        return this.http.post<Login>(this.uri + 'auth/login', {username, password}).pipe(catchError(this.handleError));
     }
 
     /**
@@ -61,7 +75,7 @@ export class HttpService {
      * NO OFFLINE SUPPORT
      */
     requestPasswordChange(email: string) {
-        return this.http.post(this.uri + 'auth/request-password-change', {email}, {observe: 'response'});
+        return this.http.post(this.uri + 'auth/request-password-change', {email}, {observe: 'response'}).pipe(catchError(this.handleError));
     }
 
     /**
@@ -74,7 +88,7 @@ export class HttpService {
         return this.http.put(this.uri + 'auth/change-password', {
             pin,
             password
-        }, {observe: 'response'});
+        }, {observe: 'response'}).pipe(catchError(this.handleError));
     }
 
     /**
@@ -82,7 +96,7 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     getUser() {
-        return this.http.get<User>(this.uri + 'manage/user', {headers: this.header});
+        return this.http.get<User>(this.uri + 'manage/user', {headers: this.header}).pipe(catchError(this.handleError));
     }
 
     /**
@@ -104,7 +118,7 @@ export class HttpService {
             birthday,
             weight,
             height
-        }, {headers: this.header});
+        }, {headers: this.header}).pipe(catchError(this.handleError));
     }
 
     /**
@@ -114,7 +128,7 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     getAlcohols(type: string) {
-        return this.http.get<Array<Alcohol>>(this.uri + `manage/alcohols/${type}`, {headers: this.header});
+        return this.http.get<Array<Alcohol>>(this.uri + `manage/alcohols/${type}`, {headers: this.header}).pipe(catchError(this.handleError));
 
     }
 
@@ -124,7 +138,7 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     getFavourites(type: string) {
-        return this.http.get<Array<Alcohol>>(this.uri + `manage/favourites/${type}`, {headers: this.header});
+        return this.http.get<Array<Alcohol>>(this.uri + `manage/favourites/${type}`, {headers: this.header}).pipe(catchError(this.handleError));
 
     }
 
@@ -134,7 +148,7 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     addFavourite(alcoholId: number) {
-        return this.http.post(this.uri + `manage/favourites/${alcoholId}`, null, {headers: this.header});
+        return this.http.post(this.uri + `manage/favourites/${alcoholId}`, null, {headers: this.header}).pipe(catchError(this.handleError));
     }
 
     /**
@@ -143,7 +157,7 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     removeFavourite(alcoholId: number) {
-        return this.http.delete(this.uri + `manage/favourites/${alcoholId}`, {headers: this.header});
+        return this.http.delete(this.uri + `manage/favourites/${alcoholId}`, {headers: this.header}).pipe(catchError(this.handleError));
 
     }
 
@@ -152,7 +166,7 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     getDrinks(count: number) {
-        return this.http.get<Array<Drink>>(this.uri + `manage/drinks/${count}`, {headers: this.header});
+        return this.http.get<Array<Drink>>(this.uri + `manage/drinks/${count}`, {headers: this.header}).pipe(catchError(this.handleError));
 
     }
 
@@ -162,7 +176,7 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     removeDrink(drinkId: number) {
-        return this.http.delete(this.uri + `manage/drinks/${drinkId}`, {headers: this.header});
+        return this.http.delete(this.uri + `manage/drinks/${drinkId}`, {headers: this.header}).pipe(catchError(this.handleError));
 
     }
 
@@ -183,12 +197,12 @@ export class HttpService {
             drankDate,
             longitude,
             latitude
-        }, {headers: this.header});
+        }, {headers: this.header}).pipe(catchError(this.handleError));
     }
 
     getPersonalAlcohols(type: string) {
         // TODO: add offline support
-        return this.http.get<Array<Alcohol>>(this.uri + `manage/personal-alcohols/${type}`, {headers: this.header});
+        return this.http.get<Array<Alcohol>>(this.uri + `manage/personal-alcohols/${type}`, {headers: this.header}).pipe(catchError(this.handleError));
     }
 
     addPersonalAlcohol(type: string, name: string, category: string, percentage: number, amount: number) {
@@ -198,11 +212,11 @@ export class HttpService {
             category,
             percentage,
             amount
-        }, {headers: this.header});
+        }, {headers: this.header}).pipe(catchError(this.handleError));
     }
 
     removePersonalAlcohol(alcoholId: number) {
-        return this.http.delete(this.uri + `manage/personal-alcohols/${alcoholId}`, {headers: this.header});
+        return this.http.delete(this.uri + `manage/personal-alcohols/${alcoholId}`, {headers: this.header}).pipe(catchError(this.handleError));
     }
 
     /**
@@ -210,6 +224,31 @@ export class HttpService {
      * OFFLINE SUPPORT (blur need internet)
      */
     getChallenges() {
-        return this.http.get<Array<Challenge>>(this.uri + 'manage/challenges', {headers: this.header});
+        return this.http.get<Array<Challenge>>(this.uri + 'manage/challenges', {headers: this.header}).pipe(catchError(this.handleError));
+    }
+
+    private handleError(error: HttpErrorResponse) {
+        if (error.error instanceof HttpErrorResponse) {
+            if (error.status === 401) {
+                this.data.remove(StorageType.AUTH);
+                this.data.remove(StorageType.PERSON);
+                this.s.clear();
+                this.presentToast('Successfully logged out').then(() => this.router.navigate(['login']));
+            }
+        } else {
+            return throwError(
+                'Something bad happened :('
+            );
+        }
+    }
+
+    private async presentToast(message: string) {
+        const toast = await this.toastController.create({
+            message: message,
+            duration: 2000,
+            showCloseButton: true,
+            keyboardClose: true
+        });
+        await toast.present();
     }
 }

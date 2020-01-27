@@ -7,6 +7,7 @@ import {DataService} from '../../services/data.service';
 import {User} from '../../data/entities/user';
 import {StorageType} from '../../data/enums/StorageType';
 import {MenuController, ToastController} from '@ionic/angular';
+import {Storage} from '@ionic/storage';
 
 @Component({
     selector: 'app-side-menu',
@@ -25,7 +26,8 @@ export class SideMenuComponent {
                 private data: DataService,
                 private router: Router,
                 private toastController: ToastController,
-                private menuController: MenuController) {
+                private menuController: MenuController,
+                private s: Storage) {
         this.challenges = new Array<Challenge>();
         this.user = this.data.get(StorageType.PERSON);
         http.getChallenges().subscribe(challenges => {
@@ -46,6 +48,7 @@ export class SideMenuComponent {
     onLogout() {
         this.data.remove(StorageType.AUTH);
         this.data.remove(StorageType.PERSON);
+        this.s.clear();
         this.presentToast('Successfully logged out').then(() => this.router.navigate(['login']));
     }
 
