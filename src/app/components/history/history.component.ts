@@ -1,51 +1,45 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Drink} from '../../data/entities/drink';
 import {HttpService} from '../../services/http.service';
 import {AlertController, ToastController} from '@ionic/angular';
 import {PermilleCalculationService} from '../../services/permille-calculation.service';
 import {HttpErrorResponse} from '@angular/common/http';
-import {DataService} from '../../services/data.service';
-import {StorageType} from '../../data/enums/StorageType';
 
 @Component({
     selector: 'app-history',
     templateUrl: './history.component.html',
     styleUrls: ['./history.component.scss']
 })
-export class HistoryComponent implements OnInit {
+export class HistoryComponent {
 
-    drinks = Array<Drink>();
+    drinks = new Array<Drink>();
+    counter = 0;
+    isLoading = false;
 
     constructor(private http: HttpService,
                 private alert: AlertController,
                 private pcs: PermilleCalculationService,
-                private toastController: ToastController,
-                private data: DataService) {
+                private toastController: ToastController) {
     }
 
-    sort(drinks) {
-        drinks.sort((a, b) => {
-            if (a.drankDate < b.drankDate) {
-                return 1;
-            } else if (a.drankDate > b.drankDate) {
-                return -1;
-            }
-            return 0;
+    ionViewWillEnter() {
+        this.isLoading = true;
+        this.counter = 0;
+    }
+
+    ionViewDidEnter() {
+        this.http.getDrinks(0).subscribe((drinks: Array<Drink>) => {
+            this.drinks = drinks;
+            this.isLoading = false;
         });
-        this.drinks = drinks;
     }
 
-    ngOnInit() {
-        if (!this.data.exist(StorageType.DRINKS)) {
-            this.http.getDrinks().subscribe((drinks: Array<Drink>) => {
-                console.log('constructor history');
-                this.data.set(StorageType.DRINKS, drinks);
-                // sort the drinks by drank date
-                this.sort(drinks);
-            });
-        } else {
-            this.sort(this.data.get(StorageType.DRINKS));
-        }
+    loadData(event) {
+        ++this.counter;
+        this.http.getDrinks(this.counter).subscribe(drinks => {
+            this.drinks.push(...drinks);
+            event.target.complete();
+        });
     }
 
     canRemove(drankDate: number): boolean {
@@ -76,7 +70,8 @@ export class HistoryComponent implements OnInit {
     async presentInfoAlert() {
         const alert = await this.alert.create({
             header: 'Drink removing',
-            message: 'Slide an entry to the right to remove the drink.<br>A drink cannot be removed if it is older than 5 minutes.',
+            message: 'Slide an entry to the right to remove the drink.' +
+                '<br>A drink cannot be removed if it is older than 5 minutes.',
             buttons: ['Understood']
         });
         await alert.present();

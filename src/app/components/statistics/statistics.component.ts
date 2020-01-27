@@ -8,7 +8,6 @@ import {AlcoholType} from '../../data/enums/AlcoholType';
 import {StatisticType} from '../../data/enums/StatisticType';
 import {AlertController} from '@ionic/angular';
 
-
 @Component({
     selector: 'app-statistics',
     templateUrl: './statistics.component.html',
@@ -95,8 +94,6 @@ export class StatisticsComponent {
 
         // changes to display the day statistics for default
         this.changeTo(StatisticType.DAY);
-
-
     }
 
     // changes focused color of the tabs and recalculates the selected datas
@@ -256,24 +253,25 @@ export class StatisticsComponent {
         this.beerCount = 0;
         this.liquorCount = 0;
         this.cocktailCount = 0;
-        this.http.getDrinks().subscribe(drinks => {
+        // fixme
+        this.http.getDrinks(0).subscribe(drinks => {
             console.log(drinks);
             for (const drink of drinks) {
                 const type = AlcoholType[drink.alcohol.type];
                 switch (type.toString()) {
-                 case '0':
-                     this.beerCount++;
-                     break;
-                 case '1':
-                     this.wineCount++;
-                     break;
-                 case '2':
-                     this.cocktailCount++;
-                     break;
+                    case '0':
+                        this.beerCount++;
+                        break;
+                    case '1':
+                        this.wineCount++;
+                        break;
+                    case '2':
+                        this.cocktailCount++;
+                        break;
                     case '3' :
-                     this.liquorCount++;
-                     break;
-             }
+                        this.liquorCount++;
+                        break;
+                }
             }
             this.distribution[0] = ['Beer', this.beerCount];
             this.distribution[1] = ['Wine', this.wineCount];

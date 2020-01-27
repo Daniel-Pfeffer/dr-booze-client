@@ -151,8 +151,8 @@ export class HttpService {
      * @description get all drinks the user drank
      * OFFLINE SUPPORT
      */
-    getDrinks() {
-        return this.http.get<Array<Drink>>(this.uri + 'manage/drinks', {headers: this.header});
+    getDrinks(count: number) {
+        return this.http.get<Array<Drink>>(this.uri + `manage/drinks/${count}`, {headers: this.header});
 
     }
 

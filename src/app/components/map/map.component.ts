@@ -101,7 +101,8 @@ export class MapComponent implements OnInit {
             }
         }
         // add drinks to map
-        this.http.getDrinks().subscribe((drinks: Array<Drink>) => {
+        // fixme
+        this.http.getDrinks(0).subscribe((drinks: Array<Drink>) => {
             // remove the drinks that have no location
             drinks = drinks.filter(drink => drink.longitude !== undefined && drink.latitude !== undefined);
             // here be dragons

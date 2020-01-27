@@ -10,7 +10,8 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-list *ngIf="drinks.length > 0; else emptyList">
+    <ion-progress-bar *ngIf="isLoading" type="indeterminate"></ion-progress-bar>
+    <ion-list *ngIf="drinks.length > 0 && isLoading === false">
         <ion-item-sliding *ngFor="let drink of drinks; index as i" [disabled]="!canRemove(drink.drankDate)">
             <ion-item-options side="start">
                 <ion-item-option (click)="removeDrink(drink, i)" expandable="true">
@@ -40,9 +41,13 @@
             </ion-item>
         </ion-item-sliding>
     </ion-list>
-    <ng-template #emptyList>
-        <div style="display: flex; flex-direction: column; justify-content: center; height: 100%; text-align: center; align-items: center">
-            <ion-label>No drinks have been added yet.</ion-label>
-        </div>
-    </ng-template>
+    <ion-infinite-scroll (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content
+                loadingSpinner="bubbles"
+                loadingText="Loading more drinks...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+    <div *ngIf="drinks.length === 0 && isLoading === false" class="no-drinks">
+        <ion-label>No drinks have been added yet.</ion-label>
+    </div>
 </ion-content>

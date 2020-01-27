@@ -28,6 +28,7 @@ export class PickerDetailComponent implements OnInit {
     categories = new Map<string, Array<Alcohol>>();
     favouriteAlcohols = new Array<Alcohol>();
     useTracking = true;
+
     isLoading = false;
     isToggleLoading = false;
 
@@ -44,7 +45,7 @@ export class PickerDetailComponent implements OnInit {
         this.typeStr = AlcoholType[this.type];
 
         this.isToggleLoading = true;
-        this.storage.get('use-picker-tracking').then((val) => {
+        this.storage.get('use-drink-tracking').then((val) => {
             if (val !== null) {
                 this.useTracking = val;
             }
@@ -167,7 +168,7 @@ export class PickerDetailComponent implements OnInit {
     }
 
     onTrackingToggleChange() {
-        this.storage.set('use-picker-tracking', this.useTracking);
+        this.storage.set('use-drink-tracking', this.useTracking);
     }
 
     async presentNewDrinkAlert() {
