@@ -4,7 +4,7 @@
         <ion-title>Map</ion-title>
         <ion-buttons slot="end">
             <ion-button shape="round">
-                <ion-spinner *ngIf="isLoadingLocation" name="crescent" color="primary"></ion-spinner>
+                <ion-spinner *ngIf="isLoadingLocation || isLoadingDrinks" name="crescent" color="primary"></ion-spinner>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
