@@ -65,7 +65,6 @@ export class DataService {
         if (this.exist(key)) {
             delete this.data[key];
             this.subject.next({command: Remove, row: key});
-        } else {
         }
     }
 }
