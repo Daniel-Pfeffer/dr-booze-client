@@ -37,7 +37,7 @@ export class StatisticsComponent {
     };
     pieOptions = {
         pieSliceText: 'none',
-        chartArea: { width: '85%', height: '60%'},
+        chartArea: {width: '85%', height: '60%'},
         height: 450,
         legend: 'none'
 
@@ -80,13 +80,13 @@ export class StatisticsComponent {
                 this.item = item;
                 // adds te first elements so that the data-array is not empty
                 if (this.daydata.length === 0) {
-                    this.daydata[0] = [ timestamp.getHours() + '-' + (timestamp.getHours() + 1), item];
+                    this.daydata[0] = [timestamp.getHours() + '-' + (timestamp.getHours() + 1), item];
                 }
                 if (this.weekdata.length === 0) {
-                    this.weekdata[0] = [ timestamp.getDay().toString(), item];
+                    this.weekdata[0] = [timestamp.getDay().toString(), item];
                 }
                 if (this.monthdata.length === 0) {
-                    this.monthdata[0] = [ (timestamp.getMonth()).toString() , item];
+                    this.monthdata[0] = [(timestamp.getMonth()).toString(), item];
                 }
                 this.getDist();
                 this.calc(item, this.statistic);
@@ -157,35 +157,35 @@ export class StatisticsComponent {
                 if (this.weekdata.length > 7) {
                     temp = this.weekdata.slice(this.weekdata.length - 7);
                 } else {
-                   temp = this.weekdata;
+                    temp = this.weekdata;
                 }
 
-        for (let i = 0; i < temp.length; i++) {
-            switch (temp[i][0]) {
-                case '1':
-                    temp[i][0] = 'Mon';
-                    break;
-                case '2':
-                    temp[i][0] = 'Tue';
-                    break;
-                case '3':
-                    temp[i][0] = 'Wed';
-                    break;
-                case '4':
-                    temp[i][0] = 'Thu';
-                    break;
-                case '5' :
-                    temp[i][0] = 'Fri';
-                    break;
-                case '6' :
-                    temp[i][0] = 'Sat';
-                    break;
-                case '7':
-                    temp[i][0] = 'Sun';
-                    break;
+                for (let i = 0; i < temp.length; i++) {
+                    switch (temp[i][0]) {
+                        case '1':
+                            temp[i][0] = 'Mon';
+                            break;
+                        case '2':
+                            temp[i][0] = 'Tue';
+                            break;
+                        case '3':
+                            temp[i][0] = 'Wed';
+                            break;
+                        case '4':
+                            temp[i][0] = 'Thu';
+                            break;
+                        case '5' :
+                            temp[i][0] = 'Fri';
+                            break;
+                        case '6' :
+                            temp[i][0] = 'Sat';
+                            break;
+                        case '7':
+                            temp[i][0] = 'Sun';
+                            break;
+                    }
                 }
-            }
-            break;
+                break;
             case StatisticType.MONTH:
                 if (this.monthdata.length > 12) {
                     temp = this.monthdata.slice(this.monthdata.length - 7);
@@ -257,23 +257,22 @@ export class StatisticsComponent {
         this.liquorCount = 0;
         this.cocktailCount = 0;
         this.http.getDrinks().subscribe(drinks => {
-            console.log(drinks);
             for (const drink of drinks) {
                 const type = AlcoholType[drink.alcohol.type];
                 switch (type.toString()) {
-                 case '0':
-                     this.beerCount++;
-                     break;
-                 case '1':
-                     this.wineCount++;
-                     break;
-                 case '2':
-                     this.cocktailCount++;
-                     break;
+                    case '0':
+                        this.beerCount++;
+                        break;
+                    case '1':
+                        this.wineCount++;
+                        break;
+                    case '2':
+                        this.cocktailCount++;
+                        break;
                     case '3' :
-                     this.liquorCount++;
-                     break;
-             }
+                        this.liquorCount++;
+                        break;
+                }
             }
             this.distribution[0] = ['Beer', this.beerCount];
             this.distribution[1] = ['Wine', this.wineCount];
@@ -285,11 +284,9 @@ export class StatisticsComponent {
         });
 
 
-
     }
 
     private calc(item: number, statType: StatisticType) {
-        console.log(statType);
         let isNew = '';
         let timeSpan = '';
         let timestamp;
@@ -305,7 +302,7 @@ export class StatisticsComponent {
                 if (timestamp.toString() === lastDayEntry[0].split('-', 1)[0] && item > lastDayEntry[1]) {
                     isNew = 'replace';
                 }
-                if (timestamp === 23 ) {
+                if (timestamp === 23) {
                     timeSpan = timestamp + '-0';
                 } else {
                     timeSpan = timestamp + '-' + (timestamp + 1);
@@ -320,7 +317,7 @@ export class StatisticsComponent {
                 break;
 
             case StatisticType.WEEK:
-                 timestamp = new Date().getDay();
+                timestamp = new Date().getDay();
                 const lastWeekEntry = this.weekdata[this.weekdata.length - 1];
                 if (timestamp > lastWeekEntry[0]) {
                     isNew = 'push';
@@ -344,7 +341,7 @@ export class StatisticsComponent {
                 const lastMonthEntry = this.monthdata[this.monthdata.length - 1];
 
                 if (timestamp > lastMonthEntry[0]) {
-                isNew = 'push';
+                    isNew = 'push';
                 }
 
                 if (timestamp === lastMonthEntry[0] && item > lastMonthEntry[1]) {
@@ -365,11 +362,12 @@ export class StatisticsComponent {
     async refresh(event) {
         this.calc(this.item, this.statistic);
         this.getDist();
-                setTimeout(
+        setTimeout(
             () => {
                 event.target.complete();
-        }, 2000);
+            }, 2000);
     }
+
     async presentHelpAlert() {
 
         const alert = await this.alert.create({

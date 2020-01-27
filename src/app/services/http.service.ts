@@ -19,7 +19,6 @@ export class HttpService {
     private hasConnection;
 
     constructor(private http: HttpClient, private data: DataService, private network: Network) {
-        console.log('network: ', this.network);
         this.hasConnection = !(
             this.network.type === network.Connection.NONE
             || this.network.type === network.Connection.CELL
@@ -31,7 +30,6 @@ export class HttpService {
         this.network.onChange().subscribe(item => {
             this.hasConnection = item.type === 'online';
         });
-        console.log(this.hasConnection);
     }
 
     /**

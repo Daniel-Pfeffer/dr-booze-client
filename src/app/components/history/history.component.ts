@@ -36,16 +36,11 @@ export class HistoryComponent implements OnInit {
     }
 
     ngOnInit() {
-        if (!this.data.exist(StorageType.DRINKS)) {
-            this.http.getDrinks().subscribe((drinks: Array<Drink>) => {
-                console.log('constructor history');
-                this.data.set(StorageType.DRINKS, drinks);
-                // sort the drinks by drank date
-                this.sort(drinks);
-            });
-        } else {
-            this.sort(this.data.get(StorageType.DRINKS));
-        }
+        this.http.getDrinks().subscribe((drinks: Array<Drink>) => {
+            this.data.set(StorageType.DRINKS, drinks);
+            // sort the drinks by drank date
+            this.sort(drinks);
+        });
     }
 
     canRemove(drankDate: number): boolean {

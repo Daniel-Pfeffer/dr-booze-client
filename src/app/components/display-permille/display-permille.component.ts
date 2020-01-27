@@ -17,9 +17,4 @@ export class DisplayPermilleComponent {
             this.currentPerMille = Math.floor(item * 100) / 100;
         });
     }
-
-    // MARK: REMOVE
-    public log() {
-        this.d.getAllKeys();
-    }
 }

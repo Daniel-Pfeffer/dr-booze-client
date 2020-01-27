@@ -35,7 +35,6 @@ export class PermilleCalculationService {
         this.perMilleObservable = this.perMilleNotifier.asObservable();
         this.statisticObservable = this.statisticNotifier.asObservable();
         this.resetHour();
-        timing.start();
         if (this.perMilleNotifier.value === 0) {
             storage.get('promille').then(permille => {
                 if (permille !== 0) {
@@ -49,13 +48,15 @@ export class PermilleCalculationService {
                                 next = 0;
                             }
                             this.perMilleNotifier.next(next);
+                            timing.start();
                         } else {
                             this.perMilleNotifier.next(0);
                         }
-
                     });
                 }
             });
+        } else {
+            timing.start();
         }
         this.timing.observable.subscribe(() => {
             if (this.perMilleNotifier.value > this.hourlyMax) {
@@ -82,7 +83,6 @@ export class PermilleCalculationService {
             this.minuteCounter++;
             // TODO: reset 15
             if (this.minuteCounter === 1) {
-                console.log('60 iterations passed');
                 this.statisticNotifier.next(this.hourlyMax);
                 this.resetHour();
             }
@@ -91,22 +91,13 @@ export class PermilleCalculationService {
         });
         this.background.enable();
         this.platform.pause.subscribe(_ => {
-            console.log('exit: Hi');
             this.setToStorage();
         });
     }
 
     private setToStorage(): void {
-        this.storage.set('promille', this.perMilleNotifier.value).then(value => {
-            console.log('exit: set promille: ' + value);
-        }).catch(reason => {
-            console.log('exit: error: ' + reason);
-        });
-        this.storage.set('promilleTime', new Date()).then(value => {
-            console.log('exit: set promilletime: ' + value);
-        }).catch(reason => {
-            console.log('exit: error: ' + reason);
-        });
+        this.storage.set('promille', this.perMilleNotifier.value);
+        this.storage.set('promilleTime', new Date());
     }
 
     public addDrink(drink: Drink) {

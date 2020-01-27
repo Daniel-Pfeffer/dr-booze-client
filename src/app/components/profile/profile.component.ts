@@ -106,13 +106,9 @@ export class ProfileComponent {
         const age = new Date().getFullYear() - new Date(user.birthday).getFullYear();
         switch (user.gender.toUpperCase()) {
             case 'M':
-                const c = 2.447 - (0.09516 * age) + (0.1074 * user.height) + (0.3362 * user.weight);
-                console.log(c);
-                return c;
+                return 2.447 - (0.09516 * age) + (0.1074 * user.height) + (0.3362 * user.weight);
             case 'F':
-                const cd = -2.097 + (0.1069 * user.height) + (0.2466 * user.weight);
-                console.log(cd);
-                return cd;
+                return -2.097 + (0.1069 * user.height) + (0.2466 * user.weight);
         }
     }
 
