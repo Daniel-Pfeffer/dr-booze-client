@@ -96,7 +96,7 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     getUser() {
-        return this.http.get<User>(this.uri + 'manage/user', {headers: this.header}).pipe(catchError(this.handleError));
+        return this.http.get<User>(this.uri + 'manage/user', {headers: this.header});
     }
 
     /**
@@ -228,18 +228,15 @@ export class HttpService {
     }
 
     private handleError(error: HttpErrorResponse) {
-        if (error.error instanceof HttpErrorResponse) {
-            if (error.status === 401) {
-                this.data.remove(StorageType.AUTH);
-                this.data.remove(StorageType.PERSON);
-                this.s.clear();
-                this.presentToast('Successfully logged out').then(() => this.router.navigate(['login']));
-            }
-        } else {
-            return throwError(
-                'Something bad happened :('
-            );
+        if (error.status === 401) {
+            this.data.remove(StorageType.AUTH);
+            this.data.remove(StorageType.PERSON);
+            this.s.clear();
+            this.presentToast('Successfully logged out').then(() => this.router.navigate(['login']));
         }
+        return throwError(
+            'Something bad happened :('
+        );
     }
 
     private async presentToast(message: string) {
