@@ -5,7 +5,6 @@ import {Router} from '@angular/router';
 import {ToastController} from '@ionic/angular';
 import {DataService} from '../../services/data.service';
 import {User} from '../../data/entities/user';
-import {HttpErrorResponse} from '@angular/common/http';
 import {StorageType} from '../../data/enums/StorageType';
 
 @Component({
@@ -66,18 +65,6 @@ export class ProfileComponent {
         this.http.setDetails(value.gender, Date.parse(value.birthday), value.height, value.weight, value.firstName, value.lastName)
             .subscribe(user => {
                 this.saveData(user);
-            }, (error: HttpErrorResponse) => {
-                switch (error.status) {
-                    case 401:
-                        // TODO: auth token invalid -> logout
-                        break;
-                    case 403:
-                        this.presentToast('At least one of the given credentials is invalid.');
-                        break;
-                    default:
-                        console.error(error);
-                        break;
-                }
             });
     }
 

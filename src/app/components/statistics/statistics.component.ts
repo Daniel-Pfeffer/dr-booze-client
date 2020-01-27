@@ -131,7 +131,6 @@ export class StatisticsComponent {
     }
 
     // displays the last days
-    // TODO change to real days
     changeTo(statType: StatisticType) {
         let temp = [];
         this.data = [];

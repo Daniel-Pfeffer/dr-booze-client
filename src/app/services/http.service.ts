@@ -49,7 +49,6 @@ export class HttpService {
      * @param username
      * @param email
      * @param password
-     * NO OFFLINE SUPPORT
      */
     register(username: string, email: string, password: string) {
         return this.http.post(this.uri + 'auth/register', {
@@ -63,7 +62,6 @@ export class HttpService {
      * @description login a existing user
      * @param username
      * @param password
-     * OFFLINE SUPPORT
      */
     login(username: string, password: string) {
         return this.http.post<Login>(this.uri + 'auth/login', {username, password});
@@ -72,7 +70,6 @@ export class HttpService {
     /**
      * @description request a password change
      * @param email
-     * NO OFFLINE SUPPORT
      */
     requestPasswordChange(email: string) {
         return this.http.post(this.uri + 'auth/request-password-change', {email}, {observe: 'response'}).pipe(catchError(this.handleError));
@@ -82,7 +79,6 @@ export class HttpService {
      * @description change the password of a existing user
      * @param pin
      * @param password
-     * NO OFFLINE SUPPORT
      */
     changePassword(pin: number, password: string) {
         return this.http.put(this.uri + 'auth/change-password', {
@@ -93,7 +89,6 @@ export class HttpService {
 
     /**
      * @description get a existing user based on the jwt
-     * OFFLINE SUPPORT
      */
     getUser() {
         return this.http.get<User>(this.uri + 'manage/user', {headers: this.header});
@@ -107,7 +102,6 @@ export class HttpService {
      * @param weight
      * @param firstName
      * @param lastName
-     * OFFLINE SUPPORT
      */
     setDetails(gender: string, birthday: number, height: number,
                weight: number, firstName?: string, lastName?: string) {
@@ -125,7 +119,6 @@ export class HttpService {
      * @description getAlcohols
      * @access Drink Picket
      * @param type
-     * OFFLINE SUPPORT
      */
     getAlcohols(type: string) {
         return this.http.get<Array<Alcohol>>(this.uri + `manage/alcohols/${type}`, {headers: this.header}).pipe(catchError(this.handleError));
@@ -135,7 +128,6 @@ export class HttpService {
     /**
      * @description get all favourites server call
      * @param type
-     * OFFLINE SUPPORT
      */
     getFavourites(type: string) {
         return this.http.get<Array<Alcohol>>(this.uri + `manage/favourites/${type}`, {headers: this.header}).pipe(catchError(this.handleError));
@@ -145,7 +137,6 @@ export class HttpService {
     /**
      * @description add a new favourite to favourite list
      * @param alcoholId
-     * OFFLINE SUPPORT
      */
     addFavourite(alcoholId: number) {
         return this.http.post(this.uri + `manage/favourites/${alcoholId}`, null, {headers: this.header}).pipe(catchError(this.handleError));
@@ -154,7 +145,6 @@ export class HttpService {
     /**
      * @description remove a favourite from to favourite list
      * @param alcoholId
-     * OFFLINE SUPPORT
      */
     removeFavourite(alcoholId: number) {
         return this.http.delete(this.uri + `manage/favourites/${alcoholId}`, {headers: this.header}).pipe(catchError(this.handleError));
@@ -163,7 +153,7 @@ export class HttpService {
 
     /**
      * @description get all drinks the user drank
-     * OFFLINE SUPPORT
+     * @param count
      */
     getDrinks(count: number) {
         return this.http.get<Array<Drink>>(this.uri + `manage/drinks/${count}`, {headers: this.header}).pipe(catchError(this.handleError));
@@ -173,7 +163,6 @@ export class HttpService {
     /**
      * @description remove a drink from all drinks the user drank
      * @param drinkId
-     * OFFLINE SUPPORT
      */
     removeDrink(drinkId: number) {
         return this.http.delete(this.uri + `manage/drinks/${drinkId}`, {headers: this.header}).pipe(catchError(this.handleError));
@@ -182,7 +171,6 @@ export class HttpService {
 
     /**
      * @description add a drink to all drinks the user drank
-     * OFFLINE SUPPORT
      * @param drink
      */
     addDrink(drink: Drink) {
@@ -201,7 +189,6 @@ export class HttpService {
     }
 
     getPersonalAlcohols(type: string) {
-        // TODO: add offline support
         return this.http.get<Array<Alcohol>>(this.uri + `manage/personal-alcohols/${type}`, {headers: this.header}).pipe(catchError(this.handleError));
     }
 
@@ -221,7 +208,6 @@ export class HttpService {
 
     /**
      * @description get the user challenges
-     * OFFLINE SUPPORT (blur need internet)
      */
     getChallenges() {
         return this.http.get<Array<Challenge>>(this.uri + 'manage/challenges', {headers: this.header}).pipe(catchError(this.handleError));
@@ -233,10 +219,10 @@ export class HttpService {
             this.data.remove(StorageType.PERSON);
             this.s.clear();
             this.presentToast('Successfully logged out').then(() => this.router.navigate(['login']));
+        } else {
+            this.presentToast('An unexpected error occurred');
         }
-        return throwError(
-            'Something bad happened :('
-        );
+        return throwError('Something bad happened :(');
     }
 
     private async presentToast(message: string) {

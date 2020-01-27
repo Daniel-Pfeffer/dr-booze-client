@@ -5,16 +5,12 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AlertController, ToastController} from '@ionic/angular';
 import {DataService} from '../../services/data.service';
 import {Alcohol} from '../../data/entities/alcohol';
-import {HttpErrorResponse} from '@angular/common/http';
 import {PermilleCalculationService} from '../../services/permille-calculation.service';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {StorageType} from '../../data/enums/StorageType';
 import {AlcoholType} from '../../data/enums/AlcoholType';
 import {Storage} from '@ionic/storage';
 
-/*
- * TODO: save personal useTracking default
- */
 @Component({
     selector: 'app-picker-detail',
     templateUrl: './picker-detail.component.html',
@@ -102,19 +98,6 @@ export class PickerDetailComponent implements OnInit {
                     this.loadPersonalAlcohols();
                 }
                 this.presentToast('Added alcohol to favourites');
-            }, error => {
-                switch (error.status) {
-                    case 401:
-                        // TODO: auth token invalid -> logout
-                        break;
-                    case 404:
-                        this.presentToast('No alcohol has been found with the given alcoholId');
-                        break;
-                    default:
-                        this.presentToast('An unexpected error occurred');
-                        console.error(error);
-                        break;
-                }
             });
         } else {
             this.presentToast('Alcohol is already a favourite');
@@ -126,19 +109,6 @@ export class PickerDetailComponent implements OnInit {
         this.http.removeFavourite(alcoholId).subscribe(_ => {
             this.loadFavourites();
             this.presentToast('Removed alcohol from favourites');
-        }, error => {
-            switch (error.status) {
-                case 401:
-                    // TODO: auth token invalid -> logout
-                    break;
-                case 404:
-                    this.presentToast('This alcohol does not exist anymore');
-                    break;
-                default:
-                    this.presentToast('An unexpected error occurred');
-                    console.error(error);
-                    break;
-            }
         });
     }
 
@@ -148,22 +118,6 @@ export class PickerDetailComponent implements OnInit {
             this.loadAlcohols();
             this.loadPersonalAlcohols();
             this.presentToast('Personal drink has been removed');
-        }, error => {
-            switch (error.status) {
-                case 401:
-                    // TODO: auth token invalid -> logout
-                    break;
-                case 403:
-                    this.presentToast('This alcohol is not a personal alcohol of this user');
-                    break;
-                case 404:
-                    this.presentToast('This alcohol does not exist anymore');
-                    break;
-                default:
-                    this.presentToast('An unexpected error occurred');
-                    console.error(error);
-                    break;
-            }
         });
     }
 
@@ -227,19 +181,6 @@ export class PickerDetailComponent implements OnInit {
         this.http.getFavourites(this.typeStr).subscribe(favourites => {
             this.data.set(StorageType['FAVOURITE' + this.typeStr], favourites);
             this.favouriteAlcohols = favourites;
-        }, (error: HttpErrorResponse) => {
-            switch (error.status) {
-                case 401:
-                    // TODO: auth token invalid -> logout
-                    break;
-                case 404:
-                    this.presentToast('The given alcohol type does not exist');
-                    break;
-                default:
-                    this.presentToast('An unexpected error occurred.');
-                    console.error(error);
-                    break;
-            }
         });
     }
 
@@ -252,19 +193,6 @@ export class PickerDetailComponent implements OnInit {
             alcohols.forEach(alcohol => {
                 this.addToCategories(alcohol);
             });
-        }, error => {
-            switch (error.status) {
-                case 401:
-                    // TODO: auth token invalid -> logout
-                    break;
-                case 404:
-                    this.presentToast('The given alcohol type does not exist');
-                    break;
-                default:
-                    this.presentToast('An unexpected error occurred.');
-                    console.error(error);
-                    break;
-            }
         });
     }
 
@@ -287,20 +215,6 @@ export class PickerDetailComponent implements OnInit {
             this.permille.addDrink(drink);
             this.isLoading = false;
             this.router.navigate(['dashboard']);
-        }, error => {
-            this.isLoading = false;
-            switch (error.status) {
-                case 401:
-                    // TODO: auth token invalid -> logout
-                    break;
-                case 404:
-                    this.presentToast('No alcohol has been found with the given alcoholId');
-                    break;
-                default:
-                    this.presentToast('An unexpected error occurred');
-                    console.error(error);
-                    break;
-            }
         });
     }
 
@@ -318,19 +232,6 @@ export class PickerDetailComponent implements OnInit {
             this.http.addPersonalAlcohol(this.typeStr, name, category, percentage, amount).subscribe(alcohol => {
                 alcohol.isPersonal = true;
                 this.addToCategories(alcohol);
-            }, (error: HttpErrorResponse) => {
-                switch (error.status) {
-                    case 401:
-                        // TODO: auth token invalid -> logout
-                        break;
-                    case 403:
-                        this.presentToast('At least one of the inputs is not valid');
-                        break;
-                    default:
-                        this.presentToast('An unexpected error occurred');
-                        console.error(error);
-                        break;
-                }
             });
             return true;
         }
