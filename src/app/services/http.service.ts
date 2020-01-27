@@ -56,7 +56,7 @@ export class HttpService {
             email,
             password,
             username
-        }).pipe(catchError(this.handleError));
+        });
     }
 
     /**
@@ -66,7 +66,7 @@ export class HttpService {
      * OFFLINE SUPPORT
      */
     login(username: string, password: string) {
-        return this.http.post<Login>(this.uri + 'auth/login', {username, password}).pipe(catchError(this.handleError));
+        return this.http.post<Login>(this.uri + 'auth/login', {username, password});
     }
 
     /**
