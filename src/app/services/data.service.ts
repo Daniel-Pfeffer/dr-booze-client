@@ -17,10 +17,14 @@ export class DataService {
     public observable: Observable<ToStore>;
     private subject: Subject<ToStore>;
     private data = {};
+    public personObs: Observable<boolean>;
+    public personSub: Subject<boolean>;
 
     constructor() {
         this.subject = new Subject<ToStore>();
         this.observable = this.subject.asObservable();
+        this.personSub = new Subject<boolean>();
+        this.personObs = this.personSub.asObservable();
     }
 
     /**

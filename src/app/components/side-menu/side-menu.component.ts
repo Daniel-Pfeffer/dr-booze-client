@@ -30,7 +30,7 @@ export class SideMenuComponent {
                 private s: Storage) {
         this.challenges = new Array<Challenge>();
         this.user = this.data.get(StorageType.PERSON);
-        http.getChallenges().subscribe(challenges => {
+        this.http.getChallenges().subscribe(challenges => {
             challenges.forEach(challenge => {
                 challenge.params.reverse().forEach(paramToInsert => {
                     challenge.desc = challenge.desc.replace(this.regexp, paramToInsert.param.toString());
@@ -43,6 +43,10 @@ export class SideMenuComponent {
     onEdit() {
         this.router.navigate(['/profile']);
         this.menuController.close('side-menu');
+        const sub = this.data.personObs.subscribe(_ => {
+            this.user = this.data.get(StorageType.PERSON);
+            sub.unsubscribe();
+        });
     }
 
     onLogout() {

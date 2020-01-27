@@ -98,6 +98,7 @@ export class ProfileComponent {
         }
         user.gkw = this.calculateGKW(user);
         this.data.set(PERSON, user);
+        this.data.personSub.next();
         const message = this.isUpdate ? 'Profile updated' : 'Thanks for joining Dr. Booze!';
         this.presentToast(message).then(() => this.router.navigate(['/home']));
     }

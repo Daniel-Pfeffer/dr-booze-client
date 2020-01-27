@@ -9,7 +9,7 @@
             <ion-list-header>
                 <ion-label>Challenges</ion-label>
                 <ion-label color="primary" style="text-align: right; padding-right: 5%">
-                    {{ user.points != null ? user.points : 0 }} points
+                    {{ user?.points != null ? user?.points : 0 }} points
                 </ion-label>
             </ion-list-header>
             <ion-item *ngFor="let challenge of challenges">
@@ -28,17 +28,17 @@
                     Edit
                 </ion-button>
             </ion-list-header>
-            <ion-item *ngIf="user.firstName||user.lastName">
+            <ion-item *ngIf="user?.firstName||user?.lastName">
                 <ion-label>
-                    <ng-container *ngIf=user.firstName>{{ user.firstName }} </ng-container>
-                    <ng-container *ngIf="user.lastName">{{ user.lastName }}</ng-container>
+                    <ng-container *ngIf=user?.firstName>{{ user?.firstName }} </ng-container>
+                    <ng-container *ngIf="user?.lastName">{{ user?.lastName }}</ng-container>
                 </ion-label>
             </ion-item>
             <ion-item>
-                <ion-label>{{ user.height }} cm</ion-label>
+                <ion-label>{{ user?.height }} cm</ion-label>
             </ion-item>
             <ion-item>
-                <ion-label>{{ user.weight }} kg</ion-label>
+                <ion-label>{{ user?.weight }} kg</ion-label>
             </ion-item>
         </ion-list>
     </ion-content>
