@@ -30,7 +30,6 @@ export class StorageService {
     private set(key: StorageType, value: any) {
         const {AUTH} = StorageType;
         if (key === AUTH) {
-            console.log('cookie auth set');
             Cookies.set(key, value, {sameSite: 'Strict', expires: 7});
         }
     }

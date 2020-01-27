@@ -43,8 +43,10 @@
             </ion-item>
             <br>
             <ion-item color="dark">
-                <ion-input name="weight" formControlName="weight" placeholder="Weight" required type="number">
+                <ion-input name="weight" formControlName="weight" placeholder="Weight" required type="number"
+                           class="hasSi">
                 </ion-input>
+                <span class="hasSi">kg</span>
                 <ion-badge color="secondary" *ngIf="form.controls.weight.errors?.pattern">
                     Not a weight
                 </ion-badge>
@@ -61,7 +63,8 @@
             <br>
             <ion-item color="dark">
                 <ion-input name="height" formControlName="height" placeholder="Height" required
-                           type="number"></ion-input>
+                           type="number" class="hasSi"></ion-input>
+                <span class="hasSi">cm</span>
                 <ion-badge color="secondary" *ngIf="form.controls.height.errors?.pattern">Not a height
                 </ion-badge>
                 <ion-badge color="secondary" *ngIf="form.controls.height.errors?.max">Too large</ion-badge>

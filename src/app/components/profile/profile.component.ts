@@ -25,17 +25,17 @@ export class ProfileComponent {
                 private toast: ToastController,
                 fb: FormBuilder) {
         this.form = fb.group({
-            firstName: ['', [Validators.minLength(1), Validators.maxLength(100),
-                Validators.pattern(/^[a-zA-z]*$/)]
+            firstName: ['', [Validators.minLength(2), Validators.maxLength(100),
+                Validators.pattern(/^([a-zA-Z]{2,})(?:(?: |-)?([a-zA-Z]+))*$/)]
             ],
             lastName: ['', [Validators.minLength(1), Validators.maxLength(100),
-                Validators.pattern(/^[a-zA-z]*$/)]
+                Validators.pattern(/^([a-zA-Z]*)(?:-?([a-zA-Z]*))*$/)]
             ],
             birthday: ['', Validators.required],
-            weight: ['', [Validators.required, Validators.pattern(/^[0-9]+$/), Validators.max(200),
+            weight: ['', [Validators.required, Validators.pattern(/\d+/), Validators.max(200),
                 Validators.min(30)]
             ],
-            height: ['', [Validators.required, Validators.pattern(/^[0-9]+$/), Validators.max(230),
+            height: ['', [Validators.required, Validators.pattern(/\d+/), Validators.max(230),
                 Validators.min(150)]
             ],
             gender: ['', [Validators.required]]
@@ -106,13 +106,9 @@ export class ProfileComponent {
         const age = new Date().getFullYear() - new Date(user.birthday).getFullYear();
         switch (user.gender.toUpperCase()) {
             case 'M':
-                const c = 2.447 - (0.09516 * age) + (0.1074 * user.height) + (0.3362 * user.weight);
-                console.log(c);
-                return c;
+                return 2.447 - (0.09516 * age) + (0.1074 * user.height) + (0.3362 * user.weight);
             case 'F':
-                const cd = -2.097 + (0.1069 * user.height) + (0.2466 * user.weight);
-                console.log(cd);
-                return cd;
+                return -2.097 + (0.1069 * user.height) + (0.2466 * user.weight);
         }
     }
 

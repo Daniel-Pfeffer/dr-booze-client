@@ -40,7 +40,7 @@ export class LoginComponent {
                 ['', [Validators.required]],
             password:
                 ['', [Validators.required,
-                    Validators.pattern(/^.*(?=.{8,})(?=.*\d)((?=.*[a-z]))((?=.*[A-Z])).*$/),
+                    Validators.pattern(/^.*(?=.{6,})((?=.*[a-z])).*$/),
                     Validators.maxLength(25)]
                 ]
         });
@@ -71,16 +71,8 @@ export class LoginComponent {
         this.notification.requestPermission();
         this.backgroundMode.enable();
         this.http.getUser().subscribe(user => {
-            console.log('user:', user);
             user.gkw = this.calculateGKW(user);
             this.data.set(PERSON, user);
-            /*
-            // QUICKFIX: Preload history
-            this.http.getDrinks().subscribe((drinks: Array<Drink>) => {
-                console.log('constructor history');
-                this.data.set(StorageType.DRINKS, drinks);
-                // sort the drinks by drank date
-            });*/
             this.router.navigate(['/home']);
         }, (error: HttpErrorResponse) => {
             switch (error.status) {
@@ -102,17 +94,12 @@ export class LoginComponent {
     }
 
     private calculateGKW(user: User): number {
-        console.log(user);
         const age = new Date().getFullYear() - new Date(user.birthday).getFullYear();
         switch (user.gender.toUpperCase()) {
             case 'M':
-                const c = 2.447 - (0.09516 * age) + (0.1074 * user.height) + (0.3362 * user.weight);
-                console.log(c);
-                return c;
+                return 2.447 - (0.09516 * age) + (0.1074 * user.height) + (0.3362 * user.weight);
             case 'F':
-                const cd = -2.097 + (0.1069 * user.height) + (0.2466 * user.weight);
-                console.log(cd);
-                return cd;
+                return -2.097 + (0.1069 * user.height) + (0.2466 * user.weight);
         }
     }
 

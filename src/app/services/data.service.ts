@@ -46,7 +46,6 @@ export class DataService {
         if (this.exist(key)) {
             return this.data[key];
         } else {
-            console.log(`%c Data doesn't exist`, 'color: grey');
             return null;
         }
     }
@@ -66,12 +65,6 @@ export class DataService {
         if (this.exist(key)) {
             delete this.data[key];
             this.subject.next({command: Remove, row: key});
-        } else {
-            console.log(`%c Data doesn't exist`, 'color: grey');
         }
-    }
-
-    getAllKeys() {
-        console.log(Object.entries(this.data));
     }
 }
