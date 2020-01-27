@@ -88,6 +88,7 @@ export class LoginComponent {
                 default:
                     this.presentToast('An unexpected error occurred. Please try again.');
                     console.error(error);
+                    this.data.remove(AUTH);
                     break;
             }
         });
