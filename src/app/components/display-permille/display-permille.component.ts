@@ -10,7 +10,6 @@ export class DisplayPermilleComponent {
 
     currentPerMille: number;
     timeSober: Date;
-    dateSober: Date;
 
     constructor(pcs: PermilleCalculationService) {
         pcs.perMilleObservable.subscribe(item => {
@@ -20,7 +19,6 @@ export class DisplayPermilleComponent {
     }
 
     private timeConverter(minutes: number) {
-        this.dateSober = new Date(new Date().getTime() + minutes * 60000);
         // corrector because start time of unix is 1970 1 o' clock
         minutes -= 60;
         return new Date(minutes * 60 * 1000);
