@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Drink} from '../../data/entities/drink';
 import {HttpService} from '../../services/http.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -7,7 +7,6 @@ import {DataService} from '../../services/data.service';
 import {Alcohol} from '../../data/entities/alcohol';
 import {PermilleCalculationService} from '../../services/permille-calculation.service';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {StorageType} from '../../data/enums/StorageType';
 import {AlcoholType} from '../../data/enums/AlcoholType';
 import {Storage} from '@ionic/storage';
 
@@ -16,7 +15,7 @@ import {Storage} from '@ionic/storage';
     templateUrl: './picker-detail.component.html',
     styleUrls: ['./picker-detail.component.scss']
 })
-export class PickerDetailComponent implements OnInit {
+export class PickerDetailComponent {
 
     type: AlcoholType;
     typeStr: string;
@@ -25,8 +24,9 @@ export class PickerDetailComponent implements OnInit {
     favouriteAlcohols = new Array<Alcohol>();
     useTracking = true;
 
-    isLoading = false;
+    isAddingDrink = false;
     isToggleLoading = false;
+    isLoadingAlcohols = false;
 
     constructor(private http: HttpService,
                 private router: Router,
@@ -40,6 +40,7 @@ export class PickerDetailComponent implements OnInit {
         this.type = +route.snapshot.paramMap.get('type');
         this.typeStr = AlcoholType[this.type];
 
+        // load the 'activate drink tracking' user setting
         this.isToggleLoading = true;
         this.storage.get('use-drink-tracking').then((val) => {
             if (val !== null) {
@@ -49,14 +50,13 @@ export class PickerDetailComponent implements OnInit {
         });
     }
 
-    ngOnInit(): void {
-        this.loadFavourites();
-        this.loadAlcohols();
-        this.loadPersonalAlcohols();
+    ionViewDidEnter() {
+        this.isLoadingAlcohols = true;
+        this.loadAllAlcohols();
     }
 
     onSelection(alcohol: Alcohol) {
-        this.isLoading = true;
+        this.isAddingDrink = true;
 
         const drink = new Drink();
         drink.alcohol = alcohol;
@@ -92,11 +92,7 @@ export class PickerDetailComponent implements OnInit {
         const foundAlcohol = this.favouriteAlcohols.find(value => value.id === alcohol.id);
         if (foundAlcohol === undefined) {
             this.http.addFavourite(alcohol.id).subscribe(_ => {
-                this.loadFavourites();
-                // also reload the personal alcohols because this functions sets the isPersonal attribute of the favourites
-                if (alcohol.isPersonal) {
-                    this.loadPersonalAlcohols();
-                }
+                this.loadAllAlcohols();
                 this.presentToast('Added alcohol to favourites');
             });
         } else {
@@ -107,16 +103,14 @@ export class PickerDetailComponent implements OnInit {
 
     removeFavourite(alcoholId: number) {
         this.http.removeFavourite(alcoholId).subscribe(_ => {
-            this.loadFavourites();
+            this.loadAllAlcohols();
             this.presentToast('Removed alcohol from favourites');
         });
     }
 
     removePersonalAlcohol(alcoholId: number) {
         this.http.removePersonalAlcohol(alcoholId).subscribe(_ => {
-            this.loadFavourites();
-            this.loadAlcohols();
-            this.loadPersonalAlcohols();
+            this.loadAllAlcohols();
             this.presentToast('Personal drink has been removed');
         });
     }
@@ -177,34 +171,25 @@ export class PickerDetailComponent implements OnInit {
         await alert.present();
     }
 
-    private loadFavourites() {
-        this.http.getFavourites(this.typeStr).subscribe(favourites => {
-            this.data.set(StorageType['FAVOURITE' + this.typeStr], favourites);
-            this.favouriteAlcohols = favourites;
-        });
-    }
-
-    private loadAlcohols() {
+    private loadAllAlcohols() {
         this.http.getAlcohols(this.typeStr).subscribe(alcohols => {
-            if (!this.data.exist(StorageType[this.typeStr])) {
-                this.data.set(StorageType[this.typeStr], alcohols);
-            }
+            // clear the alcohol list and add the new alcohols
             this.categories.clear();
-            alcohols.forEach(alcohol => {
-                this.addToCategories(alcohol);
-            });
-        });
-    }
+            alcohols.forEach(alcohol => this.addToCategories(alcohol));
 
-    private loadPersonalAlcohols() {
-        this.http.getPersonalAlcohols(this.typeStr).subscribe(personalAlcohols => {
-            personalAlcohols.forEach(personalAlcohol => {
-                personalAlcohol.isPersonal = true;
-                this.addToCategories(personalAlcohol);
-                this.favouriteAlcohols.forEach(favourite => {
-                    if (favourite.id === personalAlcohol.id) {
-                        favourite.isPersonal = true;
-                    }
+            this.http.getFavourites(this.typeStr).subscribe(favourites => {
+                this.http.getPersonalAlcohols(this.typeStr).subscribe(personalAlcohols => {
+                    personalAlcohols.forEach(personalAlcohol => {
+                        personalAlcohol.isPersonal = true;
+                        this.addToCategories(personalAlcohol);
+                        favourites.forEach(favourite => {
+                            if (favourite.id === personalAlcohol.id) {
+                                favourite.isPersonal = true;
+                            }
+                        });
+                    });
+                    this.favouriteAlcohols = favourites;
+                    this.isLoadingAlcohols = false;
                 });
             });
         });
@@ -213,7 +198,7 @@ export class PickerDetailComponent implements OnInit {
     private addDrink(drink: Drink) {
         this.http.addDrink(drink).subscribe(_ => {
             this.permille.addDrink(drink);
-            this.isLoading = false;
+            this.isAddingDrink = false;
             this.router.navigate(['dashboard']);
         });
     }
@@ -258,7 +243,7 @@ export class PickerDetailComponent implements OnInit {
                 {
                     text: 'Cancel',
                     role: 'cancel',
-                    handler: () => this.isLoading = false
+                    handler: () => this.isAddingDrink = false
                 },
                 {
                     text: 'Add anyway',
