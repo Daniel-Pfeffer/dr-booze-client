@@ -7,7 +7,6 @@ import {Router} from '@angular/router';
 import {AlcoholType} from '../../data/enums/AlcoholType';
 import * as moment from 'moment';
 import {ModalDrinkListComponent} from './modal-drink-list/modal-drink-list.component';
-import {HttpErrorResponse} from '@angular/common/http';
 
 declare var H: any;
 
@@ -26,6 +25,7 @@ export class MapComponent implements OnInit {
     private icons = new Map<number, any>();
 
     isLoadingLocation = false;
+    isLoadingDrinks = false;
 
     constructor(private http: HttpService,
                 private geolocation: Geolocation,
@@ -66,6 +66,9 @@ export class MapComponent implements OnInit {
         // tslint:disable-next-line:no-unused-expression
         new H.mapevents.Behavior(new H.mapevents.MapEvents(this.map));
         this.setLocation();
+    }
+
+    ionViewDidEnter() {
         this.displayDrinks();
     }
 
@@ -93,6 +96,7 @@ export class MapComponent implements OnInit {
     }
 
     displayDrinks() {
+        this.isLoadingDrinks = true;
         // remove previous markers
         const mapObjects: any[] = this.map.getObjects();
         for (const obj of mapObjects) {
@@ -101,51 +105,55 @@ export class MapComponent implements OnInit {
             }
         }
         // add drinks to map
-        // fixme
-        this.http.getDrinks(0).subscribe((drinks: Array<Drink>) => {
-            // remove the drinks that have no location
-            drinks = drinks.filter(drink => drink.longitude !== undefined && drink.latitude !== undefined);
-            // here be dragons
-            // group the drinks that are within a 22m radius
-            const drinkGroups = Array<Array<Drink>>();
-            drinks.forEach((value1, index1, array1) => {
-                if (value1 != null) {
-                    const group = [value1];
-                    const point1 = new H.math.Point(value1.longitude, value1.latitude);
-                    array1.forEach((value2, index2, array2) => {
-                        if (value1 !== value2 && value2 != null) {
-                            const point2 = new H.math.Point(value2.longitude, value2.latitude);
-                            const distance = point1.distance(point2);
-                            if (distance <= 0.0002) {
-                                group.push(value2);
-                                array2[index2] = null;
-                            }
-                        }
-                    });
-                    array1[index1] = null;
-                    drinkGroups.push(group);
-                }
-            });
-            // display the drink groups on the map
-            drinkGroups.forEach(value => {
-                const drink: Drink = value[0];
-                // get the group icon or the alcohol specific alcohol icon
-                const icon = this.icons.get(value.length > 1 ? 4 : +AlcoholType[drink.alcohol.type]);
-                const marker = new H.map.Marker(
-                    {lng: drink.longitude, lat: drink.latitude},
-                    {icon: icon, data: value}
-                );
-                marker.addEventListener('tap', (ev) => this.presentDrinkAlert(ev.target.getData()));
-                this.map.addObject(marker);
-            });
-        }, (error: HttpErrorResponse) => {
-            if (error.status === 401) {
-                // TODO: auth token invalid -> logout
+        this.http.getDrinks(0).subscribe((drinks1: Array<Drink>) => {
+            if (drinks1.length >= 15) {
+                this.http.getDrinks(1).subscribe((drinks2: Array<Drink>) => {
+                    drinks1.push(...drinks2);
+                    this.processDrinks(drinks1);
+                });
             } else {
-                this.presentToast('An unexpected error occurred.');
-                console.error(error);
+                this.processDrinks(drinks1);
             }
         });
+    }
+
+    private processDrinks(drinks: Array<Drink>) {
+        // remove the drinks that have no location
+        drinks = drinks.filter(drink => drink.longitude !== undefined && drink.latitude !== undefined);
+        // here be dragons
+        // group the drinks that are within a 22m radius
+        const drinkGroups = Array<Array<Drink>>();
+        drinks.forEach((value1, index1, array1) => {
+            if (value1 != null) {
+                const group = [value1];
+                const point1 = new H.math.Point(value1.longitude, value1.latitude);
+                array1.forEach((value2, index2, array2) => {
+                    if (value1 !== value2 && value2 != null) {
+                        const point2 = new H.math.Point(value2.longitude, value2.latitude);
+                        const distance = point1.distance(point2);
+                        if (distance <= 0.0002) {
+                            group.push(value2);
+                            array2[index2] = null;
+                        }
+                    }
+                });
+                array1[index1] = null;
+                drinkGroups.push(group);
+            }
+        });
+        // display the drink groups on the map
+        drinkGroups.forEach(value => {
+            const drink: Drink = value[0];
+            // get the group icon or the alcohol specific alcohol icon
+            const icon = this.icons.get(value.length > 1 ? 4 : +AlcoholType[drink.alcohol.type]);
+            const marker = new H.map.Marker(
+                {lng: drink.longitude, lat: drink.latitude},
+                {icon: icon, data: value}
+            );
+            marker.addEventListener('tap', (ev) => this.presentDrinkAlert(ev.target.getData()));
+            this.map.addObject(marker);
+        });
+        this.isLoadingDrinks = false;
     }
 
     async presentDrinkAlert(drinks: Drink[]) {

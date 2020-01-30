@@ -3,7 +3,6 @@ import {Drink} from '../../data/entities/drink';
 import {HttpService} from '../../services/http.service';
 import {AlertController, ToastController} from '@ionic/angular';
 import {PermilleCalculationService} from '../../services/permille-calculation.service';
-import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
     selector: 'app-history',
@@ -49,19 +48,6 @@ export class HistoryComponent {
     removeDrink(drink: Drink, index: number) {
         this.http.removeDrink(drink.id).subscribe(_ => {
             this.presentToast('Removed drink from history.');
-        }, (error: HttpErrorResponse) => {
-            switch (error.status) {
-                case 401:
-                    // TODO: auth token invalid -> logout
-                    break;
-                case 404:
-                    this.presentToast('No drink has been found with the given drinkId.');
-                    break;
-                default:
-                    this.presentToast('An unexpected error occurred.');
-                    console.error(error);
-                    break;
-            }
         });
         this.drinks.splice(index, 1);
         this.pcs.removeDrink(drink);

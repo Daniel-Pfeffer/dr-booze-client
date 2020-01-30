@@ -1,26 +1,21 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Drink} from '../../data/entities/drink';
 import {HttpService} from '../../services/http.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AlertController, ToastController} from '@ionic/angular';
 import {DataService} from '../../services/data.service';
 import {Alcohol} from '../../data/entities/alcohol';
-import {HttpErrorResponse} from '@angular/common/http';
 import {PermilleCalculationService} from '../../services/permille-calculation.service';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {StorageType} from '../../data/enums/StorageType';
 import {AlcoholType} from '../../data/enums/AlcoholType';
 import {Storage} from '@ionic/storage';
 
-/*
- * TODO: save personal useTracking default
- */
 @Component({
     selector: 'app-picker-detail',
     templateUrl: './picker-detail.component.html',
     styleUrls: ['./picker-detail.component.scss']
 })
-export class PickerDetailComponent implements OnInit {
+export class PickerDetailComponent {
 
     type: AlcoholType;
     typeStr: string;
@@ -29,8 +24,9 @@ export class PickerDetailComponent implements OnInit {
     favouriteAlcohols = new Array<Alcohol>();
     useTracking = true;
 
-    isLoading = false;
+    isAddingDrink = false;
     isToggleLoading = false;
+    isLoadingAlcohols = false;
 
     constructor(private http: HttpService,
                 private router: Router,
@@ -44,6 +40,7 @@ export class PickerDetailComponent implements OnInit {
         this.type = +route.snapshot.paramMap.get('type');
         this.typeStr = AlcoholType[this.type];
 
+        // load the 'activate drink tracking' user setting
         this.isToggleLoading = true;
         this.storage.get('use-drink-tracking').then((val) => {
             if (val !== null) {
@@ -53,14 +50,13 @@ export class PickerDetailComponent implements OnInit {
         });
     }
 
-    ngOnInit(): void {
-        this.loadFavourites();
-        this.loadAlcohols();
-        this.loadPersonalAlcohols();
+    ionViewDidEnter() {
+        this.isLoadingAlcohols = true;
+        this.loadAllAlcohols();
     }
 
     onSelection(alcohol: Alcohol) {
-        this.isLoading = true;
+        this.isAddingDrink = true;
 
         const drink = new Drink();
         drink.alcohol = alcohol;
@@ -96,25 +92,8 @@ export class PickerDetailComponent implements OnInit {
         const foundAlcohol = this.favouriteAlcohols.find(value => value.id === alcohol.id);
         if (foundAlcohol === undefined) {
             this.http.addFavourite(alcohol.id).subscribe(_ => {
-                this.loadFavourites();
-                // also reload the personal alcohols because this functions sets the isPersonal attribute of the favourites
-                if (alcohol.isPersonal) {
-                    this.loadPersonalAlcohols();
-                }
+                this.loadAllAlcohols();
                 this.presentToast('Added alcohol to favourites');
-            }, error => {
-                switch (error.status) {
-                    case 401:
-                        // TODO: auth token invalid -> logout
-                        break;
-                    case 404:
-                        this.presentToast('No alcohol has been found with the given alcoholId');
-                        break;
-                    default:
-                        this.presentToast('An unexpected error occurred');
-                        console.error(error);
-                        break;
-                }
             });
         } else {
             this.presentToast('Alcohol is already a favourite');
@@ -124,46 +103,15 @@ export class PickerDetailComponent implements OnInit {
 
     removeFavourite(alcoholId: number) {
         this.http.removeFavourite(alcoholId).subscribe(_ => {
-            this.loadFavourites();
+            this.loadAllAlcohols();
             this.presentToast('Removed alcohol from favourites');
-        }, error => {
-            switch (error.status) {
-                case 401:
-                    // TODO: auth token invalid -> logout
-                    break;
-                case 404:
-                    this.presentToast('This alcohol does not exist anymore');
-                    break;
-                default:
-                    this.presentToast('An unexpected error occurred');
-                    console.error(error);
-                    break;
-            }
         });
     }
 
     removePersonalAlcohol(alcoholId: number) {
         this.http.removePersonalAlcohol(alcoholId).subscribe(_ => {
-            this.loadFavourites();
-            this.loadAlcohols();
-            this.loadPersonalAlcohols();
+            this.loadAllAlcohols();
             this.presentToast('Personal drink has been removed');
-        }, error => {
-            switch (error.status) {
-                case 401:
-                    // TODO: auth token invalid -> logout
-                    break;
-                case 403:
-                    this.presentToast('This alcohol is not a personal alcohol of this user');
-                    break;
-                case 404:
-                    this.presentToast('This alcohol does not exist anymore');
-                    break;
-                default:
-                    this.presentToast('An unexpected error occurred');
-                    console.error(error);
-                    break;
-            }
         });
     }
 
@@ -223,60 +171,25 @@ export class PickerDetailComponent implements OnInit {
         await alert.present();
     }
 
-    private loadFavourites() {
-        this.http.getFavourites(this.typeStr).subscribe(favourites => {
-            this.data.set(StorageType['FAVOURITE' + this.typeStr], favourites);
-            this.favouriteAlcohols = favourites;
-        }, (error: HttpErrorResponse) => {
-            switch (error.status) {
-                case 401:
-                    // TODO: auth token invalid -> logout
-                    break;
-                case 404:
-                    this.presentToast('The given alcohol type does not exist');
-                    break;
-                default:
-                    this.presentToast('An unexpected error occurred.');
-                    console.error(error);
-                    break;
-            }
-        });
-    }
-
-    private loadAlcohols() {
+    private loadAllAlcohols() {
         this.http.getAlcohols(this.typeStr).subscribe(alcohols => {
-            if (!this.data.exist(StorageType[this.typeStr])) {
-                this.data.set(StorageType[this.typeStr], alcohols);
-            }
+            // clear the alcohol list and add the new alcohols
             this.categories.clear();
-            alcohols.forEach(alcohol => {
-                this.addToCategories(alcohol);
-            });
-        }, error => {
-            switch (error.status) {
-                case 401:
-                    // TODO: auth token invalid -> logout
-                    break;
-                case 404:
-                    this.presentToast('The given alcohol type does not exist');
-                    break;
-                default:
-                    this.presentToast('An unexpected error occurred.');
-                    console.error(error);
-                    break;
-            }
-        });
-    }
+            alcohols.forEach(alcohol => this.addToCategories(alcohol));
 
-    private loadPersonalAlcohols() {
-        this.http.getPersonalAlcohols(this.typeStr).subscribe(personalAlcohols => {
-            personalAlcohols.forEach(personalAlcohol => {
-                personalAlcohol.isPersonal = true;
-                this.addToCategories(personalAlcohol);
-                this.favouriteAlcohols.forEach(favourite => {
-                    if (favourite.id === personalAlcohol.id) {
-                        favourite.isPersonal = true;
-                    }
+            this.http.getFavourites(this.typeStr).subscribe(favourites => {
+                this.http.getPersonalAlcohols(this.typeStr).subscribe(personalAlcohols => {
+                    personalAlcohols.forEach(personalAlcohol => {
+                        personalAlcohol.isPersonal = true;
+                        this.addToCategories(personalAlcohol);
+                        favourites.forEach(favourite => {
+                            if (favourite.id === personalAlcohol.id) {
+                                favourite.isPersonal = true;
+                            }
+                        });
+                    });
+                    this.favouriteAlcohols = favourites;
+                    this.isLoadingAlcohols = false;
                 });
             });
         });
@@ -285,22 +198,8 @@ export class PickerDetailComponent implements OnInit {
     private addDrink(drink: Drink) {
         this.http.addDrink(drink).subscribe(_ => {
             this.permille.addDrink(drink);
-            this.isLoading = false;
+            this.isAddingDrink = false;
             this.router.navigate(['dashboard']);
-        }, error => {
-            this.isLoading = false;
-            switch (error.status) {
-                case 401:
-                    // TODO: auth token invalid -> logout
-                    break;
-                case 404:
-                    this.presentToast('No alcohol has been found with the given alcoholId');
-                    break;
-                default:
-                    this.presentToast('An unexpected error occurred');
-                    console.error(error);
-                    break;
-            }
         });
     }
 
@@ -318,19 +217,6 @@ export class PickerDetailComponent implements OnInit {
             this.http.addPersonalAlcohol(this.typeStr, name, category, percentage, amount).subscribe(alcohol => {
                 alcohol.isPersonal = true;
                 this.addToCategories(alcohol);
-            }, (error: HttpErrorResponse) => {
-                switch (error.status) {
-                    case 401:
-                        // TODO: auth token invalid -> logout
-                        break;
-                    case 403:
-                        this.presentToast('At least one of the inputs is not valid');
-                        break;
-                    default:
-                        this.presentToast('An unexpected error occurred');
-                        console.error(error);
-                        break;
-                }
             });
             return true;
         }
@@ -357,7 +243,7 @@ export class PickerDetailComponent implements OnInit {
                 {
                     text: 'Cancel',
                     role: 'cancel',
-                    handler: () => this.isLoading = false
+                    handler: () => this.isAddingDrink = false
                 },
                 {
                     text: 'Add anyway',
