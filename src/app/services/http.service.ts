@@ -153,11 +153,17 @@ export class HttpService {
 
     /**
      * @description get all drinks the user drank
-     * @param count
+     */
+    getAllDrinks() {
+        return this.http.get<Array<Drink>>(this.uri + 'manage/drinks', {headers: this.header}).pipe(catchError(this.handleError));
+    }
+
+    /**
+     * @description get 15 drinks the user drank
+     * @param count the position of the the first result (multiplied by fifteen)
      */
     getDrinks(count: number) {
         return this.http.get<Array<Drink>>(this.uri + `manage/drinks/${count}`, {headers: this.header}).pipe(catchError(this.handleError));
-
     }
 
     /**
