@@ -1,7 +1,12 @@
-<ion-card color="tertiary" mode="ios">
-    <ion-card-header>
-        <ion-title style="text-align: center">
-            {{currentPerMille}}‰
-        </ion-title>
-    </ion-card-header>
-</ion-card>
+<div style="display: flex; justify-content: center">
+    <ion-card color="tertiary" mode="ios" style="width: 80% !important;">
+        <ion-card-content style="display: flex; flex-direction: column; padding: 2% !important;">
+            <span style="text-align: center; font-size: 1.6em">
+                {{currentPerMille | number: '1.2'}}‰
+            </span>
+            <div style="display: flex; justify-content: center; font-size: 0.8em">
+                <span>Sober in: {{(timeSober / 60) | number: '1.0-0'}}h {{(timeSober % 60) | number: '1.0-0'}}min</span>
+            </div>
+        </ion-card-content>
+    </ion-card>
+</div>

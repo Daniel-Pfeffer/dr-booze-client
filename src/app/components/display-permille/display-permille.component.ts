@@ -1,7 +1,5 @@
 import {Component} from '@angular/core';
 import {PermilleCalculationService} from '../../services/permille-calculation.service';
-import {StorageService} from '../../services/storage.service';
-import {DataService} from '../../services/data.service';
 
 @Component({
     selector: 'app-header',
@@ -11,10 +9,19 @@ import {DataService} from '../../services/data.service';
 export class DisplayPermilleComponent {
 
     currentPerMille: number;
+    timeSober: number;
 
-    constructor(pcs: PermilleCalculationService, private ss: StorageService, private d: DataService) {
+    constructor(pcs: PermilleCalculationService) {
         pcs.perMilleObservable.subscribe(item => {
             this.currentPerMille = Math.floor(item * 100) / 100;
+            this.timeSober = (item / 0.1) * 60;
+            console.log('sober: ' + this.timeSober);
         });
+    }
+
+    private timeConverter(minutes: number) {
+        // corrector because start time of unix is 1970 1 o' clock
+        console.log('minutes: ' + minutes);
+        return new Date(new Date(minutes * 60 * 1000).getUTCDate() + ' GMT+0');
     }
 }
