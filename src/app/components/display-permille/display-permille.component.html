@@ -5,7 +5,7 @@
                 {{currentPerMille | number: '1.2'}}‰
             </span>
             <div style="display: flex; justify-content: center; font-size: 0.8em">
-                <span>Sober in: {{ timeSober | date:'hh' }}h {{ timeSober | date:'mm' }}min</span>
+                <span>Sober in: {{(timeSober / 60) | number: '1.0-0'}}h {{(timeSober % 60) | number: '1.0-0'}}min</span>
             </div>
         </ion-card-content>
     </ion-card>

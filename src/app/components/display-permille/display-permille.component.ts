@@ -9,18 +9,19 @@ import {PermilleCalculationService} from '../../services/permille-calculation.se
 export class DisplayPermilleComponent {
 
     currentPerMille: number;
-    timeSober: Date;
+    timeSober: number;
 
     constructor(pcs: PermilleCalculationService) {
         pcs.perMilleObservable.subscribe(item => {
             this.currentPerMille = Math.floor(item * 100) / 100;
-            this.timeSober = this.timeConverter((item / 0.1) * 60);
+            this.timeSober = (item / 0.1) * 60;
+            console.log('sober: ' + this.timeSober);
         });
     }
 
     private timeConverter(minutes: number) {
         // corrector because start time of unix is 1970 1 o' clock
-        minutes -= 60;
-        return new Date(minutes * 60 * 1000);
+        console.log('minutes: ' + minutes);
+        return new Date(new Date(minutes * 60 * 1000).getUTCDate() + ' GMT+0');
     }
 }
