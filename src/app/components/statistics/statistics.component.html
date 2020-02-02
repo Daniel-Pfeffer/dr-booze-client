@@ -18,14 +18,15 @@
             <ion-label style="margin-bottom: 1vh;">After drinking you may have to wait a minute...</ion-label>
         </ion-refresher-content>
     </ion-refresher>
-    <div *ngIf="this.data!=[]; else placeholder" style="height:100%;">
-        <google-chart id="barChart" type="ColumnChart" [data]="data" [options]="barOptions"
-                      style="width:100%;height:40%; position: center;">
-        </google-chart>
+    <div *ngIf="this.data!=undefined; else placeholder" style="height:100%;">
 
         <google-chart type="PieChart" [data]="distribution" [options]="pieOptions"
-                      style="height:30%; margin-top:0; width: 100%; ">
+                      style="height:50%; margin-top:0; width: 100%; ">
         </google-chart>
+        <google-chart id="barChart" type="ColumnChart" [data]="data" [options]="barOptions"
+                      style="width:100%;height:60%; position:relative;margin-bottom:0;padding-bottom: 10%;">
+        </google-chart>
+
     </div>
     <ng-template #placeholder>
         <ion-content>
