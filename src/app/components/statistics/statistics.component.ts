@@ -36,7 +36,7 @@ export class StatisticsComponent {
     };
     pieOptions = {
         pieSliceText: 'none',
-        chartArea: {width: '85%', height: '60%'},
+        chartArea: {width: '85%', height: '50%'},
         height: 450,
         legend: 'none'
 
@@ -51,6 +51,7 @@ export class StatisticsComponent {
     private screenHeight: number;
     private screenWidth: number;
     private isLoading = false;
+    private showPie = false;
 
 
     constructor(
@@ -113,6 +114,11 @@ export class StatisticsComponent {
             this.distribution = this.dataservice.get(StorageType.DIST);
         } else {
             this.updateDist();
+        }
+        for (const c of this.distribution) {
+            if (c[1] !== 0 ) {
+                this.showPie = true;
+            }
         }
 
     }
@@ -294,6 +300,14 @@ export class StatisticsComponent {
             this.distribution[2] = ['Liquor', this.liquorCount];
             this.distribution[3] = ['Cocktail', this.cocktailCount];
 
+            for (const c of this.distribution) {
+                console.log(c)
+                if (c[1] !== 0) {
+                    this.showPie = true;
+                }
+            }
+
+            Object.assign(this.distribution, []);
             this.dataservice.set(StorageType.DIST, this.distribution);
             });
 
