@@ -37,7 +37,7 @@ export class StatisticsComponent {
     };
     pieOptions = {
         pieSliceText: 'none',
-        chartArea: {width: '85%', height: '50%'},
+        chartArea: {width: '85%', height: '50%', top: '20%'},
         height: 450,
         legend: 'none'
 
