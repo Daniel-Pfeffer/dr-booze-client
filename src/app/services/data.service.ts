@@ -19,12 +19,16 @@ export class DataService {
     private data = {};
     public personObs: Observable<boolean>;
     public personSub: Subject<boolean>;
+    public permilleResetObs: Observable<boolean>;
+    private permilleReset: Subject<boolean>;
 
     constructor() {
         this.subject = new Subject<ToStore>();
         this.observable = this.subject.asObservable();
         this.personSub = new Subject<boolean>();
         this.personObs = this.personSub.asObservable();
+        this.permilleReset = new Subject<boolean>();
+        this.permilleResetObs = this.permilleReset.asObservable();
     }
 
     /**
@@ -78,5 +82,6 @@ export class DataService {
      */
     clear() {
         this.data = {};
+        this.permilleReset.next(true);
     }
 }
