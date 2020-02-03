@@ -30,6 +30,9 @@ export class PermilleCalculationService {
                 private platform: Platform,
                 private storage: Storage
     ) {
+        this.data.permilleResetObs.subscribe(() => {
+            this.perMilleNotifier.next(0);
+        });
         this.perMilleNotifier = new BehaviorSubject<number>(0);
         this.statisticNotifier = new BehaviorSubject<number>(0);
         this.perMilleObservable = this.perMilleNotifier.asObservable();
