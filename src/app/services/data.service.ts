@@ -71,4 +71,12 @@ export class DataService {
             this.subject.next({command: Remove, row: key});
         }
     }
+
+    /**
+     * Fecking removes the data do not use unless you know what you are doing
+     * @return void
+     */
+    clear() {
+        this.data = {};
+    }
 }

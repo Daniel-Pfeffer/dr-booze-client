@@ -50,8 +50,7 @@ export class SideMenuComponent {
     }
 
     onLogout() {
-        this.data.remove(StorageType.AUTH);
-        this.data.remove(StorageType.PERSON);
+        this.data.clear();
         this.s.clear();
         this.presentToast('Successfully logged out').then(() => this.router.navigate(['login']));
     }
