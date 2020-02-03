@@ -8,6 +8,7 @@ import {AlcoholType} from '../../data/enums/AlcoholType';
 import {StatisticType} from '../../data/enums/StatisticType';
 import {AlertController, LoadingController} from '@ionic/angular';
 import {assertNumber} from '@angular/core/src/render3/assert';
+import {Storage} from '@ionic/storage';
 
 @Component({
     selector: 'app-statistics',
@@ -55,6 +56,7 @@ export class StatisticsComponent {
 
 
     constructor(
+        private storage: Storage,
         private loadingController: LoadingController,
         private permilleCalculationService: PermilleCalculationService,
         private router: Router,
@@ -80,9 +82,9 @@ export class StatisticsComponent {
                 this.monthdata[0] = [(timestamp.getMonth()), 0];
             }
             // updates distribution for the Pie-Chart
-
+        this.updateDist();
         this.permilleCalculationService.statisticObservable.subscribe(item => {
-
+            this.updateDist();
             if (item !== undefined) {
                 this.item = item;
                 }
@@ -92,7 +94,6 @@ export class StatisticsComponent {
                 this.calc(item, StatisticType.DAY);
                 this.changeTo(this.statistic);
 
-            this.updateDist();
             this.forceRedraw();
             });
 
@@ -110,11 +111,7 @@ export class StatisticsComponent {
         if (this.dataservice.exist(StorageType.MONTH)) {
             this.monthdata = this.dataservice.get(StorageType.MONTH);
         }
-        if (this.dataservice.exist((StorageType.DIST))) {
-            this.distribution = this.dataservice.get(StorageType.DIST);
-        } else {
-            this.updateDist();
-        }
+
         for (const c of this.distribution) {
             if (c[1] !== 0 ) {
                 this.showPie = true;
@@ -125,6 +122,7 @@ export class StatisticsComponent {
 
     // saves all the data-arrays
     ionViewWillLeave() {
+
         this.dataservice.set(StorageType.DAY, this.daydata);
         this.dataservice.set(StorageType.WEEK, this.weekdata);
         this.dataservice.set(StorageType.MONTH, this.monthdata);
@@ -301,13 +299,13 @@ export class StatisticsComponent {
             this.distribution[3] = ['Cocktail', this.cocktailCount];
 
             for (const c of this.distribution) {
-                console.log(c)
+
                 if (c[1] !== 0) {
                     this.showPie = true;
                 }
             }
 
-            Object.assign(this.distribution, []);
+            Object.assign(this.distribution, this.distribution);
             this.dataservice.set(StorageType.DIST, this.distribution);
             });
 
