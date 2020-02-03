@@ -10,11 +10,15 @@ export class DisplayPermilleComponent {
 
     currentPerMille: number;
     timeSober: number;
+    soberH: number;
+    soberMin: number;
 
     constructor(pcs: PermilleCalculationService) {
         pcs.perMilleObservable.subscribe(item => {
             this.currentPerMille = Math.floor(item * 100) / 100;
             this.timeSober = (item / 0.1) * 60;
+            this.soberH = Math.floor(item / 0.1);
+            this.soberMin = Math.floor(((item / 0.1) * 60) % 60);
             console.log('sober: ' + this.timeSober);
         });
     }
