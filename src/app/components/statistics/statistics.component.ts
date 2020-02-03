@@ -79,7 +79,7 @@ export class StatisticsComponent {
                 this.monthdata[0] = [(timestamp.getMonth()), 0];
             }
             // updates distribution for the Pie-Chart
-            this.updateDist();
+
         this.permilleCalculationService.statisticObservable.subscribe(item => {
 
             if (item !== undefined) {
@@ -91,6 +91,7 @@ export class StatisticsComponent {
                 this.calc(item, StatisticType.DAY);
                 this.changeTo(this.statistic);
 
+            this.updateDist();
             this.forceRedraw();
             });
 
@@ -110,6 +111,8 @@ export class StatisticsComponent {
         }
         if (this.dataservice.exist((StorageType.DIST))) {
             this.distribution = this.dataservice.get(StorageType.DIST);
+        } else {
+            this.updateDist();
         }
 
     }
