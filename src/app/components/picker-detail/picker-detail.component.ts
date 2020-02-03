@@ -64,7 +64,7 @@ export class PickerDetailComponent {
 
         // add location if drink tracking is activated
         if (this.useTracking) {
-            this.geolocation.getCurrentPosition({timeout: 2000}).then(pos => {
+            this.geolocation.getCurrentPosition({timeout: 4000}).then(pos => {
                 drink.longitude = pos.coords.longitude;
                 drink.latitude = pos.coords.latitude;
                 this.addDrink(drink);
