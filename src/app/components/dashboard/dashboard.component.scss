@@ -1,0 +1,26 @@
+.grid {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.card {
+  --background: #FFFFFF;
+  --color: #3c3c3c;
+  margin: 3% !important;
+}
+
+.card-content {
+  height: 25vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  font-size: 1.4em;
+}
+
+.card-icon {
+  width: 40%;
+  height: 100%;
+}

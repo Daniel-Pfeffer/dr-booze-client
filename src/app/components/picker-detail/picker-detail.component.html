@@ -1,0 +1,103 @@
+<ion-header>
+    <ion-toolbar color="dark">
+        <ion-back-button defaultHref="home" slot="start"></ion-back-button>
+        <ion-title>Choose your {{ typeStr.toLowerCase() | titlecase }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-progress-bar *ngIf="isAddingDrink" type="indeterminate"></ion-progress-bar>
+    <ion-list>
+        <ion-item-group>
+            <ion-item lines="none">
+                <ion-label>Activate drink tracking</ion-label>
+                <ion-button fill="clear" color="dark" (click)="presentHelpAlert()">
+                    <ion-icon slot="icon-only" name="help-circle"></ion-icon>
+                </ion-button>
+                <ion-toggle *ngIf="!isToggleLoading" [(ngModel)]="useTracking"
+                            (ngModelChange)="onTrackingToggleChange()"></ion-toggle>
+            </ion-item>
+        </ion-item-group>
+        <div *ngIf="isLoadingAlcohols; else alcohols"
+             style="display:flex;justify-content:center;align-items:center; margin-top: 5%">
+            <ion-spinner color="primary"></ion-spinner>
+        </div>
+        <ng-template #alcohols>
+            <ion-item-group *ngIf="favouriteAlcohols.length > 0">
+                <ion-item-divider color="light">
+                    <ion-label>Favourites</ion-label>
+                    <ion-icon name="star" color="primary" style="margin-left: 2vw"></ion-icon>
+                </ion-item-divider>
+                <ion-item-sliding *ngFor="let alcohol of favouriteAlcohols">
+                    <ion-item-options side="start">
+                        <ion-item-option (click)="removeFavourite(alcohol.id)">
+                            <ion-icon slot="icon-only" name="close" color="light"></ion-icon>
+                        </ion-item-option>
+                        <ion-item-option *ngIf="alcohol.isPersonal" (click)="removePersonalAlcohol(alcohol.id)">
+                            <ion-icon slot="icon-only" name="trash" color="light"></ion-icon>
+                        </ion-item-option>
+                    </ion-item-options>
+                    <ion-item detail="true" button="true" (click)="onSelection(alcohol)">
+                        <ng-container [ngSwitch]="type">
+                            <ion-icon *ngSwitchCase="0" size="large" class="item-icon" name="beer"></ion-icon>
+                            <ion-icon *ngSwitchCase="1" size="large" class="item-icon" name="wine"
+                                      mode="ios"></ion-icon>
+                            <ion-icon *ngSwitchCase="2" size="large" class="item-icon" name="wine" mode="md"></ion-icon>
+                            <ion-icon *ngSwitchCase="3" size="large" class="item-icon"
+                                      src="../../../assets/whiskey.svg"></ion-icon>
+                        </ng-container>
+                        <ion-label>
+                            <h2>{{ alcohol.name }}</h2>
+                            <p>{{ alcohol.percentage }}%</p>
+                        </ion-label>
+                        <ion-icon *ngIf="alcohol.isPersonal" name="person"></ion-icon>
+                        <p style="text-align: right; padding-right: 5vw; padding-left: 5vw">
+                            {{ alcohol.amount }}ml
+                        </p>
+                    </ion-item>
+                </ion-item-sliding>
+            </ion-item-group>
+            <ion-item-group *ngFor="let category of categories | keyvalue">
+                <ion-item-divider color="light">
+                    <ion-label>
+                        {{ (category.key | titlecase) }}
+                    </ion-label>
+                </ion-item-divider>
+                <ion-item-sliding *ngFor="let alcohol of category.value" #slider>
+                    <ion-item-options side="start">
+                        <ion-item-option (click)="addFavourite(alcohol, slider)">
+                            <ion-icon slot="icon-only" name="star" mode="md" color="light"></ion-icon>
+                        </ion-item-option>
+                        <ion-item-option *ngIf="alcohol.isPersonal" (click)="removePersonalAlcohol(alcohol.id)">
+                            <ion-icon slot="icon-only" name="trash" color="light"></ion-icon>
+                        </ion-item-option>
+                    </ion-item-options>
+                    <ion-item detail="true" button="true" (click)="onSelection(alcohol)">
+                        <ng-container [ngSwitch]="type">
+                            <ion-icon *ngSwitchCase="0" size="large" class="item-icon" name="beer"></ion-icon>
+                            <ion-icon *ngSwitchCase="1" size="large" class="item-icon" name="wine"
+                                      mode="ios"></ion-icon>
+                            <ion-icon *ngSwitchCase="2" size="large" class="item-icon" name="wine" mode="md"></ion-icon>
+                            <ion-icon *ngSwitchCase="3" size="large" class="item-icon"
+                                      src="../../../assets/whiskey.svg"></ion-icon>
+                        </ng-container>
+                        <ion-label>
+                            <h2>{{ alcohol.name }}</h2>
+                            <p>
+                                {{ alcohol.percentage }}%
+                            </p>
+                        </ion-label>
+                        <ion-icon *ngIf="alcohol.isPersonal" name="person"></ion-icon>
+                        <p style="text-align: right; padding-right: 5vw; padding-left: 5vw">
+                            {{ alcohol.amount }}ml
+                        </p>
+                    </ion-item>
+                </ion-item-sliding>
+            </ion-item-group>
+        </ng-template>
+    </ion-list>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="presentNewDrinkAlert()">
+            <ion-icon name="add" color="light"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</ion-content>

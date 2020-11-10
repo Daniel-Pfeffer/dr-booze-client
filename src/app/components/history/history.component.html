@@ -1,0 +1,53 @@
+<ion-header>
+    <ion-toolbar color="dark">
+        <ion-back-button defaultHref="home" slot="start"></ion-back-button>
+        <ion-title>History</ion-title>
+        <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="presentInfoAlert()">
+                <ion-icon slot="icon-only" name="information-circle-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-progress-bar *ngIf="isLoading" type="indeterminate"></ion-progress-bar>
+    <ion-list *ngIf="drinks.length > 0 && isLoading === false">
+        <ion-item-sliding *ngFor="let drink of drinks; index as i" [disabled]="!canRemove(drink.drankDate)">
+            <ion-item-options side="start">
+                <ion-item-option (click)="removeDrink(drink, i)" expandable="true">
+                    <ion-icon slot="icon-only" name="close" mode="md" color="light"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+            <ion-item>
+                <ng-container [ngSwitch]="drink.alcohol.type">
+                    <ion-icon *ngSwitchCase="'BEER'" size="large" class="item-icon" name="beer"></ion-icon>
+                    <ion-icon *ngSwitchCase="'WINE'" size="large" class="item-icon" name="wine"
+                              mode="ios"></ion-icon>
+                    <ion-icon *ngSwitchCase="'COCKTAIL'" size="large" class="item-icon" name="wine"
+                              mode="md"></ion-icon>
+                    <ion-icon *ngSwitchCase="'LIQUOR'" size="large" class="item-icon"
+                              src="../../../assets/whiskey.svg"></ion-icon>
+                </ng-container>
+                <ion-label>
+                    <h2>{{ drink.alcohol.name }}</h2>
+                    <p>{{ drink.alcohol.percentage }}% - {{ drink.alcohol.amount }}ml</p>
+                </ion-label>
+                <div>
+                    <ion-label>
+                        <h2>{{ drink.drankDate | date: 'HH:mm' }}</h2>
+                        <p>{{ drink.drankDate | date: 'dd.MM.yy' }}</p>
+                    </ion-label>
+                </div>
+            </ion-item>
+        </ion-item-sliding>
+    </ion-list>
+    <ion-infinite-scroll (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content
+                loadingSpinner="bubbles"
+                loadingText="Loading more drinks...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+    <div *ngIf="drinks.length === 0 && isLoading === false" class="no-drinks">
+        <ion-label>No drinks have been added yet.</ion-label>
+    </div>
+</ion-content>

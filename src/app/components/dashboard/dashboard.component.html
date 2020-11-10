@@ -1,0 +1,41 @@
+<ion-header>
+    <ion-toolbar color="dark">
+        <ion-menu-button slot="start" color="primary"></ion-menu-button>
+        <ion-title>Dashboard</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content id="dashboardContent" class="background">
+    <app-header></app-header>
+    <ion-grid class="grid">
+        <ion-row *ngFor="let row of rows" class="align-items-center">
+            <ion-col *ngFor="let card of row" style="height: 100%">
+                <ion-card (click)="onCardClick(card.type)" button="true" mode="ios" class="card">
+                    <ion-card-content class="card-content">
+                        <ion-icon *ngIf="card.title != 'Hard liquor'; else hardLiquorIcon"
+                                  size="large" [name]="card.iconName" [mode]="card.iconMode"
+                                  class="card-icon"></ion-icon>
+                        <ng-template #hardLiquorIcon>
+                            <ion-icon size="large" class="card-icon" src="../../../assets/whiskey.svg"></ion-icon>
+                        </ng-template>
+                        <ion-text style="text-align: center">{{ card.title }}</ion-text>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+<ion-tab-bar color="dark" slot="bottom">
+    <ion-tab-button [routerLink]="['/stats']">
+        <ion-icon name="stats"></ion-icon>
+        <ion-label>Statistics</ion-label>
+    </ion-tab-button>
+    <ion-tab-button [routerLink]="['/history']">
+        <ion-icon name="time"></ion-icon>
+        <ion-label>History</ion-label>
+    </ion-tab-button>
+    <ion-tab-button [routerLink]="['/map']">
+        <ion-icon name="map"></ion-icon>
+        <ion-label>Map</ion-label>
+    </ion-tab-button>
+</ion-tab-bar>
+<app-side-menu contentId="dashboardContent"></app-side-menu>

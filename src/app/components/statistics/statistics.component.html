@@ -1,0 +1,49 @@
+<ion-header>
+    <ion-toolbar color="dark">
+        <ion-back-button defaultHref="stats" slot="start"></ion-back-button>
+        <ion-title>Statistics</ion-title>
+        <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="presentHelpAlert()">
+                <ion-icon slot="icon-only" name="information-circle-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="background" [scrollY]="false">
+
+
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+        <ion-refresher-content>
+            <ion-label style="margin-bottom: 1vh;">After drinking you may have to wait a minute...</ion-label>
+        </ion-refresher-content>
+    </ion-refresher>
+    <div *ngIf="this.showPie; else placeholder" style="height:100%;">
+        <google-chart type="PieChart" [data]="distribution" [options]="pieOptions"
+                      style="height:50%; margin-top:0; width: 100%; ">
+        </google-chart>
+        <google-chart id="barChart" type="ColumnChart" [data]="data" [options]="barOptions"
+                      style="width:100%;height:60%; position:relative;margin-bottom:0;padding-bottom: 15%;">
+        </google-chart>
+
+    </div>
+    <ng-template #placeholder>
+        <ion-content>
+            <ion-item>
+                No drinks to evaluate your stats
+            </ion-item>
+        </ion-content>
+    </ng-template>
+
+</ion-content>
+<ion-tab-bar slot="bottom" color="dark">
+    <ion-tab-button id="dayButton" (click)="changeColor(0)">
+        <ion-label [color]="daycolor" style="font-size: 1.8em">Day</ion-label>
+    </ion-tab-button>
+    <ion-tab-button (click)="changeColor(1)">
+        <ion-label [color]="weekcolor" style="font-size: 1.8em">Week</ion-label>
+    </ion-tab-button>
+    <ion-tab-button (click)="changeColor(2)">
+        <ion-label [color]="monthcolor" style="font-size: 1.8em">Month</ion-label>
+    </ion-tab-button>
+</ion-tab-bar>

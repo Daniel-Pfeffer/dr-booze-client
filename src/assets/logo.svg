@@ -1,0 +1,31 @@
+<svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 312 310.22">
+    <defs>
+        <style>
+            .cls-1{fill:#d8505b;}.cls-2{fill:#ea5657;}.cls-3{fill:#ed6f71;}.cls-4{fill:#fff;}.cls-5{fill:none;stroke-width:9px;}.cls-5,.cls-6{stroke:#fff;stroke-miterlimit:10;}.cls-6{fill:#d51116;stroke-width:6px;}
+        </style>
+    </defs>
+    <g id="Logo">
+        <g id="Block">
+            <path class="cls-1"
+                  d="M189.59,88.18h52.59a14.17,14.17,0,0,1,14.17,14.17V300.77a14.17,14.17,0,0,1-14.17,14.17H189.59a0,0,0,0,1,0,0V88.18A0,0,0,0,1,189.59,88.18Z"
+                  transform="translate(155.93 -91.44) rotate(35)"/>
+            <rect class="cls-2" x="120.51" y="45.69" width="83.58" height="226.77"
+                  transform="translate(120.6 -64.32) rotate(35)"/>
+            <path class="cls-3"
+                  d="M73.38.3h62.37a0,0,0,0,1,0,0V227.07a0,0,0,0,1,0,0H73.38A14.17,14.17,0,0,1,59.2,212.9V14.47A14.17,14.17,0,0,1,73.38.3Z"
+                  transform="translate(82.83 -35.35) rotate(35)"/>
+        </g>
+        <g id="Glas">
+            <polyline id="Stiel" class="cls-4" points="156.74 286.67 156.74 246.97 165.24 246.97 165.24 291.97"/>
+            <path id="Glas_Rund" class="cls-5"
+                  d="M78.1,95.27v27.38C79,237.81,161,243.72,161,243.72h0s82-5.91,82.89-121.07V95.27"/>
+            <g id="Glas_Oben">
+                <rect class="cls-4" x="73.59" y="90.45" width="174.78" height="8.5" rx="2.84"/>
+            </g>
+        </g>
+        <g id="Kreuz">
+            <polygon class="cls-6"
+                     points="150.29 172.79 150.29 194.19 171.69 194.19 171.69 172.79 193.08 172.79 193.08 151.4 171.69 151.4 171.69 130 150.29 130 150.29 151.4 128.9 151.4 128.9 172.79 150.29 172.79"/>
+        </g>
+    </g>
+</svg>

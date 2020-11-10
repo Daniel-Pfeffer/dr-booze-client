@@ -1,63 +1,87 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {RouteReuseStrategy} from '@angular/router';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
 import {IonicModule, IonicRouteStrategy} from '@ionic/angular';
+
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
+import {Dialogs} from '@ionic-native/dialogs/ngx';
+import {DatePicker} from '@ionic-native/date-picker/ngx';
+import {Toast} from '@ionic-native/toast/ngx';
+import {Keyboard} from '@ionic-native/keyboard/ngx';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
+
+import {GoogleChartsModule} from 'angular-google-charts';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './modules/app-routing.module';
-import {RegisterComponent} from './register/register.component';
-import {LoginComponent} from './login/login.component';
-import {CalenderComponent} from './calender/calender.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
-import {AfterRegisterComponent} from './dialogs/after-register/after-register.component';
-import {InformationComponent} from './information/information.component';
-import {ChallengesComponent} from './information/challenges/challenges.component';
-import {PickMainComponent} from './pick-main/pick-main.component';
-import {PickerComponent} from './pick-main/picker/picker.component';
-import {PickerDetailComponent} from './pick-main/picker/picker-detail/picker-detail.component';
-import {StatisticsMainComponent} from './statistics-main/statistics-main.component';
-import {StatisticsComponent} from './statistics-main/statistics/statistics.component';
-import {StatisticsDetailComponent} from './statistics-main/statistics/statistics-detail/statistics-detail.component';
-
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-import {Dialogs} from '@ionic-native/dialogs/ngx';
-import {DatePicker} from '@ionic-native/date-picker/ngx';
+import {RegisterComponent} from './components/register/register.component';
+import {LoginComponent} from './components/login/login.component';
+import {DashboardComponent} from './components/dashboard/dashboard.component';
+import {ProfileComponent} from './components/profile/profile.component';
+import {PickerDetailComponent} from './components/picker-detail/picker-detail.component';
+import {SideMenuComponent} from './components/side-menu/side-menu.component';
+import {DisplayPermilleComponent} from './components/display-permille/display-permille.component';
+import {RequestPasswordChangeComponent} from './components/request-password-change/request-password-change.component';
+import {StatisticsComponent} from './components/statistics/statistics.component';
+import {MapComponent} from './components/map/map.component';
+import {ModalDrinkListComponent} from './components/map/modal-drink-list/modal-drink-list.component';
+import {HistoryComponent} from './components/history/history.component';
+import {Network} from '@ionic-native/network/ngx';
+import {BackgroundMode} from '@ionic-native/background-mode/ngx';
+import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
+import {WaitingComponent} from './components/waiting/waiting.component';
+import {IonicStorageModule} from '@ionic/storage';
 
 @NgModule({
     declarations: [
         AppComponent,
         RegisterComponent,
         LoginComponent,
-        CalenderComponent,
         DashboardComponent,
-        AfterRegisterComponent,
-        InformationComponent,
-        ChallengesComponent,
-        PickMainComponent,
-        PickerComponent,
+        ProfileComponent,
         PickerDetailComponent,
-        StatisticsMainComponent,
         StatisticsComponent,
-        StatisticsDetailComponent
+        SideMenuComponent,
+        DisplayPermilleComponent,
+        RequestPasswordChangeComponent,
+        MapComponent,
+        ModalDrinkListComponent,
+        HistoryComponent,
+        WaitingComponent
     ],
-    entryComponents: [],
+    entryComponents: [
+        ModalDrinkListComponent
+    ],
     imports: [
         ReactiveFormsModule,
         FormsModule,
         BrowserModule,
         HttpClientModule,
-        IonicModule.forRoot(),
-        AppRoutingModule
+        IonicModule.forRoot({
+            scrollPadding: true,
+            scrollAssist: false,
+        }),
+        IonicStorageModule.forRoot(),
+        AppRoutingModule,
+        GoogleChartsModule.forRoot()
     ],
     providers: [
         DatePicker,
         Dialogs,
         StatusBar,
         SplashScreen,
+        Keyboard,
+        Toast,
+        Geolocation,
+        SideMenuComponent,
+        DashboardComponent,
+        Network,
+        BackgroundMode,
+        LocalNotifications,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
     ],
     bootstrap: [AppComponent]

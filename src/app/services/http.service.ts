@@ -1,40 +1,243 @@
-/*
-Handles ALL HTTP/s-Request
- */
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Login} from '../interfaces/login';
-import {Register} from '../interfaces/register';
-import {User} from '../entities/user';
-import {InsertData} from '../interfaces/insert-data';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {Login} from '../data/interfaces/login';
+import {Drink} from '../data/entities/drink';
+import {Challenge} from '../data/interfaces/challenge';
+import {User} from '../data/entities/user';
+import {Alcohol} from '../data/entities/alcohol';
+import {DataService} from './data.service';
+import {StorageType} from '../data/enums/StorageType';
+import {Network} from '@ionic-native/network/ngx';
+import {Storage} from '@ionic/storage';
+import {Router} from '@angular/router';
+import {catchError} from 'rxjs/operators';
+import {ToastController} from '@ionic/angular';
+import {throwError} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class HttpService {
 
-    // private IP of burgi probably changes all the time pls change if changed
-    private ipBorgi = 'http://192.168.137.1:8080/rest/booze/';
-    private ipLocal = 'http://localhost:8080/rest/booze/';
-    private ipLocalGlobal = 'http://192.168.1.6:8080/rest/booze/';
+    private uri = 'http://vm102.htl-leonding.ac.at:8080/booze/';
+    public header: HttpHeaders = new HttpHeaders();
+    private hasConnection;
 
-    // help me i don't have a fuccin clue
-
-    constructor(private http: HttpClient) {
+    constructor(
+        private http: HttpClient,
+        private data: DataService,
+        private network: Network,
+        private router: Router,
+        private toastController: ToastController,
+        private s: Storage
+    ) {
+        this.hasConnection = !(
+            this.network.type === network.Connection.NONE
+            || this.network.type === network.Connection.CELL
+            || this.network.type === network.Connection.CELL_2G
+        );
+        if (data.exist(StorageType.AUTH)) {
+            this.header = this.header.set('Authorization', 'Bearer ' + data.get(StorageType.AUTH));
+        }
+        this.network.onChange().subscribe(item => {
+            this.hasConnection = item.type === 'online';
+        });
     }
 
-    login(username, password) {
-        return this.http.post<Login>(this.ipLocal + 'login', {username, password});
+    /**
+     * @description register a new user
+     * @param username
+     * @param email
+     * @param password
+     */
+    register(username: string, email: string, password: string) {
+        return this.http.post(this.uri + 'auth/register', {
+            email,
+            password,
+            username
+        });
     }
 
-    register(email, password, username) {
-        return this.http.post<Register>(this.ipLocal + 'register', {email, password, username});
+    /**
+     * @description login a existing user
+     * @param username
+     * @param password
+     */
+    login(username: string, password: string) {
+        return this.http.post<Login>(this.uri + 'auth/login', {username, password});
     }
 
-    insertData(birthday, weight, height, gender, firstName?, lastName?) {
-        const user: User = JSON.parse(localStorage.getItem('user')).user;
-        const email = user.email;
-        console.log(`bday: ${birthday}\nweight: ${weight}\nheight: ${height}\ngender: ${gender}\nfirstname: ${firstName}\nlastName: ${lastName}\nemail: ${email}`);
-        return this.http.post<InsertData>(this.ipLocal + 'insertDetails', {birthday, weight, height, gender, firstName, lastName, email});
+    /**
+     * @description request a password change
+     * @param email
+     */
+    requestPasswordChange(email: string) {
+        return this.http.post(this.uri + 'auth/request-password-change', {email}, {observe: 'response'}).pipe(catchError(this.handleError));
+    }
+
+    /**
+     * @description change the password of a existing user
+     * @param pin
+     * @param password
+     */
+    changePassword(pin: number, password: string) {
+        return this.http.put(this.uri + 'auth/change-password', {
+            pin,
+            password
+        }, {observe: 'response'}).pipe(catchError(this.handleError));
+    }
+
+    /**
+     * @description get a existing user based on the jwt
+     */
+    getUser() {
+        return this.http.get<User>(this.uri + 'manage/user', {headers: this.header});
+    }
+
+    /**
+     * @description set the
+     * @param gender
+     * @param birthday
+     * @param height
+     * @param weight
+     * @param firstName
+     * @param lastName
+     */
+    setDetails(gender: string, birthday: number, height: number,
+               weight: number, firstName?: string, lastName?: string) {
+        return this.http.post<User>(this.uri + 'manage/details', {
+            firstName,
+            lastName,
+            gender,
+            birthday,
+            weight,
+            height
+        }, {headers: this.header}).pipe(catchError(this.handleError));
+    }
+
+    /**
+     * @description getAlcohols
+     * @access Drink Picket
+     * @param type
+     */
+    getAlcohols(type: string) {
+        return this.http.get<Array<Alcohol>>(this.uri + `manage/alcohols/${type}`, {headers: this.header}).pipe(catchError(this.handleError));
+
+    }
+
+    /**
+     * @description get all favourites server call
+     * @param type
+     */
+    getFavourites(type: string) {
+        return this.http.get<Array<Alcohol>>(this.uri + `manage/favourites/${type}`, {headers: this.header}).pipe(catchError(this.handleError));
+
+    }
+
+    /**
+     * @description add a new favourite to favourite list
+     * @param alcoholId
+     */
+    addFavourite(alcoholId: number) {
+        return this.http.post(this.uri + `manage/favourites/${alcoholId}`, null, {headers: this.header}).pipe(catchError(this.handleError));
+    }
+
+    /**
+     * @description remove a favourite from to favourite list
+     * @param alcoholId
+     */
+    removeFavourite(alcoholId: number) {
+        return this.http.delete(this.uri + `manage/favourites/${alcoholId}`, {headers: this.header}).pipe(catchError(this.handleError));
+
+    }
+
+    /**
+     * @description get all drinks the user drank
+     */
+    getAllDrinks() {
+        return this.http.get<Array<Drink>>(this.uri + 'manage/drinks', {headers: this.header}).pipe(catchError(this.handleError));
+    }
+
+    /**
+     * @description get 15 drinks the user drank
+     * @param count the position of the the first result (multiplied by fifteen)
+     */
+    getDrinks(count: number) {
+        return this.http.get<Array<Drink>>(this.uri + `manage/drinks/${count}`, {headers: this.header}).pipe(catchError(this.handleError));
+    }
+
+    /**
+     * @description remove a drink from all drinks the user drank
+     * @param drinkId
+     */
+    removeDrink(drinkId: number) {
+        return this.http.delete(this.uri + `manage/drinks/${drinkId}`, {headers: this.header}).pipe(catchError(this.handleError));
+
+    }
+
+    /**
+     * @description add a drink to all drinks the user drank
+     * @param drink
+     */
+    addDrink(drink: Drink) {
+        const {DRINKS} = StorageType;
+        const drinks = this.data.exist(DRINKS) ? this.data.get(DRINKS) : new Array<Drink>();
+        drinks.push(drink);
+        this.data.set(DRINKS, drinks);
+        const {drankDate, latitude, longitude} = drink;
+        const alcoholId = drink.alcohol.id;
+        return this.http.post(this.uri + 'manage/drinks', {
+            alcoholId,
+            drankDate,
+            longitude,
+            latitude
+        }, {headers: this.header}).pipe(catchError(this.handleError));
+    }
+
+    getPersonalAlcohols(type: string) {
+        return this.http.get<Array<Alcohol>>(this.uri + `manage/personal-alcohols/${type}`, {headers: this.header}).pipe(catchError(this.handleError));
+    }
+
+    addPersonalAlcohol(type: string, name: string, category: string, percentage: number, amount: number) {
+        return this.http.post<Alcohol>(this.uri + `manage/personal-alcohols`, {
+            type,
+            name,
+            category,
+            percentage,
+            amount
+        }, {headers: this.header}).pipe(catchError(this.handleError));
+    }
+
+    removePersonalAlcohol(alcoholId: number) {
+        return this.http.delete(this.uri + `manage/personal-alcohols/${alcoholId}`, {headers: this.header}).pipe(catchError(this.handleError));
+    }
+
+    /**
+     * @description get the user challenges
+     */
+    getChallenges() {
+        return this.http.get<Array<Challenge>>(this.uri + 'manage/challenges', {headers: this.header}).pipe(catchError(this.handleError));
+    }
+
+    private handleError(error: HttpErrorResponse) {
+        if (error.status === 401) {
+            this.data.remove(StorageType.AUTH);
+            this.data.remove(StorageType.PERSON);
+            this.s.clear();
+            this.presentToast('Successfully logged out').then(() => this.router.navigate(['login']));
+        } else {
+            this.presentToast('An unexpected error occurred');
+        }
+        return throwError('Something bad happened :(');
+    }
+
+    private async presentToast(message: string) {
+        const toast = await this.toastController.create({
+            message: message,
+            duration: 2000,
+            showCloseButton: true,
+            keyboardClose: true
+        });
+        await toast.present();
     }
 }

@@ -87,3 +87,18 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+
+/***************************************************************************************************
+ * APPLICATION CUSTOM FUNCTIONS
+ */
+
+declare global {
+    interface String {
+        capitalize(): string;
+    }
+}
+
+String.prototype.capitalize = function () {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+};

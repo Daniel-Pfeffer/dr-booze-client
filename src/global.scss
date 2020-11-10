@@ -3,13 +3,26 @@
 @import '~@ionic/angular/css/normalize.css';
 @import '~@ionic/angular/css/structure.css';
 @import '~@ionic/angular/css/typography.css';
-@import url('https://fonts.googleapis.com/css?family=Exo+2');
 @import '~@ionic/angular/css/padding.css';
 @import '~@ionic/angular/css/float-elements.css';
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+@import url('https://fonts.googleapis.com/css?family=Exo+2');
 
 * {
   font-family: 'Exo 2', sans-serif !important;
+}
+
+.background {
+  --background: #f2f2f2;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 100%;
+  align-items: stretch;
+  padding: 0 5% 5% 5%;
 }

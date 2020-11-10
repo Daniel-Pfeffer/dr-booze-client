@@ -1,22 +1,29 @@
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
-import {LoginComponent} from '../login/login.component';
-import {RegisterComponent} from '../register/register.component';
-import {DashboardComponent} from '../dashboard/dashboard.component';
-import {StatisticsMainComponent} from '../statistics-main/statistics-main.component';
-import {InformationComponent} from '../information/information.component';
-import {CalenderComponent} from '../calender/calender.component';
+import {RouterModule, Routes} from '@angular/router';
+import {LoginComponent} from '../components/login/login.component';
+import {RegisterComponent} from '../components/register/register.component';
+import {DashboardComponent} from '../components/dashboard/dashboard.component';
+import {ProfileComponent} from '../components/profile/profile.component';
 import {RegisteredGuard} from '../guards/registered.guard';
 import {NeedRegisterGuard} from '../guards/need-register.guard';
+import {RequestPasswordChangeComponent} from '../components/request-password-change/request-password-change.component';
+import {PickerDetailComponent} from '../components/picker-detail/picker-detail.component';
+import {StatisticsComponent} from '../components/statistics/statistics.component';
+import {MapComponent} from '../components/map/map.component';
+import {HistoryComponent} from '../components/history/history.component';
+import {WaitingComponent} from '../components/waiting/waiting.component';
 
 const routes: Routes = [
+    {path: '', component: WaitingComponent, canActivate: [RegisteredGuard]},
     {path: 'login', component: LoginComponent, canActivate: [RegisteredGuard]},
-    {path: '', component: RegisterComponent, canActivate: [RegisteredGuard]},
     {path: 'register', component: RegisterComponent, canActivate: [RegisteredGuard]},
+    {path: 'request-password-change', component: RequestPasswordChangeComponent, canActivate: [RegisteredGuard]},
     {path: 'home', component: DashboardComponent, canActivate: [NeedRegisterGuard]},
-    {path: 'stats', component: StatisticsMainComponent, canActivate: [NeedRegisterGuard]},
-    {path: 'profile', component: InformationComponent, canActivate: [NeedRegisterGuard]},
-    {path: 'activity', component: CalenderComponent, canActivate: [NeedRegisterGuard]},
+    {path: 'stats', component: StatisticsComponent, canActivate: [NeedRegisterGuard]},
+    {path: 'profile', component: ProfileComponent, canActivate: [NeedRegisterGuard]},
+    {path: 'picker-detail/:type', component: PickerDetailComponent, canActivate: [NeedRegisterGuard]},
+    {path: 'map', component: MapComponent, canActivate: [NeedRegisterGuard]},
+    {path: 'history', component: HistoryComponent, canActivate: [NeedRegisterGuard]},
     {path: '**', redirectTo: 'home'}
 ];
 

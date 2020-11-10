@@ -1,0 +1,18 @@
+<ion-header>
+    <ion-toolbar color="dark">
+        <ion-back-button defaultHref="home" slot="start"></ion-back-button>
+        <ion-title>Map</ion-title>
+        <ion-buttons slot="end">
+            <ion-button shape="round">
+                <ion-spinner *ngIf="isLoadingLocation || isLoadingDrinks" name="crescent" color="primary"></ion-spinner>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<div #map style="width: 100%; height: 100%">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="dark" (click)="setLocation()">
+            <ion-icon name="locate" mode="md"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</div>

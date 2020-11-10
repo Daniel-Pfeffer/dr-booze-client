@@ -1,0 +1,55 @@
+<ion-menu type="overlay" side="start" menuId="side-menu" [contentId]="contentId">
+    <ion-toolbar>
+        <ion-title color="secondary">
+            Dr. Booze
+        </ion-title>
+    </ion-toolbar>
+    <ion-content>
+        <ion-list>
+            <ion-list-header>
+                <ion-label>Challenges</ion-label>
+                <ion-label color="primary" style="text-align: right; padding-right: 5%">
+                    {{ user?.points != null ? user?.points : 0 }} points
+                </ion-label>
+            </ion-list-header>
+            <ion-item *ngFor="let challenge of challenges">
+                <ion-text style="max-width: 75%; font-size: 90%">
+                    {{ challenge.desc }}
+                </ion-text>
+                <ion-label style="text-align: right">
+                    {{ challenge.amount }} pt
+                </ion-label>
+            </ion-item>
+        </ion-list>
+        <ion-list>
+            <ion-list-header>
+                <ion-label>Profile</ion-label>
+                <ion-button class="editButton" (click)="onEdit()" size="small" color="primary" fill="outline">
+                    Edit
+                </ion-button>
+            </ion-list-header>
+            <ion-item *ngIf="user?.firstName||user?.lastName">
+                <ion-label>
+                    <ng-container *ngIf=user?.firstName>{{ user?.firstName }} </ng-container>
+                    <ng-container *ngIf="user?.lastName">{{ user?.lastName }}</ng-container>
+                </ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>{{ user?.height }} cm</ion-label>
+            </ion-item>
+            <ion-item>
+                <ion-label>{{ user?.weight }} kg</ion-label>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+    <ion-footer>
+        <ion-toolbar color="light">
+            <ion-buttons>
+                <ion-button (click)="onLogout()">
+                    <ion-icon name="log-out"></ion-icon>
+                    <ion-label style="padding-left: 5%">Logout</ion-label>
+                </ion-button>
+            </ion-buttons>
+        </ion-toolbar>
+    </ion-footer>
+</ion-menu>
